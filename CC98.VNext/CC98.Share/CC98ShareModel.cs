@@ -1,4 +1,5 @@
 ﻿using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 using JetBrains.Annotations;
 
 namespace CC98.Share
@@ -65,6 +66,7 @@ namespace CC98.Share
 		/// <summary>
 		/// 获取或设置一个值，指示该项目是否被所有者共享。
 		/// </summary>
+		[Index(IsUnique = false)]
 		public bool IsShared { get; set; }
 
 		/// <summary>
@@ -72,5 +74,10 @@ namespace CC98.Share
 		/// </summary>
 		[Range(0, int.MaxValue)]
 		public int DownloadCount { get; set; }
+
+		/// <summary>
+		/// 获取或设置该项目的上传时间。
+		/// </summary>
+		public DateTime UploadTime { get; set; }
 	}
 }

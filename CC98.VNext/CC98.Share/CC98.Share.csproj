@@ -177,6 +177,10 @@
     <Compile Include="Migrations\201603120654086_AddDownloadCountForShareItem.Designer.cs">
       <DependentUpon>201603120654086_AddDownloadCountForShareItem.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201603120912187_AddUploadTimeForShareItem.cs" />
+    <Compile Include="Migrations\201603120912187_AddUploadTimeForShareItem.Designer.cs">
+      <DependentUpon>201603120912187_AddUploadTimeForShareItem.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Startup.cs" />
@@ -223,6 +227,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201603120654086_AddDownloadCountForShareItem.resx">
       <DependentUpon>201603120654086_AddDownloadCountForShareItem.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201603120912187_AddUploadTimeForShareItem.resx">
+      <DependentUpon>201603120912187_AddUploadTimeForShareItem.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <PropertyGroup>

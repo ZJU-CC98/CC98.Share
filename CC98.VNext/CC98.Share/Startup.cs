@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Threading.Tasks;
 using System.Web.Mvc;
+using System.Web.Optimization;
 using System.Web.Routing;
 using JetBrains.Annotations;
 using Microsoft.Owin;
@@ -26,6 +27,9 @@ namespace CC98.Share
 
 			AreaRegistration.RegisterAllAreas();
 			RouteConfig.RegisterRoutes(RouteTable.Routes);
+			BundleConfig.RegisterBundles(BundleTable.Bundles);
+
+			BundleTable.EnableOptimizations = true;
 		}
 	}
 }

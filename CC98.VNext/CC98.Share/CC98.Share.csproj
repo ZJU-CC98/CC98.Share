@@ -168,6 +168,7 @@
     <Compile Include="App_Start\BundleConfig.cs" />
     <Compile Include="App_Start\RouteConfig.cs" />
     <Compile Include="CC98ShareModel.cs" />
+    <Compile Include="Controllers\DownUploadController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Migrations\201603120649037_Intialize.cs" />
     <Compile Include="Migrations\201603120649037_Intialize.Designer.cs">
@@ -206,6 +207,8 @@
     <Content Include="Content\bootstrap-theme.css.map">
       <DependentUpon>bootstrap-theme.css</DependentUpon>
     </Content>
+    <Content Include="Views\DownUpload\IndexUpload.cshtml" />
+    <Content Include="Views\DownUpload\IndexDownload.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>

@@ -20,6 +20,9 @@
 	  list1.Add(new SelectListItem { Text = "部分匹配", Value = nameof(Accuracy.Vague), Selected = false });
 
 	  var transdata = ViewBag.onePageOfProducts;
+	  var transsearch = (SearchModeViewModels)ViewData["SEARCH"];
+
+
    }
   <br />
    
@@ -110,7 +113,7 @@
 					</tbody>
 				</table>
 		
-		@Html.PagedListPager((IPagedList)ViewBag.onePageOfProducts, page => Url.Action("Index", new { page = 2 }))
+		@Html.PagedListPager((IPagedList)ViewBag.onePageOfProducts, page => Url.Action("Search","Home" ,new {Words=transsearch.Words,Check=transsearch.Check,Mode=transsearch.Mode,Acc=transsearch.Acc,page }))
 
 			</body>
 		</html>

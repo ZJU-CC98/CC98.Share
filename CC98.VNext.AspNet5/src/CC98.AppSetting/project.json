@@ -1,0 +1,22 @@
+﻿{
+	"version": "1.0.0-*",
+	"description": "CC98 应用程序设置模块",
+	"authors": [ "CC98" ],
+	"tags": [ "CC98" ],
+	"projectUrl": "http://v2.cc98.org",
+	"licenseUrl": "",
+
+	"dependencies": {
+		"EntityFramework.Core": "7.0.0-rc1-final",
+		"Newtonsoft.Json": "8.0.2"
+	},
+
+	"frameworks": {
+		"dotnet5.4": { },
+		"net451": {
+			"frameworkAssemblies": {
+				"System.Runtime": "4.0.10.0"
+			}
+		}
+	}
+}

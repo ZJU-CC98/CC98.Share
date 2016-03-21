@@ -109,8 +109,8 @@ namespace CC98.Share
 					using (var serviceScope = app.ApplicationServices.GetRequiredService<IServiceScopeFactory>()
 						.CreateScope())
 					{
-						//serviceScope.ServiceProvider.GetService<ApplicationDbContext>()
-						//	 .Database.Migrate();
+						// 启用数据库自动迁移
+						serviceScope.ServiceProvider.GetService<CC98ShareModel>().Database.Migrate();
 					}
 				}
 				catch { }

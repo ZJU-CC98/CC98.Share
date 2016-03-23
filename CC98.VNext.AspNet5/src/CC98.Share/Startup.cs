@@ -66,7 +66,7 @@ namespace CC98.Share
 				.AddDbContext<CC98ShareModel>(options =>
 				{
 					// 从配置文件中读取连接到数据库使用的连接字符串
-					options.UseSqlServer("Data:ShareDatabase:ConnectionString");
+					options.UseSqlServer(Configuration["Data:ShareDatabase:ConnectionString"]);
 				});
 
 			// 为应用程序添加 MVC 功能

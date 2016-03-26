@@ -120,7 +120,9 @@ namespace CC98.Share
 			app.UseIISPlatformHandler(options => options.AuthenticationDescriptions.Clear());
 
 			// 允许网站直接返回静态文件（样式表，脚本等）的内容
-			app.UseStaticFiles();
+			app.UseStaticFiles(new Microsoft.AspNet.StaticFiles.StaticFileOptions { ServeUnknownFileTypes = true });
+
+			app.UseFileServer();
 
 			// 配置 MVC 的路径映射表
 			app.UseMvc(routes =>

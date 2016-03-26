@@ -2,15 +2,22 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using CC98.Authentication;
 using CC98.Share.Models;
 using JetBrains.Annotations;
+using Microsoft.AspNet.Authentication;
+using Microsoft.AspNet.Authentication.Cookies;
 using Microsoft.AspNet.Builder;
 using Microsoft.AspNet.Hosting;
+using Microsoft.AspNet.Http;
+using Microsoft.AspNet.Identity;
 using Microsoft.AspNet.Identity.EntityFramework;
 using Microsoft.Data.Entity;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
+using Microsoft.Extensions.OptionsModel;
+using Microsoft.Framework.DependencyInjection;
 
 namespace CC98.Share
 {
@@ -71,6 +78,44 @@ namespace CC98.Share
 
 			// 为应用程序添加 MVC 功能
 			services.AddMvc();
+
+			// 配置应用程序的身份验证设置
+			services.Configure<IdentityOptions>(identityOptions =>
+			{
+				// 应用程序的主 Cookie 设置
+				identityOptions.Cookies.ApplicationCookie.CookieHttpOnly = true;
+				identityOptions.Cookies.ApplicationCookie.CookieSecure = CookieSecureOption.Never;
+				identityOptions.Cookies.ApplicationCookie.LoginPath = new PathString("/Account/LogOn");
+				identityOptions.Cookies.ApplicationCookie.LogoutPath = new PathString("/Account/LogOff");
+				identityOptions.Cookies.ApplicationCookie.AutomaticAuthenticate = true;
+				identityOptions.Cookies.ApplicationCookie.AutomaticChallenge = true;
+
+				// 外部 Cookie（和其他身份验证交互使用的临时票证）设置
+				identityOptions.Cookies.ExternalCookie.CookieHttpOnly = true;
+				identityOptions.Cookies.ExternalCookie.CookieSecure = CookieSecureOption.Never;
+				identityOptions.Cookies.ExternalCookie.AutomaticAuthenticate = false;
+				identityOptions.Cookies.ExternalCookie.AutomaticChallenge = false;
+			});
+
+			// 配置第三方身份验证相关的设置
+			services.Configure<SharedAuthenticationOptions>(options =>
+			{
+				// 将第三方身份验证信息暂存入网站的外部 Cookie 中
+				options.SignInScheme = new IdentityOptions().Cookies.ExternalCookieAuthenticationScheme;
+			});
+
+
+			// 添加外部身份验证管理器功能
+			services.AddExternalSignInManager();
+
+			// 添加缓存和会话数据服务（TempData 必须）
+			services.AddCaching();
+			services.AddSession();
+
+			// 使用增强的 TempData 服务（Message 服务必须）
+			services.AddEnhancedTempData();
+			// 通过 TempData 在网页间传输标准化提示消息的功能
+			services.AddOperationMessages();
 		}
 
 		/// <summary>
@@ -118,6 +163,20 @@ namespace CC98.Share
 
 			// 使用 IIS 平台处理程序承载网站（必须语句，不可去除！）
 			app.UseIISPlatformHandler(options => options.AuthenticationDescriptions.Clear());
+
+			// 启用会话数据服务支持（TempData 必须）
+			app.UseSession();
+
+			// 启用所有 Cookie 相关的身份验证功能
+			app.UseAllCookies();
+
+			// 配置应用程序使用 CC98 账户登录
+			app.UseCC98Authentication(options =>
+			{
+				options.AllowInsecureHttp = true;
+				options.ClientId = Configuration["Authentication:CC98:ClientId"];
+				options.ClientSecret = Configuration["Authentication:CC98:ClientSecret"];
+			});
 
 			// 允许网站直接返回静态文件（样式表，脚本等）的内容
 			app.UseStaticFiles();

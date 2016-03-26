@@ -17,6 +17,7 @@
 		"Microsoft.AspNet.Server.Kestrel": "1.0.0-rc1-final",
 		"Microsoft.AspNet.StaticFiles": "1.0.0-rc1-final",
 		"Microsoft.AspNet.Tooling.Razor": "1.0.0-rc1-final",
+		"Microsoft.AspNet.Session": "1.0.0-rc1-final",
 		"Microsoft.Extensions.CodeGenerators.Mvc": "1.0.0-rc1-final",
 		"Microsoft.Extensions.Configuration.FileProviderExtensions" : "1.0.0-rc1-final",
 		"Microsoft.Extensions.Configuration.Json": "1.0.0-rc1-final",
@@ -26,7 +27,11 @@
 		"Microsoft.Extensions.Logging.Debug": "1.0.0-rc1-final",
 		"Microsoft.VisualStudio.Web.BrowserLink.Loader": "14.0.0-rc1-final",
 
-		"CC98.Authentication.External": "1.0.0"
+		"CC98.Authentication.External": "1.0.0",
+		"CC98.Identity.External": "1.0.0",
+
+		"Sakura.AspNet.Mvc.TempDataExtensions": "1.0.0-rc1-update2",
+		"Sakura.AspNet.Mvc.Messages": "1.0.0-rc1-update2"
 	},
 
 	"commands": {

@@ -50,7 +50,10 @@ namespace CC98.Identity.External
 				return null;
 			}
 
-			await AuthenticationManager.SignInAsync(IdentityOptions.Cookies.ApplicationCookieAuthenticationScheme, externalLoginInfo);
+			// 新的身份验证类型，用于替换外部登录产生的身份验证类型
+			var newScheme = IdentityOptions.Cookies.ApplicationCookieAuthenticationScheme;
+
+			await AuthenticationManager.SignInAsync(newScheme, externalLoginInfo.CloneAs(newScheme));
 			return externalLoginInfo;
 
 		}

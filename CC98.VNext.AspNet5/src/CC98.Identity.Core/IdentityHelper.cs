@@ -76,6 +76,29 @@ namespace CC98.Identity
 		}
 
 		/// <summary>
+		/// 从指定的主体创建新主体，并将其主要所有标识的验证类型更换为指定类型。
+		/// </summary>
+		/// <param name="principal">要复制的主体。</param>
+		/// <param name="authenticationType">新主体中所有标识的验证类型。</param>
+		/// <returns>复制的新主体。</returns>
+		/// <exception cref="ArgumentNullException"><paramref name="principal"/> 或 <paramref name="authenticationType"/> 为 null。</exception>
+		public static ClaimsPrincipal CloneAs(this ClaimsPrincipal principal, string authenticationType)
+		{
+			if (principal == null)
+			{
+				throw new ArgumentNullException(nameof(principal));
+			}
+			if (authenticationType == null)
+			{
+				throw new ArgumentNullException(nameof(authenticationType));
+			}
+
+			var newIdentities = principal.Identities.Select(i => i.CloneAs(authenticationType));
+
+			return new ClaimsPrincipal(newIdentities);
+		}
+
+		/// <summary>
 		/// 获取给定的用户标识包含的所有角色的列表。
 		/// </summary>
 		/// <param name="identity">要检查的用户标识。</param>

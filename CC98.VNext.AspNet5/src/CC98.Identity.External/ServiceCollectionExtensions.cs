@@ -14,7 +14,7 @@ namespace Microsoft.Extensions.DependencyInjection
 		/// 为应用程序添加 CC98 登录身份验证服务。
 		/// </summary>
 		/// <param name="services">服务集合对象。</param>
-	    public static void AddCC98SignManager(this IServiceCollection services)
+	    public static void AddExternalSignInManager(this IServiceCollection services)
 	    {
 			services.TryAddScoped<ExternalSignInManager>();
 	    }

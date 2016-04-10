@@ -11,69 +11,80 @@
 	 class="img-thumbnail">
 <h5>漠蓝无际</h5>
 
+<div class="container">
+	<div style="display:inline; margin-left:1%;text-align:right;">
 
-<div style="display:inline; margin-left:1%;text-align:right;">
+		<form class="form-inline" style="float:left;text-align:left;">
+			<input id="lefile" type="file" style="display:none; float:left;text-align:left;">
+			<div class="input-append">
 
-	<form class="form-inline" style="float:left;text-align:left;">
-		<input id="lefile" type="file" style="display:none; float:left;text-align:left;">
-		<div class="input-append">
+				<a onclick="$('input[id=lefile]').click();">
+					<input id="photoCover" class="btn btn-default" type="text"><span class="btn btn-default" type="button">
+						上传文件
+					</span>
+				</a>
+			</div>
+		</form>
+		<script type="text/javascript">
+			$('input[id=lefile]').change(function () {
+				$('#photoCover').val($(this).val());
+			});
+		</script>
+		<button class="btn btn-default" type="button">
+			新建文件夹
+		</button>
 
-			<a onclick="$('input[id=lefile]').click();">
-				<input id="photoCover" class="btn btn-default" type="text"><span class="btn btn-default" type="button">
-					上传文件
-				</span>
-			</a>
-		</div>
-	</form>
-	<script type="text/javascript">
-$('input[id=lefile]').change(function() {
-$('#photoCover').val($(this).val());
-});
-	</script>
-	<button class="btn btn-default" type="button">
-		新建文件夹
-	</button>
+		<button data-toggle="modal" href="#download" class="btn btn-default" type="button">
+			批量下载
 
-	<button data-toggle="modal" href="#download" class="btn btn-default" type="button">
-		批量下载
+		</button>
 
-	</button>
-
-	<form class="form-inline" style="float:right;text-align:left;margin-left:10px">
-		<div class="form-group">
-			<input type="email" class="form-control" id="exampleInputEmail2" placeholder="输入要搜索的文件">
-		</div>
-		<button type="submit" class="btn btn-default">搜索</button>
-	</form>
+		<form class="form-inline" style="float:right;text-align:left;margin-left:10px">
+			<div class="form-group">
+				<input type="email" class="form-control" id="exampleInputEmail2" placeholder="输入要搜索的文件">
+			</div>
+			<button type="submit" class="btn btn-default">搜索</button>
+		</form>
+	</div>
+	<table class="table table-striped" style="margin-top:20px">
+		<thead style="border:2px solid #eee">
+			<tr>
+				<th><input type="checkbox" name="file" /></th>
+				<th>文件名称</th>
+				<th style="text-align:center">操作</th>
+				<th>上传日期</th>
+				<th>文件大小</th>
+			</tr>
+		</thead>
+		<tbody>
+			<tr>
+				<td><input type="checkbox" name="file" /></td>
+				<td>1</td>
+				<td style="text-align:center"><button class="btn-link">下载</button><button class="btn-link" data-toggle="modal" href="#deletefile">删除</button><button class="btn-link" data-toggle="modal" href="#sharefile">分享</button></td>
+				<td>Anna</td>
+				<td>Anna</td>
+			</tr>
+			<tr>
+				<td><input type="checkbox" name="file" /></td>
+				<td>2</td>
+				<td style="text-align:center"><button class="btn-link">下载</button><button class="btn-link">删除</button><button class="btn-link">分享</button></td>
+				<td>Debbie</td>
+				<td>Anna</td>
+			</tr>
+		</tbody>
+	</table>
+	<div class="pagination-index" style="float:right">
+	<ul class="pagination">
+		<li><a href="#">&laquo;</a></li>
+		<li><a href="#">1</a></li>
+		<li><a href="#">2</a></li>
+		<li><a href="#">3</a></li>
+		<li><a href="#">4</a></li>
+		<li><a href="#">&raquo;</a></li>
+	</ul>
+	</div>
 </div>
-<table class="table table-striped" style="margin-top:20px">
-	<thead style="border:2px solid #eee">
-		<tr>
-			<th><input type="checkbox" name="file" /></th>
-			<th>文件名称</th>
-			<th style="text-align:center">操作</th>
-			<th>上传日期</th>
-			<th>文件大小</th>
-		</tr>
-	</thead>
-	<tbody>
-		<tr>
-			<td><input type="checkbox" name="file" /></td>
-			<td>1</td>
-			<td style="text-align:center"><button class="btn-link">下载</button><button class="btn-link" data-toggle="modal" href="#deletefile">删除</button><button class="btn-link" data-toggle="modal" href="#sharefile">分享</button></td>
-			<td>Anna</td>
-			<td>Anna</td>
-		</tr>
-		<tr>
-			<td><input type="checkbox" name="file" /></td>
-			<td>2</td>
-			<td style="text-align:center"><button class="btn-link">下载</button><button class="btn-link">删除</button><button class="btn-link">分享</button></td>
-			<td>Debbie</td>
-			<td>Anna</td>
-		</tr>
-	</tbody>
-</table>
-
+<!--以下是bootstrap组态，一群各种弹出框-->
 <div id="download" class="modal fade in" style="width:500px;height:300px;position:absolute;margin: 10% 25%;
 background-color:#efefef;display:none;">
 	<div class="modal-header">
@@ -101,8 +112,7 @@ background-color:#efefef;display:none;">
 	<div class="modal-body" style="margin-left:20px">
 		<h5>链接已创建</h5>
 		<input type="text" class="form-control" value="http://pan.baidu.com/s/1hrkN9Ta" />
-		<h5>提取码</h5>
-		<input type="text" class="form-control" value="ewqeq" />
+		
 	</div>
 	<div class="modal-footer">
 		<span id="copysuccess" style="display:none">复制成功！</span>
@@ -122,6 +132,7 @@ background-color:#efefef;display:none;">
 		<p>文件XXX</p>
 	</div>
 	<div class="modal-footer">
+
 		<a href="#" class="btn btn-success">确认</a>
 		<a href="#" class="btn" data-dismiss="modal">取消</a>
 	</div>

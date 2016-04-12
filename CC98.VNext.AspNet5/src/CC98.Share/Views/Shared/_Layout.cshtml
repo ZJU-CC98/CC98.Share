@@ -33,8 +33,8 @@
                         <li><a asp-controller="Home" asp-action="Index">Home</a></li>
                         <li><a asp-controller="Home" asp-action="About">About</a></li>
                         <li><a asp-controller="Home" asp-action="Contact">Contact</a></li>
-						<li><a asp-controller="DownUpload" asp-action="IndexDownload">Download</a></li>
-						<li><a asp-controller="DownUpload" asp-action="IndexUpload">Upload</a></li>
+						<li><a asp-controller="File" asp-action="Download">Download</a></li>
+						<li><a asp-controller="File" asp-action="Upload">Upload</a></li>
                     </ul>
                     @await Html.PartialAsync("_LoginPartial")
                 </div>

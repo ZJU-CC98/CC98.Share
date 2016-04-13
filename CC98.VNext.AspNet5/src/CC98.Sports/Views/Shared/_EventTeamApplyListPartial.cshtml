@@ -1,0 +1,245 @@
+﻿@using System.Globalization
+@model IEnumerable<EventTeamRegistration>
+
+@{
+	var showEvent = (bool)ViewBag.ShowEvent;
+	var showTeam = (bool)ViewBag.ShowTeam;
+	var showAdmin = (bool)ViewBag.ShowAdmin;
+	var forceAdmin = (bool)ViewBag.ForceAdmin; // 强制使用管理员身份管理（否则以当前身份管理）
+	var showAuditState = (bool)ViewBag.ShowAuditState;
+}
+
+<table class="table table-hover table-striped">
+
+	<thead>
+		<tr>
+			@if (showEvent)
+			{
+				<th>赛事</th>
+			}
+			@if (showTeam)
+			{
+				<th>队伍名称</th>
+			}
+			<th>分组编号</th>
+			<th>领队</th>
+			<th>队长</th>
+			<th>教练</th>
+			<th>运动员 / 成员人数</th>
+
+			@if (showAuditState)
+			{
+				<th>审核状态</th>
+				<th>审核提交时间</th>
+			}
+
+			<th>参赛状态</th>
+
+			<th>详情</th>
+
+			@if (showAdmin)
+			{
+				<th>操作</th>
+			}
+		</tr>
+	</thead>
+
+	<tbody>
+
+		@foreach (var i in Model)
+		{
+			<tr>
+				@if (showEvent)
+				{
+					<th><a asp-controller="Event" asp-action="Detail" asp-route-id="@i.Event.Id">@i.Event.Name</a></th>
+				}
+				@if (showTeam)
+				{
+					<th><a asp-controller="Team" asp-action="Detail" asp-route-id="@i.Team.Id">@i.Team.Name</a></th>
+				}
+
+				<td>
+					@if (string.IsNullOrEmpty(i.Group) && string.IsNullOrEmpty(i.GroupNumber))
+					{
+						<span class="text-muted">暂无</span>
+					}
+					else
+					{
+						<span>@string.Format(CultureInfo.InvariantCulture, "{0}{1}", i.Group, i.GroupNumber)</span>
+
+					}
+				</td>
+
+				<td>
+					@if (i.Skipper != null)
+					{
+						<a asp-controller="Member" asp-action="Detail" asp-route-id="@i.Skipper.Id">@i.Skipper.Name</a>
+					}
+					else
+					{
+						<span class="text-muted">暂无</span>
+					}
+				</td>
+				<td>
+					@if (i.Captain != null)
+					{
+						<a asp-controller="Member" asp-action="Detail" asp-route-id="@i.Captain.Id">@i.Captain.Name</a>
+					}
+					else
+					{
+						<span class="text-muted">暂无</span>
+					}
+				</td>
+
+				<td>
+					@if (i.Coach != null)
+					{
+						<a asp-controller="Member" asp-action="Detail" asp-route-id="@i.Coach.Id">@i.Coach.Name</a>
+					}
+					else
+					{
+						<span class="text-muted">暂无</span>
+					}
+				</td>
+
+				<td>
+					@string.Format(CultureInfo.CurrentCulture, "{0} / {1}", i.Members.Where(p => p.Member.Type == MemberType.Player).Count(), i.Members.Count)
+				</td>
+
+				@if (showAuditState)
+				{
+					<td>
+
+						@await Html.PartialAsync("_AuditStatePartial", i.AuditState)
+
+					</td>
+
+					<td>
+						@if (i.AuditCommitTime != null)
+						{
+							<span>@i.AuditCommitTime.Value.ToString("G")</span>
+						}
+						else
+						{
+							<span class="text-muted">无</span>
+						}
+					</td>
+
+				}
+
+				<td>
+					<strong>
+
+
+						@switch (i.EventState)
+						{
+							case TeamEventState.NotStarted:
+								<span class="text-success">正在报名</span>
+								break;
+							case TeamEventState.Playing:
+								<span class="text-primary">正在参赛</span>
+								break;
+							case TeamEventState.Ended:
+								<span>参赛结束</span>
+								break;
+						}
+					</strong>
+				</td>
+
+				<td>
+					<div class="btn-group btn-group-xs">
+						<a asp-controller="TeamEventApply" asp-action="Detail" asp-route-teamId="@i.TeamId" asp-route-eventId="@i.EventId" class="btn btn-default">查看详情</a>
+					</div>
+				</td>
+
+				@if (showAdmin)
+				{
+					<td>
+
+						@if (!i.IsLocked() || (User.CanOperate() && forceAdmin))
+						{
+							<div class="btn-group btn-group-xs">
+								<a asp-controller="TeamEventApply" asp-action="Edit" asp-route-teamId="@i.TeamId" asp-route-eventId="@i.EventId" class="btn btn-default">编辑</a>
+								<button type="button" data-team-name="@i.Team.Name" data-team-id="@i.Team.Id" data-event-name="@i.Event.Name" data-event-id="@i.Event.Id" class="btn btn-danger" onclick="onDeleteEventApply(this);">删除</button>
+							</div>
+						}
+						else if (i.EventState != TeamEventState.NotStarted)
+						{
+							<span class="text-muted">已归档</span>
+						}
+						else
+						{
+							<span class="text-muted">已锁定</span>
+						}
+
+					</td>
+				}
+
+
+
+			</tr>
+
+			}
+
+	</tbody>
+
+</table>
+
+@if (showAdmin)
+{
+	<form asp-controller="TeamEventApply" asp-action="Delete" method="post" asp-antiforgery="true" id="delete-event-apply-form">
+
+		<input type="hidden" name="teamId" id="delete-apply-team-id" />
+		<input type="hidden" name="eventId" id="delete-apply-event-id" />
+
+		<div class="modal fade" id="delete-event-apply-dialog">
+			<div class="modal-dialog">
+				<div class="modal-content">
+					<div class="modal-header">
+						<button type="button" class="close" data-dismiss="modal" aria-label="关闭"><span aria-hidden="true">&times;</span></button>
+						<h4 class="modal-title">删除参赛申请警告</h4>
+					</div>
+					<div class="modal-body">
+						<p>你确定要删除队伍 <strong><span id="delete-apply-team-name-text"></span></strong> 对赛事 <strong><span id="delete-apply-event-name-text"></span></strong> 的参赛申请吗？这个操作将无法撤销。如果你确定要执行删除操作，请点击下面的 <q>确认删除</q>按钮；否则，请点击<q>关闭</q>或者对话框外的任何位置。</p>
+					</div>
+					<div class="modal-footer">
+						<p class="text-danger" id="dialog-error-text"></p>
+						<button type="submit" class="btn btn-danger">确认删除</button>
+						<button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
+					</div>
+				</div><!-- /.modal-content -->
+			</div><!-- /.modal-dialog -->
+		</div><!-- /.modal -->
+
+	</form>
+
+
+	<script type="text/javascript" language="javascript">
+
+		function onDeleteEventApply(btn) {
+
+			$('#delete-event-apply-form').ajaxForm({
+
+				success: function () {
+					window.location.reload();
+				},
+
+				error: function (xhr) {
+					$('#dialog-error-text').text(getErrorText(xhr));
+				}
+
+			});
+
+			$('#delete-apply-team-id').val($(btn).data('team-id'));
+			$('#delete-apply-event-id').val($(btn).data('event-id'));
+
+			$('#delete-apply-team-name-text').text($(btn).data('team-name'));
+			$('#delete-apply-event-name-text').text($(btn).data('event-name'));
+
+			$('#delete-event-apply-dialog').modal();
+
+		}
+
+	</script>
+
+}

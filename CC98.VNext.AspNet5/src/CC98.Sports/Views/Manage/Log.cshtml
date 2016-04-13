@@ -1,0 +1,192 @@
+﻿@using System.Globalization
+@model Sakura.AspNet.IPagedList<Log>
+
+@{
+	ViewBag.Title = "管理日志";
+}
+
+<h1 class="page-header lead text-center">@ViewBag.Title</h1>
+
+<div asp-message-list="Sakura.AspNet.Mvc.Messages.MessageListStyle.AlertDialogClosable"></div>
+
+@if (Model.Any())
+{
+	<table class="table table-hover table-striped">
+
+		<thead>
+			<tr>
+				<th>操作类型</th>
+				<th>操作者</th>
+				<th>关联对象</th>
+				<th>备注</th>
+				<th>时间</th>
+
+				@if (User.IsSystemAdmin())
+				{
+					<th>操作</th>
+				}
+
+			</tr>
+		</thead>
+
+		<tbody>
+			@foreach (var item in Model)
+			{
+				<tr>
+					<td>
+						@item.ActionType.GetDisplayName()
+					</td>
+					<td>
+						<a href="http://www.cc98.org/dispuser.asp?name=@item.CC98Id">@item.CC98Id</a>
+					</td>
+					<td>
+
+						@if (item.RelatedMember != null)
+						{
+							<a asp-controller="Member" asp-action="Detail" asp-route-id="@item.RelatedMember.Id">@item.RelatedMember.Name</a>
+						}
+
+						@if (item.RelatedTeam != null)
+						{
+							<a asp-controller="Team" asp-action="Detail" asp-route-id="@item.RelatedTeam.Id">@item.RelatedTeam.Name</a>
+
+						}
+
+						@if (item.RelatedEvent != null)
+						{
+							<a asp-controller="Event" asp-action="Detail" asp-route-id="@item.RelatedEvent.Id">@item.RelatedEvent.Name</a>
+						}
+
+						@if (item.RelatedTeam == null && item.RelatedEvent == null && item.RelatedMember == null)
+						{
+							<span class="text-muted">无</span>
+						}
+
+					</td>
+					<td>
+						@if (string.IsNullOrEmpty(item.Remark))
+					{
+							<span class="text-muted">无</span>
+					}
+					else
+					{
+							<span>@item.Remark</span>
+					}
+					</td>
+
+					<td>@item.Time.ToString("g", CultureInfo.CurrentCulture)</td>
+
+					@if (User.IsSystemAdmin())
+					{
+						<td>
+							<div class="btn-group btn-group-xs">
+								<button type="button" class="btn btn-danger" data-id="@item.Id" onclick="showDeleteDialog(this);">删除</button>
+							</div>
+						</td>
+					}
+
+				</tr>
+			}
+		</tbody>
+
+	</table>
+
+	<nav asp-pager-source="Model"></nav>
+
+
+	<hr />
+	<button type="submit" class="btn btn-default btn-primary" data-toggle="modal" data-target="#clear-log-dialog">清除所有日志</button>
+
+	<form asp-controller="Manage" asp-action="ClearLog" method="post" asp-antiforgery="true" id="delete-member-form">
+
+		<div class="modal fade" id="clear-log-dialog">
+			<div class="modal-dialog">
+				<div class="modal-content">
+					<div class="modal-header">
+						<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+						<h4 class="modal-title">日志删除警告</h4>
+					</div>
+					<div class="modal-body">
+						<p>
+							你确定要删除所有日志项目吗？这个操作将会产生永久效果且无法撤销。如果你确定要这么做，请单击<q>确认删除</q>按钮。否则，请点击<q>关闭</q>按钮或者点击对话框外的任何位置。
+						</p>
+						<p>在下面输入删除日志的说明：</p>
+						<textarea type="text" name="remark" rows="3" class="form-control"></textarea>
+					</div>
+					<div class="modal-footer">
+						<p class="text-danger" id="dialog-error-text"></p>
+						<button type="submit" class="btn btn-danger">确认删除</button>
+						<button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
+					</div>
+				</div><!-- /.modal-content -->
+			</div><!-- /.modal-dialog -->
+		</div><!-- /.modal -->
+
+	</form>
+
+	if (User.IsSystemAdmin())
+	{
+		<form asp-controller="Manage" asp-action="DeleteLog" method="post" asp-antiforgery="true" id="delete-log-form">
+
+			<input type="hidden" name="id" id="delete-id" />
+
+			<div class="modal fade" id="delete-dialog">
+				<div class="modal-dialog">
+					<div class="modal-content">
+						<div class="modal-header">
+							<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+							<h4 class="modal-title">删除日志警告</h4>
+						</div>
+						<div class="modal-body">
+							<p>你确定要删除这个日志项目吗？这个操作无法撤销。如果你确定要执行删除操作，请点击下面的 <q>确认删除</q>按钮；否则，请点击<q>关闭</q>或者对话框外的任何位置。</p>
+						</div>
+						<div class="modal-footer">
+							<p class="text-danger" id="delete-log-dialog-error-text"></p>
+							<button type="submit" class="btn btn-danger">确认删除</button>
+							<button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
+						</div>
+					</div><!-- /.modal-content -->
+				</div><!-- /.modal-dialog -->
+			</div><!-- /.modal -->
+
+		</form>
+	}
+
+}
+else
+{
+	<p class="text-center text-muted">目前还没有任何日志项目</p>
+}
+
+@section scripts{
+
+	@if (User.IsSystemAdmin())
+	{
+		@await Html.PartialAsync("_ValidationScriptsPartial")
+		@await Html.PartialAsync("_AjaxPartial")
+
+		<script type="text/javascript" language="javascript">
+
+			$(document).ready(function () {
+
+				$('#delete-log-form').ajaxForm({
+
+					error: function (xhr) {
+						$('#delete-log-dialog-error-text').text(getErrorText(xhr));
+					},
+
+					success: function () {
+						window.location.reload();
+					}
+				});
+
+			});
+
+			function showDeleteDialog(btn) {
+				$('#delete-id').val($(btn).data('id'));
+				$('#delete-dialog').modal();
+			}
+
+		</script>
+	}
+}

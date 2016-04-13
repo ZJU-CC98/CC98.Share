@@ -1,0 +1,103 @@
+﻿@model CC98.LogOn.ViewModels.Account.RegisterViewModel
+@{
+	ViewBag.Title = "注册 CC98 账号";
+}
+
+<h1 class="page-header lead text-center">@ViewBag.Title</h1>
+
+<form asp-controller="Account" asp-action="Register" asp-antiforgery="true" method="post">
+	<div class="row">
+		<div class="col-md-6">
+			<div class="panel panel-primary">
+				<div class="panel-heading">
+					<h2 class="panel-title">必需信息</h2>
+				</div>
+				<div class="panel-body">
+
+					<div>
+						<div class="form-group">
+							<label asp-for="UserName" class="control-label"></label>
+							<input asp-for="UserName" type="text" class="form-control"/>
+							<span asp-validation-for="UserName" class="text-danger"></span>
+							<p class="help-block">用户名不能和其他用户重复。只能包含 10 个半角字符。每个非半角英文、数字的符号（包括汉字、中文标点、其他语言文字等）折算两个字符。出于个人隐私安全考虑，我们建议你不要使用真实姓名、学号等可辨识的个人身份信息作为用户名。<strong class="text-warning">用户名一经注册将无法更改。</strong>
+							</p>
+						</div>
+						<div class="form-group">
+							<label asp-for="Password" class="control-label"></label>
+							<input asp-for="Password" type="password" class="form-control"/>
+							<span asp-validation-for="Password" class="text-danger"></span>
+							<p class="help-block">建议你使用同时包含数字、大写字母、小写字母和标点符号的混合内容作为密码。由于系统限制，使用中文或者其它无法直接输入的字符作为密码可能会产生验证问题，请不要使用这些字符作为密码。</p>
+
+						</div>
+						<div class="form-group">
+							<label asp-for="ConfirmPassword" class="control-label"></label>
+							<input asp-for="ConfirmPassword" type="password" class="form-control"/>
+							<span asp-validation-for="ConfirmPassword" class="text-danger"></span>
+							<p class="help-block">请再输入一次密码。</p>
+						</div>
+					</div>
+
+				</div>
+			</div>
+		</div>
+		<div class="col-md-6">
+			<div class="panel panel-info">
+				<div class="panel-heading">
+					<h2 class="panel-title">可选信息</h2>
+				</div>
+				<div class="panel-body">
+					<p>以下信息是你的完整个人信息设置的一部分，这些内容不是必需的。你可以在注册之后通过 CC98 网站的用户控制面板修改完整的个人资料。</p>
+					<hr/>
+					<div>
+						<div class="form-group">
+							<label asp-for="Gender" class="control-label"></label>
+							<div>
+								<label class="radio-inline">
+									<input type="radio" asp-for="Gender" value="@nameof(Gender.Male)"/> 男
+								</label>
+								<label class="radio-inline">
+									<input type="radio" asp-for="Gender" value="@nameof(Gender.Female)"/> 女
+								</label>
+							</div>
+							<span asp-validation-for="Gender" class="text-danger"></span>
+							<p class="help-block">
+								选择你注册的用户账户显示的性别。默认选项为<q>男</q>。
+							</p>
+						</div>
+
+						<div class="form-group">
+							<label asp-for="Birthday" class="control-label"></label>
+							<input asp-for="Birthday" type="date" class="form-control" />
+							<span asp-validation-for="Birthday" class="text-danger"></span>
+							<p class="help-block">你的生日。如果你填写了生日日期，在生日的那天会收到 CC98 送出的神秘礼物哦！</p>
+						</div>
+
+						<div class="form-group">
+							<label asp-for="Email" class="control-label"></label>
+							<input asp-for="Email" type="email" class="form-control"/>
+							<span asp-validation-for="Email" class="text-danger"></span>
+							<p class="help-block">你的电子邮件地址。这项信息仅用于个人资料展示，我们不会向你的邮箱发送任何邮件。</p>
+						</div>
+
+						<div class="form-group">
+							<label asp-for="ConfirmPassword" class="control-label"></label>
+							<input asp-for="ConfirmPassword" type="password" class="form-control" />
+							<span asp-validation-for="ConfirmPassword" class="text-danger"></span>
+							<p class="help-block">请再输入一次密码。</p>
+						</div>
+					</div>
+
+				</div>
+			</div>
+		</div>
+
+	</div>
+	<hr />
+	<div asp-validation-summary="ValidationSummary.ModelOnly" class="text-danger"></div>
+	<button type="submit" class="btn btn-default btn-primary">确认注册</button>
+	<button type="reset" class="btn btn-default">清空输入</button>
+</form>
+
+@section scripts{
+	@await Html.PartialAsync("_ValidationScriptsPartial")
+}

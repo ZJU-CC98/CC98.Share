@@ -1,0 +1,35 @@
+<div style="background-color: lavender">
+    <b>Progressbar with event listeners (see console log)</b>
+
+    <p>
+        <div jquery-widget config="progressbarConfig" disabled="{{disabled}}" ng-model="model.pb"></div>
+    </p>
+
+    <p>
+        Methods:
+        <button ng-click="model.pb.method='enable'">Enable</button>
+        <button ng-click="model.pb.method='disable'">Disable</button>
+    </p>
+
+    <p>
+        Directive Attributes:
+    </p>
+    <div style="margin-left:5em">
+        <p>
+            Disabled:
+            <input type="checkbox" value="{{disabled}}" ng-click="disabled = !disabled"/>
+        </p>
+    </div>
+    <p>ngModel Settings:</p>
+    <div style="margin-left:5em">
+        <p>
+            Value:
+            <input type="text" ng-model="model.pb.value">
+        </p>
+        <p>
+            Max:
+            <input type="text" ng-model="model.pb.max">
+        </p>
+    </div>
+    ng-model="{{model.pb}}"
+</div>

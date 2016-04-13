@@ -1,0 +1,50 @@
+﻿
+
+<form asp-controller="Game" asp-action="Delete" method="post" asp-antiforgery="true" id="delete-game-form">
+
+	<input type="hidden" name="id" id="delete-game-id" />
+
+	<div class="modal fade" id="delete-game-dialog">
+		<div class="modal-dialog">
+			<div class="modal-content">
+				<div class="modal-header">
+					<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+					<h4 class="modal-title">删除警告</h4>
+				</div>
+				<div class="modal-body">
+					<p>你确定要删除比赛 <strong><span id="delete-game-name-text"></span></strong> 吗？这个操作将无法撤销。如果你确定要执行删除操作，请点击下面的 <q>确认删除</q>按钮；否则，请点击<q>关闭</q>或者对话框外的任何位置。</p>
+				</div>
+				<div class="modal-footer">
+					<p class="text-danger" id="dialog-error-text"></p>
+					<button type="submit" class="btn btn-danger">确认删除</button>
+					<button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
+				</div>
+			</div><!-- /.modal-content -->
+		</div><!-- /.modal-dialog -->
+	</div><!-- /.modal -->
+
+</form>
+
+<script type="text/javascript" language="javascript">
+
+	function showDeleteGame(btn) {
+
+		$('#delete-game-form').ajaxForm({
+			success: function (result, statusText, xhr) {
+				window.location.reload();
+			},
+			error: function (xhr, statusText) {
+				$('#dialog-error-text').text(getErrorText(xhr));
+				$('#dialog-error-text').show();
+			}
+		});
+
+		$('#delete-game-name-text').text($(btn).data('name'));
+		$('#delete-game-id').val($(btn).data('id-value'));
+
+		$('#delete-game-dialog').modal();
+
+
+	}
+
+</script>

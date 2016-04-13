@@ -1,0 +1,21 @@
+﻿@using System.Security.Claims
+@using Microsoft.AspNet.Http.Extensions
+
+@if (User.Identity.IsAuthenticated)
+{
+    <form asp-controller="Account" asp-action="LogOff" asp-antiforgery="true" method="post" id="logoutForm" class="navbar-right">
+        <ul class="nav navbar-nav navbar-right">
+            <li>
+                <a asp-controller="Manage" asp-action="Index" title="Manage">@User.GetUserName()</a>
+            </li>
+            <li><a href="javascript:document.getElementById('logoutForm').submit()">注销</a></li>
+        </ul>
+    </form>
+}
+else
+{
+    <ul class="nav navbar-nav navbar-right">
+        <li><a href="https://secure.cc98.org/Register">注册</a></li>
+        <li><a asp-controller="Account" asp-action="LogOn" asp-route-returnUrl="@Context.Request.GetDisplayUrl()">登录</a></li>
+    </ul>
+}

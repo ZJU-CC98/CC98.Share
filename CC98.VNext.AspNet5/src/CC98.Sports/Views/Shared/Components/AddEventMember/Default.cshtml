@@ -1,0 +1,83 @@
+﻿@model IEnumerable<Member>
+@{ 
+	var eventId = (int)ViewBag.EventId;
+	var teamId = (int)ViewBag.TeamId;
+}
+
+
+<form asp-controller="TeamEventApply" asp-action="AddMember" asp-antiforgery="true" method="post" id="add-event-member-form">
+
+	<input type="hidden" name="eventId" value="@eventId" />
+	<input type="hidden" name="teamId" value="@teamId" />
+ 
+	<div class="modal fade" id="add-event-member-dialog">
+		<div class="modal-dialog modal-lg">
+			<div class="modal-content">
+				<div class="modal-header">
+					<button type="button" class="close" data-dismiss="modal" aria-label="关闭"><span aria-hidden="true">&times;</span></button>
+					<h4 class="modal-title">添加参赛队伍成员</h4>
+				</div>
+				<div class="modal-body">
+
+					@if (Model.Any())
+					{
+						<p>要添加特定的成员，请选中该成员姓名左侧的复选框。注意：一旦加入参赛队伍，在队伍比赛结束前，该成员将无法离队，也不能修改自己的个人资料。被添加的成员必须符合以下条件：</p>
+						<ul>
+							<li>已经正式加入该队伍，也即他和队伍的入队双向审核都处于<q>已接受</q>状态。</li>
+							<li>该成员的资料已经通过系统管理员的审核。</li>
+							<li>该成员在本赛事中尚未被其他队伍纳入参赛队伍。</li>
+						</ul>
+						<table class="table table-striped table-hover">
+							<thead>
+								<tr>
+									<th>状态</th>
+									<th>姓名</th>
+									<th>身份</th>
+									<th>备注</th>
+								</tr>
+							</thead>
+							<tbody>
+								@foreach (var member in Model)
+								{
+									<tr>
+										<th><input type="checkbox" name="memberId" value="@member.Id" onchange="setRowState(this);" /></th>
+										<td><a asp-controller="Member" asp-action="Detail" asp-route-id="@member.Id">@member.Name</a></td>
+										<td>@await Html.PartialAsync("_MemberTypePartial", member.Type)</td>
+										<td>@await Html.PartialAsync("_MemberRemarkPartial", member)</td>
+									</tr>
+								}
+							</tbody>
+						</table>
+					}
+					else
+					{
+						<p class="text-center text-muted">队伍中所有符合要求的成员均已报名参赛。</p>
+					}
+
+				</div>
+				<div class="modal-footer">
+					<p class="text-danger" id="dialog-error-text"></p>
+					<button type="submit" class="btn btn-primary">添加成员</button>
+					<button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
+				</div>
+			</div><!-- /.modal-content -->
+		</div><!-- /.modal-dialog -->
+	</div><!-- /.modal -->
+
+</form>
+
+<script type="text/javascript" language="javascript">
+
+	function setRowState(item) {
+
+		var row = $(item).closest('tr');
+		var isChecked = $(item).prop('checked');
+
+		if (isChecked) {
+			$(row).addClass('success');
+		} else {
+			$(row).removeClass('success');
+		}
+	}
+
+</script>

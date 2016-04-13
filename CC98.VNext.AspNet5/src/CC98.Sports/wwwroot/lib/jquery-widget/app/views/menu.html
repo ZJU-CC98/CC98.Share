@@ -1,0 +1,65 @@
+<div style="background-color: lightgoldenrodyellow">
+
+    <b>Menu with event listeners (see console log)</b>
+
+    <p>
+        <ul jquery-widget config="menuConfig" disabled="{{disabled}}" ng-model="model.menu">
+            <li class="ui-state-disabled">Aberdeen</li>
+            <li>Ada</li>
+            <li>Adamsville</li>
+            <li>Addyston</li>
+            <li>Delphi
+                <ul>
+                    <li class="ui-state-disabled">Ada</li>
+                    <li>Saarland</li>
+                    <li>Salzburg an der schönen Donau</li>
+                </ul>
+            </li>
+            <li>Saarland</li>
+            <li>Salzburg
+                <ul>
+                    <li>Delphi
+                        <ul>
+                            <li>Ada</li>
+                            <li>Saarland</li>
+                            <li>Salzburg</li>
+                        </ul>
+                    </li>
+                    <li>Delphi
+                        <ul>
+                            <li>Ada</li>
+                            <li>Saarland</li>
+                            <li>Salzburg</li>
+                        </ul>
+                    </li>
+                    <li>Perch</li>
+                </ul>
+            </li>
+            <li class="ui-state-disabled">Amesville</li>
+        </ul>
+    </p>
+
+    <p>
+        Methods:
+        <button ng-click="model.menu.method='next'">next</button>
+        <button ng-click="model.menu.method='previous'">previous</button>
+    </p>
+
+    <p>
+        Directive Attributes:
+    </p>
+    <div style="margin-left:5em">
+        <p>
+            Disabled:
+            <input type="checkbox" value="{{disabled}}" ng-click="disabled = !disabled"/>
+        </p>
+    </div>
+    <p>ngModel Settings:</p>
+    <div style="margin-left:5em">
+        <p>
+            Items:
+            <input type="text" ng-model="model.menu.items">
+        </p>
+    </div>
+    ng-model="{{model.menu}}"
+</div>

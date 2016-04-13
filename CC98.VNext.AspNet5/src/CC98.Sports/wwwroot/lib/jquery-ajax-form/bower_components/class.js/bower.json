@@ -1,0 +1,20 @@
+{
+    "name": "class.js",
+    "main": "src/class.js",
+    "version": "1.0.0",
+    "ignore": [
+        "docs",
+        "tests",
+        ".gitignore",
+        "*.rst",
+        "*.html"
+    ],
+    "dependencies": {},
+    "devDependencies": {},
+    "keywords": [
+        "class",
+        "classjs",
+        "javascript",
+        "library"
+    ]
+}

@@ -1,0 +1,17 @@
+{
+  "name": "CC98.LogOn",
+  "private": true,
+  "dependencies": {
+    "bootstrap": "3.3.6",
+    "jquery": "2.2.2",
+    "jquery-validation": "*",
+    "jquery-validation-unobtrusive": "*",
+    "Microsoft.jQuery.Unobtrusive.Ajax": "*",
+    "jquery-ajaxform": "*",
+    "bootstrap-datetimepicker": "*"
+  },
+  "resolutions": {
+    "bootstrap": "3.3.6",
+    "jquery": ">= 1.7.2"
+  }
+}

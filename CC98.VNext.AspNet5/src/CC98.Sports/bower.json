@@ -1,0 +1,23 @@
+{
+  "name": "CC98.Sports",
+  "private": true,
+  "dependencies": {
+    "bootstrap": "3.3.6",
+    "bootstrap-touch-carousel": "0.8.0",
+    "eonasdan-bootstrap-datetimepicker": "4.17.37",
+    "hammer.js": "2.0.6",
+    "jquery": "2.2.2",
+    "jquery-form": "3.46.0",
+    "jquery-file-upload": "9.12.1",
+    "jquery-ui": "1.11.4",
+    "jquery-widget": "*",
+    "jquery.iframe-transport": "1.0.0",
+    "jquery-validation": "1.15.0",
+    "jquery-validation-unobtrusive": "3.2.6",
+    "Microsoft.jQuery.Unobtrusive.Ajax": "3.2.3"
+  },
+  "resolutions": {
+    "bootstrap": "3.3.6",
+    "jquery": "2.2.2"
+  }
+}

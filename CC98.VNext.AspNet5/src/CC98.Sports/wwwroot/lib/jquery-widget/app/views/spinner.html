@@ -1,0 +1,49 @@
+<div style="background-color: rosybrown">
+    <b>Spinner with event listeners (see console log)</b>
+
+    <p>
+        <input jquery-widget config="spinnerConfig" icons="{{icons}}" culture="en-US" ng-model="model.spinner">
+    </p>
+
+    <p>
+        Methods:
+        <button ng-click="model.spinner.method='enable'">Enable</button>
+        <button ng-click="model.spinner.method='disable'">Disable</button>
+        <button ng-click="model.spinner.method={value: 1}">value</button>
+        <button ng-click="model.spinner.method='stepUp'">StepUp</button>
+        <button ng-click="model.spinner.method='stepDown'">StepDown</button>
+        <button ng-click="model.spinner.method='pageUp'">PageUp</button>
+        <button ng-click="model.spinner.method='pageDown'">PageDown</button>
+    </p>
+
+    <p>
+        Directive Attributes:
+    </p>
+    <div style="margin-left:5em">
+        <p>
+            Icons:
+            <a href="" ng-click="icons = {down: 'ui-icon-triangle-1-s', up: 'ui-icon-triangle-1-n'}">standard</a>
+            <a href="" ng-click="icons = {down: 'ui-icon-wrench', up: 'ui-icon-disk'}">funky</a>
+        </p>
+    </div>
+    <p>ngModel Settings:</p>
+    <div style="margin-left:5em">
+        <p>
+            Page:
+            <input type="text" ng-model="model.spinner.page">
+        </p>
+        <p>
+            Step:
+            <input type="text" ng-model="model.spinner.step">
+        </p>
+        <p>
+            Min:
+            <input type="text" ng-model="model.spinner.min">
+        </p>
+        <p>
+            Max:
+            <input type="text" ng-model="model.spinner.max">
+        </p>
+    </div>
+    ng-model="{{model.spinner}}"
+</div>

@@ -1,0 +1,77 @@
+﻿@model string[]
+
+<div class="files-container">
+
+	<div id="input-container">
+
+		@foreach (var item in Model)
+		{
+			<input type="hidden" name="files" value="@item" />
+		}
+
+	</div>
+
+	<div id="ui-container">
+
+	</div>
+
+</div>
+
+<script type="text/javascript">
+
+	function deleteItem(btn) {
+
+		var id = $(btn).data('id');
+		$('#input-container').children().eq(id).remove();
+
+		rebuildItems();
+	}
+
+	function addItems(items) {
+
+		$.each(items, function (index, value) {
+
+			var newItem = $.parseHTML('<input type="hidden" name="files" />');
+			$(newItem).val(value);
+
+			$('#input-container').append(newItem);
+
+		});
+
+		rebuildItems();
+	}
+
+	function rebuildItems() {
+
+		$('#ui-container').empty();
+
+		var items = $('#input-container').children();
+
+		if (items.length === 0) {
+			$('#ui-container').append($.parseHTML('<p class="text-muted text-center">你目前还没有上传任何文件</p>'));
+		}
+		else {
+
+			$('#ui-container').append($.parseHTML('<table class="table table-striped table-hover"><thead><tr><th>文件</th><th>操作</th></tr></thead><tbody></tbody></table>'));
+
+			var contentRoot = $('#ui-container').find('tbody');
+
+			items.each(function (index, value) {
+
+				var fileName = $(value).val();
+
+				var newItem = $.parseHTML('<tr><td><a target="_blank"></a></td><td><button type="button" class="btn btn-xs btn-danger" onclick="deleteItem(this);">删除</button></td></tr>');
+
+				$(newItem).find('button').attr('data-id', index);
+				$(newItem).find('a').prop('href', fileName);
+				$(newItem).find('a').text(fileName);
+
+				$(contentRoot).append(newItem);
+
+
+			});
+		}
+
+	}
+
+</script>

@@ -1,0 +1,47 @@
+﻿@model TeamEventApplyViewModel
+@{
+	var eventItem = (Event)ViewBag.Event;
+	var teams = (IEnumerable<Team>) ViewBag.Teams;
+
+	var teamSelectList = new SelectList(teams, nameof(Team.Id), nameof(Team.Name));
+}
+
+<form asp-controller="Team" asp-action="ApplyEvent" asp-antiforgery="true" method="post" id="team-apply-event-form">
+
+	<input type="hidden" asp-for="EventId" value="@eventItem.Id" />
+
+	<div class="modal fade" id="team-apply-event-modal">
+		<div class="modal-dialog">
+			<div class="modal-content">
+				<div class="modal-header">
+					<button type="button" class="close" data-dismiss="modal" aria-label="关闭"><span aria-hidden="true">&times;</span></button>
+					<h4 class="modal-title">队伍报名参赛</h4>
+				</div>
+				<div class="modal-body">
+
+					<p>请选择你要报名参加的赛事和队伍。注意，赛事和队伍在你确认操作后将不可修改。如果你需要报名参加其它赛事或使用其它队伍报名，你需要重新创建一个新的参赛申请。</p>
+
+					<div class="form-group">
+						<label for="event-input" class="control-label">报名赛事</label>
+						<input id="event-input" readonly="readonly" value="@eventItem.Name" class="form-control" />
+						<p class="help-block">要报名参加的赛事。</p>
+					</div>
+
+					<div class="form-group">
+						<label asp-for="TeamId" class="control-label">报名赛事</label>
+						<select asp-for="TeamId" asp-items="teamSelectList" asp-option-label="选择一支队伍" class="form-control"></select>
+						<p class="help-block">要报名参赛的队伍。如果你在列表中看不到任何选项，请先注册你的领队身份并创建一支队伍。</p>
+					</div>
+
+				</div>
+				<div class="modal-footer">
+					<span class="text-danger" id="dialog-error-text"></span>
+					<button type="submit" class="btn btn-primary">申请报名</button>
+					<button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
+				</div>
+			</div><!-- /.modal-content -->
+		</div><!-- /.modal-dialog -->
+	</div><!-- /.modal -->
+
+
+</form>

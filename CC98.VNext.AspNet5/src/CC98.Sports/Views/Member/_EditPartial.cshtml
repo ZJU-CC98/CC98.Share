@@ -1,0 +1,354 @@
+﻿@using System.Diagnostics
+@using CC98
+@model Member
+@inject AppSettingService<SystemSetting> SettingService
+
+@{
+	var isEditMode = (bool)ViewBag.IsEditMode;
+
+	var files = (Model?.UploadImagePaths ?? string.Empty).Split(new[] { '\n' }, StringSplitOptions.RemoveEmptyEntries);
+
+	// 列表
+	var departmentList = SettingService.Current.DepartmentList.SplitWithNewLine();
+	var locationList = SettingService.Current.LocationList.SplitWithNewLine();
+}
+
+@* 验证警告 *@
+
+<div class="row">
+
+	<div class="col-md-6">
+		<div class="panel panel-default panel-primary">
+			<div class="panel-heading">
+				<h2 class="panel-title">注册类型</h2>
+			</div>
+			<div class="panel-body">
+				<p>注册类型将影响到你在系统中可以执行的操作，以及需要填写的注册信息。如果你需要同时报名多个身份，请分别为它们进行注册。<strong>注意：由于领队不能上场比赛，你不能同时报名为球队领队和运动员。</strong></p>
+				<hr />
+				<div>
+					<div class="radio">
+						<label>
+							<input type="radio" asp-for="Type" value="@nameof(MemberType.Officer)" /> 比赛官员
+						</label>
+						<p class="help-block">申请担任裁判、助理裁判、第四官员等职务。你需要提供个人基本信息、联系方式，以及适应的岗位。在比赛准备和进行阶段，你需要提供胜任职位和可执勤时间段的相关信息，等待管理员进行调度。</p>
+					</div>
+
+					<div class="radio">
+						<label>
+							<input type="radio" asp-for="Type" value="@nameof(MemberType.Coach)" /> 教练
+						</label>
+						<p class="help-block">申请作为教练。你需要提供个人基本信息和联系方式。在稍后你需要申请加入对应的球队才能正式被记录为球队教练。</p>
+					</div>
+
+					<div class="radio">
+						<label>
+							<input type="radio" asp-for="Type" value="@nameof(MemberType.Skipper)" /> 球队领队
+						</label>
+						<p class="help-block">申请作为领队。除基本信息外，你还需要填写详细的校内身份证明信息，并提供身份证明文件。在赛事开始阶段，你还需要负责注册球队并管理球队的球员安排。</p>
+					</div>
+
+					<div class="radio">
+						<label>
+							<input type="radio" asp-for="Type" value="@nameof(MemberType.Player)" /> 运动员
+						</label>
+						<p class="help-block">申请作为运动员（包括队长）参赛。除了领队的信息外，你还需要提供在校证明和健康证明。在球队公开报名阶段，你需要和球队双向选择报名加入球队。</p>
+					</div>
+
+
+
+					<span asp-validation-for="Type" class="text-danger"></span>
+
+					@if (User.CanOperate())
+					{
+						<hr />
+						<div class="form-group">
+							<label asp-for="AuditState" class="control-label">审核状态</label>
+							<select asp-enum-for="AuditState" asp-text-source="EnumOptionTextSource.Name" class="form-control"></select>
+							<span asp-validation-for="AuditState" class="text-danger"></span>
+							<p class="help-block">作为管理员，你可以直接修改该成员目前的审核状态。</p>
+						</div>
+
+						<div class="form-group">
+							<label asp-for="AuditCommitTime" class="control-label">审核提交时间</label>
+
+							<div class='input-group date' id='audit-commit-time-group'>
+								<input type='text' asp-for="AuditCommitTime" class="form-control" />
+								<span class="input-group-addon">
+									<span class="glyphicon glyphicon-calendar"></span>
+								</span>
+							</div>
+							<span asp-validation-for="AuditCommitTime" class="text-danger"></span>
+							<p class="help-block">作为管理员，你可以直接修改该成员的审核提交时间。</p>
+						</div>
+					}
+
+				</div>
+
+
+			</div>
+		</div>
+
+		<div class="panel panel-default panel-primary">
+			<div class="panel-heading">
+				<h2 class="panel-title">个人基本信息</h2>
+			</div>
+			<div class="panel-body">
+				<p>你必须填写下列信息，才能在成员系统中完成注册。所有职位都需要填写这些内容。</p>
+
+				<fieldset id="member-basic-info-set">
+
+					<div class="form-group">
+						<label asp-for="Name" class="control-label">姓名</label>
+						<input asp-for="Name" type="text" class="form-control" />
+						<span asp-validation-for="Name" class="text-danger"></span>
+						<p class="help-block">你的真实姓名。请确保你的姓名和证件上的信息一致。</p>
+					</div>
+
+					@if (isEditMode)
+					{
+						<div class="form-group">
+							<label asp-for="CC98Id" class="control-label">关联的 CC98 账号</label>
+							<input asp-for="CC98Id" type="text" class="form-control" id="cc98id-input" />
+							<span asp-validation-for="CC98Id" class="text-danger"></span>
+							<p class="help-block">这个账号关联的 CC98 账号。除系统管理员外，只有账号所有者才能修改个人信息。</p>
+
+							<p id="edit-cc98id-warning" class="text-warning hide">
+								<span class="glyphicon glyphicon-warning-sign"></span> 警告：如果你修改了这个信息，原来的所有者将失去对个人信息的管理权。
+							</p>
+						</div>
+					}
+
+					<div class="form-group">
+						<label asp-for="Gender" class="control-label">性别</label>
+						<select asp-enum-for="Gender" class="form-control" asp-option-label="选择一个性别" asp-text-source="EnumOptionTextSource.Name"></select>
+						<span asp-validation-for="Gender" class="text-danger"></span>
+						<p class="help-block">你的性别。</p>
+					</div>
+
+					<div class="form-group">
+						<label asp-for="Nationality" class="control-label">国籍</label>
+						<div>
+							<div class="input-group">
+								<input asp-for="Nationality" type="text" class="form-control" id="nationality-input" />
+								<div class="input-group-btn">
+									<button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">常用 <span class="caret"></span></button>
+									<ul class="dropdown-menu dropdown-menu-right">
+										<li><a href="#" onclick="$('#nationality-input').val($(this).text());">@SettingService.Current.DefaultNation</a></li>
+									</ul>
+								</div>
+							</div>
+						</div>
+						<span asp-validation-for="Nationality" class="text-danger"></span>
+						<p class="help-block">你的国籍，这将用于你判断是否属于留学生。如果你不是留学生，请通过下拉列表填写标准国籍。</p>
+					</div>
+
+					<div class="form-group">
+						<label asp-for="ContactInfo" class="control-label">联系电话</label>
+						<input asp-for="ContactInfo" type="text" class="form-control" />
+						<span asp-validation-for="ContactInfo" class="text-danger"></span>
+						<p class="help-block">你的联系电话。</p>
+					</div>
+
+					<div class="form-group">
+						<label asp-for="Location" class="control-label">位置</label>
+
+						<div class="input-group">
+							<input asp-for="Location" type="text" class="form-control" id="location-input" />
+							<div class="input-group-btn">
+								<button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">常用 <span class="caret"></span></button>
+								<ul class="dropdown-menu dropdown-menu-right">
+									<li><a href="#" data-text="" onclick="return setLocationText(this);">清空</a></li>
+
+									@if (locationList.Length != 0)
+									{
+										<li role="separator" class="divider"></li>
+										foreach (var i in locationList)
+										{
+											<li><a href="#" data-text="@i" onclick="return setLocationText(this);">@i</a></li>
+										}
+									}
+								</ul>
+							</div><!-- /btn-group -->
+						</div>
+						<span asp-validation-for="Location" class="text-danger"></span>
+						<p class="help-block">你所在的位置（如校区），这可帮助管理人员更好地安排涉及到你的活动。</p>
+					</div>
+
+					<hr />
+
+					<div class="form-group">
+						<label asp-for="Description" class="control-label">个人简介（可选）</label>
+						<textarea asp-for="Description" rows="5" class="form-control"></textarea>
+						<span asp-validation-for="Description" class="text-danger"></span>
+						<p class="help-block">你的个人简介，将会显示在详细信息页面，可以帮助其他人更好地了解你的情况。</p>
+					</div>
+
+
+				</fieldset>
+
+
+
+			</div>
+		</div>
+
+	</div>
+
+	<div class="col-md-6">
+
+		<div class="panel panel-default panel-info">
+			<div class="panel-heading">
+				<h2 class="panel-title">个人详细信息</h2>
+			</div>
+			<div class="panel-body">
+
+				<p>如果你报名作为领队或球员，你必须填写这些信息。</p>
+
+				<hr />
+
+				<fieldset id="member-detail-info-set">
+
+					<div class="form-group">
+						<label asp-for="PersonalId" class="control-label">身份证件号码</label>
+						<input asp-for="PersonalId" type="text" class="form-control" />
+						<span asp-validation-for="PersonalId" class="text-danger"></span>
+						<p class="help-block">你的身份证、军官证或者护照号码。</p>
+					</div>
+
+					<div class="form-group">
+						<label asp-for="SchoolId" class="control-label">学校证件号码</label>
+						<input asp-for="SchoolId" type="text" class="form-control" />
+						<span asp-validation-for="SchoolId" class="text-danger"></span>
+						<p class="help-block">你的学号或者教工号。</p>
+					</div>
+
+					<div class="form-group">
+						<label asp-for="Department" class="control-label">所在部门</label>
+
+						<div class="input-group">
+							<input asp-for="Department" type="text" class="form-control" id="department-input" />
+							<div class="input-group-btn">
+								<button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">常用 <span class="caret"></span></button>
+								<ul class="dropdown-menu dropdown-menu-right">
+									<li><a href="#" data-text="" onclick="return setDepartmentText(this);">清空</a></li>
+
+									@if (departmentList.Length != 0)
+									{
+										<li role="separator" class="divider"></li>
+										foreach (var i in departmentList)
+										{
+											<li><a href="#" data-text="@i" onclick="return setDepartmentText(this);">@i</a></li>
+										}
+									}
+								</ul>
+							</div><!-- /btn-group -->
+						</div>
+						<span asp-validation-for="Department" class="text-danger"></span>
+						<p class="help-block">你所在的院系、研究所或者学校直属机构的名称。</p>
+					</div>
+
+				</fieldset>
+
+			</div>
+		</div>
+
+		<div class="panel panel-default panel-info">
+			<div class="panel-heading">
+				<h2 class="panel-title">运动员信息</h2>
+			</div>
+			<div class="panel-body">
+
+				<p>如果你报名作为运动员，请填写以下信息。</p>
+
+				<hr />
+
+				<div class="checkbox">
+					<label>
+						<input type="checkbox" asp-for="IsProfessional" /> 我是专业运动员
+					</label>
+					<p class="help-block">如果你是足球特招生，请选中上面的复选项。</p>
+				</div>
+
+			</div>
+		</div>
+
+		<div class="panel panel-default panel-info">
+			<div class="panel-heading">
+				<h2 class="panel-title">比赛官员信息</h2>
+			</div>
+			<div class="panel-body">
+
+				<p>如果你报名作为比赛官员，请在以下项目中选择你适合担任的比赛官员角色。</p>
+
+				<hr />
+
+				<div class="form-inline">
+
+					<label class="checkbox-inline">
+						<input type="checkbox" asp-enum-flag-for="OfficerTypes" asp-enum-flag-value="OfficerTypes.Referee" /> 裁判
+					</label>
+
+					<label class="checkbox-inline">
+						<input type="checkbox" asp-enum-flag-for="OfficerTypes" asp-enum-flag-value="OfficerTypes.AssistantReferee" /> 助理裁判
+					</label>
+
+					<label class="checkbox-inline">
+						<input type="checkbox" asp-enum-flag-for="OfficerTypes" asp-enum-flag-value="OfficerTypes.FourthOfficial" /> 第四官员
+					</label>
+
+					<label class="checkbox-inline">
+						<input type="checkbox" asp-enum-flag-for="OfficerTypes" asp-enum-flag-value="OfficerTypes.Commissioner" /> 比赛监督
+					</label>
+
+				</div>
+
+			</div>
+		</div>
+
+		<div class="panel panel-default panel-info">
+			<div class="panel-heading">
+				<h2 class="panel-title">文件上传</h2>
+			</div>
+			<div class="panel-body">
+
+				<p>
+					在此处上传报名注册的相关附加文件。请详细阅读赛事管理团队在公告中给出的说明，按照要求上传所有必需的文件。
+				</p>
+				<p>
+					目前上传的系统限制为：单个文件尺寸不能超过 <strong>@(SettingService.Current.MaxAttachementSize / 1024) KB</strong>，文件总数不能超过 <strong>@SettingService.Current.MaxAttachementCount</strong> 个。
+				</p>
+				<p>
+					<strong>特别注意：你必须一并提供证件中记载有效期的一面，否则相关的证件信息将被视为无效。</strong>
+				</p>
+
+				<button type="button" class="btn btn-primary" onclick="beginUploadFile(endUpload);">上传文件</button>
+
+				<hr />
+
+				@Component.Invoke("FileList", Model?.UploadImagePaths ?? string.Empty)
+
+			</div>
+
+		</div>
+
+	</div>
+</div>
+
+<script type="text/javascript">
+
+	function endUpload() {
+
+		addItems(getUploadFiles());
+	}
+
+	function setDepartmentText(item) {
+		$('#department-input').val($(item).data('text'));
+		return false;
+	}
+
+	function setLocationText(item) {
+		$('#location-input').val($(item).data('text'));
+		return false;
+	}
+
+
+</script>

@@ -1,0 +1,89 @@
+﻿@using System.Threading.Tasks
+@using CC98
+@using CC98.Sports
+@using Microsoft.AspNet.Mvc.ViewFeatures
+
+
+@inject AppSettingService<SystemSetting> SettingService
+
+@model Member
+
+@{
+	ViewBag.Title = "创建成员";
+	ViewBag.IsEditMode = false;
+
+	var operateText = User.CanOperate().ToJavaScriptString();
+
+}
+
+<h1 class="page-header lead text-center">@ViewBag.Title</h1>
+
+<form method="POST" asp-antiforgery="true" asp-controller="Member" asp-action="Create" data-can-operate="@operateText" onsubmit="return onsubmit();">
+
+	<input type="hidden" name="commitAudit" value="false" id="commit-audit-input" />
+
+	@await Html.PartialAsync("_EditPartial")
+
+	<hr />
+
+	@if (!User.CanOperate() && !SettingService.Current.OpenUserReviewRequest)
+	{
+		<div class="alert alert-warning">由于管理员关闭了用户审核申请，目前你只能保存申请信息，但无法提交审核。</div>
+	}
+
+	<div asp-validation-summary="ValidationSummary.ModelOnly" class="text-danger">
+
+	</div>
+
+	<button type="submit" class="btn btn-primary btn-default" onclick="onCommitAudit(false);">保存信息</button>
+
+	@if (!User.CanOperate() && SettingService.Current.OpenUserReviewRequest)
+	{
+		<button type="submit" class="btn btn-primary btn-success" onclick="onCommitAudit(true);">保存信息并提交审核</button>
+	}
+
+	<button type="reset" class="btn btn-default">撤销更改</button>
+
+</form>
+
+@await Html.PartialAsync("_FileUploadPartial")
+
+@section scripts{
+
+	@await Html.PartialAsync("_ValidationScriptsPartial")
+	@await Html.PartialAsync("_AjaxPartial")
+
+	<script type="text/javascript" language="javascript">
+
+		$(document).ready(function () {
+
+			rebuildItems();
+
+		});
+
+		function onSubmit() {
+
+			var canOperate = $('#edit-member-form').data('can-operate');
+
+			// 是否提交审核。
+			var isCommit = $('commit-audit-input').val();
+
+			// 操作员不显示任何提示
+			if (canOperate) {
+				return true;
+			}
+
+			if (isCommit) {
+				return confirm('提交审核后，你将不能随意修改资料。重新修改资料将需要再次提交，这回刷新你的提交审核时间，可能影响到你和其他人的提交时间顺序。你确定要提交审核吗？');
+			} else {
+				return true;
+			}
+
+		}
+
+		function onCommitAudit(value) {
+			$('#commit-audit-input').val(value);
+		}
+
+	</script>
+}

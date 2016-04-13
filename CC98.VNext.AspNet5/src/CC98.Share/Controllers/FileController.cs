@@ -21,6 +21,7 @@ namespace CC98.Share.Controllers
 		/// </summary>
 		/// <returns>操作结果。</returns>
         [HttpGet]
+        [Authorize]
         public IActionResult Upload()
 		{
 			return View();
@@ -51,7 +52,6 @@ namespace CC98.Share.Controllers
         /// 提供下载功能。
         /// </summary>
         /// <returns>操作结果。</returns>
-        [Authorize]
         [ValidateAntiForgeryToken]
         [HttpPost]
         public IActionResult Download(int id)

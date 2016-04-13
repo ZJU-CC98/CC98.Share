@@ -1,4 +1,5 @@
-﻿using System.Linq;
+﻿using System;
+using System.Linq;
 using Microsoft.AspNet.Mvc;
 using CC98.Share.Models;
 using System.IO;
@@ -59,8 +60,8 @@ namespace CC98.Share.Controllers
             {
                 //将文件在数据库中的标识传入函数。
                 //并在数据库中找到此文件，返回给用户
-                var Output = from i in Model.Items where i.Id == id select i;
-                var result = Output.SingleOrDefault();
+                var output = from i in Model.Items where i.Id == id select i;
+                var result = output.SingleOrDefault();
                 if (result != null)
                 {
                     string addressName = result.Path;
@@ -82,17 +83,13 @@ namespace CC98.Share.Controllers
         /// <returns>操作结果。</returns>
         public string GetFileName(string contentDisposition)
         {
-            string fileName;
-            int startIndex;
-            int endIndex;
-            int length;
-            //获取文件名称的起始位置。
-            startIndex = contentDisposition.IndexOf("filename=\"") + 10;
+	        //获取文件名称的起始位置。
+            var startIndex = contentDisposition.IndexOf("filename=\"", StringComparison.OrdinalIgnoreCase) + 10;
             //获取文件名称的结尾位置。
-            endIndex = contentDisposition.LastIndexOf("\"");
-            length = endIndex - startIndex;
+            var endIndex = contentDisposition.LastIndexOf("\"", StringComparison.OrdinalIgnoreCase);
+            var length = endIndex - startIndex;
             //通过起始位置和结尾位置获得名称。
-            fileName = contentDisposition.Substring(startIndex, length);
+            var fileName = contentDisposition.Substring(startIndex, length);
             return fileName;
         }
         /// <summary>

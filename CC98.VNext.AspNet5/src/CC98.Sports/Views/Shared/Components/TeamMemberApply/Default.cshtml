@@ -1,0 +1,59 @@
+﻿@model TeamMemberApplyViewModel
+
+@{
+	var teams = (IEnumerable<Team>)ViewBag.Teams;
+	var members = (IEnumerable<Member>)ViewBag.Members;
+	var teamId = (int) ViewBag.TeamId;
+
+	var teamSelectList = new SelectList(teams, nameof(Team.Id), nameof(Team.Name), teamId);
+	var memberSelectList = new SelectList(members, nameof(Member.Id), nameof(Member.Name));
+}
+
+<form asp-controller="Member" asp-action="ApplyTeam" asp-antiforgery="true" method="post" id="apply-team-form">
+
+	<div class="modal fade" id="apply-team-modal">
+		<div class="modal-dialog">
+			<div class="modal-content">
+				<div class="modal-header">
+					<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+					<h4 class="modal-title">申请加入球队</h4>
+				</div>
+				<div class="modal-body">
+
+					<p>你可以申请加入任意多支球队，但是在同一场赛事中，你不能同时代表两只参赛球队参与比赛。</p>
+
+					<div>
+
+						<div class="form-group">
+							<label asp-for="TeamId" class="control-label">要申请的球队</label>
+							<select asp-for="TeamId" asp-items="teamSelectList" asp-option-label="选择一个球队" class="form-control"></select>
+							<span asp-validation-for="TeamId" class="text-danger"></span>
+							<p class="help-block">选择要申请加入的球队。只有通过审核的球队才能申请加入。</p>
+						</div>
+
+						<div class="form-group">
+							<label asp-for="MemberId" class="control-label">要申请的球队</label>
+							<select asp-for="MemberId" asp-items="memberSelectList" asp-option-label="选择一个球员" class="form-control"></select>
+							<span asp-validation-for="MemberId" class="text-danger"></span>
+							<p class="help-block">选择要申请加入的球员。只有通过审核的球员才能申请加入。如果你在列表上看不到任何球员，请尝试先注册球员信息，或提交球员信息的认证申请。</p>
+						</div>
+
+						<div class="form-group">
+							<label asp-for="Reason" class="control-label">申请理由</label>
+							<textarea asp-for="Reason" rows="3" class="form-control"></textarea>
+							<span asp-validation-for="Reason" class="text-danger"></span>
+							<p class="help-block">在此处填写申请的理由。球队的领队将会看到你的理由，这有助于他更好地做出决定。</p>
+						</div>
+
+					</div>
+				</div>
+				<div class="modal-footer">
+					<span class="text-danger" id="apply-team-error-text"></span>
+					<button type="submit" class="btn btn-primary">提交申请</button>
+					<button type="button" class="btn btn-default" data-dismiss="modal">取消</button>
+				</div>
+			</div><!-- /.modal-content -->
+		</div><!-- /.modal-dialog -->
+	</div><!-- /.modal -->
+
+</form>

@@ -1,0 +1,49 @@
+<div style="background-color: silver">
+    <b>Slider with event listeners (see console log)</b>
+
+    <p>
+        <div id="slider" jquery-widget config="sliderConfig" disabled="{{disabled}}" orientation="{{orientation}}" ng-model="model.slider"></div>
+        <button type="button" ng-click="remove('#slider')">Remove</button>
+    </p>
+
+    <p>
+        Methods:
+        <button ng-click="model.slider.method='enable'">Enable</button>
+        <button ng-click="model.slider.method='disable'">Disable</button>
+    </p>
+
+    <p>
+        Directive Attributes:
+    </p>
+    <div style="margin-left:5em">
+        <p>
+            Disabled:
+            <input type="checkbox" value="{{disabled}}" ng-click="disabled = !disabled"/>
+        </p>
+        <p>
+            Orientation:
+            <a href="" ng-click="orientation = 'vertical'">vertical</a>
+            <a href="" ng-click="orientation = 'horizontal'">horizontal</a>
+        </p>
+    </div>
+    <p>ngModel Settings:</p>
+    <div style="margin-left:5em">
+        <p>
+            Value:
+            <input type="text" ng-model="model.slider.value">
+        </p>
+        <p>
+            Step:
+            <input type="text" ng-model="model.slider.step">
+        </p>
+        <p>
+            Min:
+            <input type="text" ng-model="model.slider.min">
+        </p>
+        <p>
+            Max:
+            <input type="text" ng-model="model.slider.max">
+        </p>
+    </div>
+    ng-model="{{model.slider}}"
+</div>

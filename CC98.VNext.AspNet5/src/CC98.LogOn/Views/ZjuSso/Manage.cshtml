@@ -1,0 +1,154 @@
+﻿@using CC98.LogOn.ViewModels.ZjuSso
+@using Microsoft.AspNet.Mvc.ViewFeatures
+@model CC98V1User[]
+
+@{
+	ViewBag.Title = "账户绑定管理";
+}
+
+<h1 class="page-header lead text-center">@ViewBag.Title</h1>
+
+<div asp-message-list="MessageListStyle.AlertDialogClosable"></div>
+
+<div class="alert alert-info">这个页面列出了和你当前登录的浙大通行证账号绑定的所有 CC98 账号。你可以在这个页面绑定新的 CC98 账号，或者对忘记密码的 CC98 账号执行密码重置操作。</div>
+<div class="alert alert-warning">根据学校相关部门的信息管理安全要求，目前我们不支持解除 CC98 账号和浙大通行证账号的绑定关系，每个浙大通行证可以绑定的账号数量有限，请谨慎操作。</div>
+
+@if (Model.Length != 0)
+{
+	<table class="table table-striped table-hover">
+		<thead>
+			<tr>
+				<th>账户名</th>
+				<th>注册时间</th>
+				<th>等级</th>
+				<th>发言总数</th>
+				<th>登录次数</th>
+				<th>上次登录时间</th>
+				<th>上次登录 IP</th>
+				<th>状态</th>
+				<th>操作</th>
+			</tr>
+		</thead>
+		<tbody>
+
+			@foreach (var i in Model)
+			{
+				<tr>
+					<th><a asp-controller="Account" asp-action="Detail" asp-route-userName="@i.Name">@i.Name</a></th>
+					<td>@i.RegisterTime.ToString("G")</td>
+					<td>@i.Level</td>
+					<td>@i.TotalPosts.ToString("D")</td>
+					<td>@i.LogOnTimes.ToString("D")</td>
+					<td>@i.LastLogOnTime.ToString("G")</td>
+					<td>@i.LastLogOnIP</td>
+					<td>
+
+						@if (i.IsVerified)
+						{
+							<span class="label label-success" title="这个用户账户已经和浙大通行证绑定，具有完全的论坛功能访问权限。">已认证</span>
+						}
+						else
+						{
+							<span class="label label-danger" title="这个账户还没有和浙大通行证绑定，因此在大部分版面进行发言。">未认证</span>
+						}
+
+						@if (i.IsOnline)
+						{
+							<span class="label label-primary" title="该用户目前正在论坛上进行活动。">在线</span>
+						}
+						else
+						{
+							<span class="label label-default" title="该用户目前没有在论坛上进行活动">离线</span>
+						}
+
+						@if (i.State.HasFlag(UserState.Locked))
+						{
+							<span class="label label-danger" title="这是一个惩罚机制，被锁定的账户将不能进行发言或者其他大多数操作。">锁定</span>
+						}
+						@if (i.State.HasFlag(UserState.Forbidden))
+						{
+							<span class="label label-danger" title="这是一个惩罚机制，被屏蔽的账户将不能登录论坛，其之前的发言也将隐藏。">屏蔽</span>
+						}
+
+						@if (i.IsReserved)
+						{
+							<span class="label label-success" title="这是一个奖励机制，被保留的账户将不会因为论坛旧数据清理而被自动删除。">保留</span>
+						}
+
+					</td>
+					<td>
+						<div class="btn-group btn-group-xs">
+							<button type="button" class="btn btn-default" data-name="@i.Name" onclick="showResetPasswordDialog(this);">重置密码</button>
+						</div>
+					</td>
+				</tr>
+			}
+
+		</tbody>
+	</table>
+}
+else
+{
+	<p class="text-center text-muted">你的浙大通行证还没有绑定任何 CC98 账户。</p>
+}
+
+<hr />
+<a class="btn btn-primary" asp-controller="ZjuSso" asp-action="Bind">绑定新的 CC98 账号</a>
+
+<form asp-controller="ZjuSso" asp-action="ResetPassword" asp-antiforgery="true" data-ajax="true" data-ajax-begin="onBindBegin" data-ajax-success="onBindSuccess" data-ajax-failure="onBindError">
+	<div class="modal fade" id="reset-password-dialog">
+		<div class="modal-dialog">
+			<div class="modal-content">
+				<div class="modal-header">
+					<button type="button" class="close" data-dismiss="modal" aria-label="关闭"><span aria-hidden="true">&times;</span></button>
+					<h4 class="modal-title">重置账号密码</h4>
+				</div>
+				<div class="modal-body">
+					<p>
+						你正在重置 CC98 账号 <strong id="user-name-text"></strong> 的密码。请注意，这个操作不能撤销。如果你确定要重置密码，请输入两次新密码后单击<q>确认重置</q>按钮。重置密码后，你可能需要重新登录 CC98 相关服务。
+					</p>
+					<hr />
+					@await Html.PartialAsync("_ResetPasswordPartial", null, new ViewDataDictionary(ViewData))
+				</div>
+				<div class="modal-footer">
+					<p id="error-text" class="text-danger" style="display: none;"></p>
+					<button type="submit" class="btn btn-primary">确认重置</button>
+					<button type="reset" class="btn btn-default">清空输入</button>
+					<button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
+				</div>
+			</div><!-- /.modal-content -->
+		</div><!-- /.modal-dialog -->
+	</div><!-- /.modal -->
+
+</form>
+
+@section scripts{
+
+	@await Html.PartialAsync("_ValidationScriptsPartial")
+	@await Html.PartialAsync("_AjaxScriptsPartial")
+
+	<script type="text/javascript" language="javascript">
+
+		function showResetPasswordDialog(btn) {
+
+			$('#user-name-input').val($(btn).data('name'));
+			$('#user-name-text').text($(btn).data('name'));
+
+			$('#reset-password-dialog').modal();
+		}
+
+		function onBindBegin() {
+			$('#error-text').hide();
+		}
+
+		function onBindSuccess() {
+			window.location.reload();
+		}
+
+		function onBindError(xhr) {
+			$('#error-text').text(xhr.responseText);
+			$('#error-text').show();
+		}
+
+	</script>
+}

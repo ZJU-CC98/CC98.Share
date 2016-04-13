@@ -1,0 +1,31 @@
+﻿@using Microsoft.AspNet.Mvc.Rendering
+@model IPagedList<Game>
+
+@{
+	var eventItem = ViewBag.Event as Event;
+
+	if (eventItem != null)
+	{
+		ViewBag.Title = string.Format(CultureInfo.CurrentCulture, "比赛日程一览 - {0}", eventItem.Name);
+	}
+	else
+	{
+		ViewBag.Title = "比赛日程一览";
+	}
+
+}
+
+<h1 class="page-header lead text-center">@ViewBag.Title</h1>
+
+<div asp-message-list="MessageListStyle.AlertDialogClosable"></div>
+
+@if (Model.Any())
+{
+	@await Html.PartialAsync("_GameListPartial", Model)
+
+	<nav asp-pager-source="Model"></nav>
+}
+else
+{
+	<p class="text-muted text-center">目前还没有任何赛事</p>
+}

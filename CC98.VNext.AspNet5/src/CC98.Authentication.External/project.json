@@ -14,12 +14,16 @@
 
 	"frameworks": {
 
-		"net451": {	},
+		"net451": {
+			"frameworkAssemblies": {
+			}
+		},
 
 		"dotnet5.4": {
 			"dependencies": {
 				"System.Runtime": "4.0.21-beta-23516",
-				"System.Linq": "4.0.1-beta-23516"
+				"System.Linq": "4.0.1-beta-23516",
+				"System.Security.Claims": "4.0.1-beta-23516"
 			}
 		}
 

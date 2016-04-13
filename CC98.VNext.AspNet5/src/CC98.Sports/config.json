@@ -1,0 +1,28 @@
+﻿{
+	"AppSettings": {
+		"SiteTitle": "CC98 赛事管理系统",
+		"UploadRootFolder": "/Upload"
+	},
+	"Data": {
+		"DefaultConnection": {
+			"ConnectionString": ""
+		}
+	},
+
+	"Authentication": {
+		"CC98": {
+			"ClientId": "",
+			"ClientSecret": ""
+		}
+
+	},
+
+	"Logging": {
+		"IncludeScopes": false,
+		"LogLevel": {
+			"Default": "Verbose",
+			"System": "Information",
+			"Microsoft": "Information"
+		}
+	}
+}

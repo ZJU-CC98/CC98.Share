@@ -1,0 +1,36 @@
+﻿@model CC98.LogOn.ViewModels.ZjuSso.LogOnViewModel
+@{
+	ViewBag.Title = "浙大通行证登录";
+}
+
+<h1 class="page-header lead text-center">@ViewBag.Title</h1>
+
+
+<form asp-antiforgery="true" asp-controller="ZjuSso" asp-action="LogOn" asp-route-returnUrl="@ViewBag.ReturnUrl" method="post">
+
+	<div class="form-group">
+		<label asp-for="UserName" class="control-label">用户名</label>
+		<input asp-for="UserName" type="text" class="form-control" placeholder="你的浙大通行证账户名" />
+		<span asp-validation-for="UserName" class="text-danger"></span>
+	</div>
+
+	<div class="form-group">
+		<label asp-for="Password" class="control-label">密码</label>
+		<input asp-for="Password" type="password" class="form-control" placeholder="你的浙大通行证账户密码" />
+		<span asp-validation-for="Password" class="text-danger"></span>
+	</div>
+
+	<hr />
+
+	<div asp-validation-summary="ValidationSummary.ModelOnly" class="text-danger"></div>
+
+	<button type="submit" class="btn btn-primary">立即登录</button>
+	<button type="reset" class="btn btn-default">重置输入</button>
+
+	<button type="button" class="btn btn-default" onclick="showWhatMustKnowBeforeLogin();">登录须知</button>
+
+</form>
+
+@section scripts{
+	<script type="text/javascript" charset="gb2312" src="http://zuinfo.zju.edu.cn/know/showWhatMustKnowBeforeLogin.js"></script>
+}

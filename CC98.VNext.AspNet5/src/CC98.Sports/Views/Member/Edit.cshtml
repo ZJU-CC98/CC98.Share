@@ -1,0 +1,107 @@
+﻿@using System.Threading.Tasks
+@using System.Globalization
+@using CC98
+@using CC98.Sports
+
+@inject AppSettingService<SystemSetting> SettingService
+
+@model Member
+
+@{
+	ViewBag.Title = string.Format(CultureInfo.CurrentCulture, "编辑成员 - {0}", Model.Name);
+	ViewBag.IsEditMode = true;
+
+	// 是否覆盖审核
+	var overrideText = (Model.AuditState != AuditState.NotCommitted).ToJavaScriptString();
+	var operateText = User.CanOperate().ToJavaScriptString();
+}
+
+<h1 class="page-header lead text-center">@ViewBag.Title</h1>
+
+<form id="edit-member-form" method="POST" asp-antiforgery="true" asp-controller="Member" asp-action="Edit" asp-route-id="@Model.Id" data-can-operate="@operateText" data-override="@overrideText" onsubmit="return onSubmit();">
+
+	<input type="hidden" name="commitAudit" value="false" id="commit-audit-input" />
+
+	@await Html.PartialAsync("_EditPartial")
+
+	<hr />
+
+	@if (!User.CanOperate() && !SettingService.Current.OpenUserReviewRequest)
+	{
+		<div class="alert alert-warning">由于管理员关闭了用户审核申请，目前你只能保存申请信息，但无法提交审核。</div>
+	}
+
+	<div asp-validation-summary="ValidationSummary.ModelOnly" class="text-danger"></div>
+
+	<button type="submit" class="btn btn-primary btn-default" onclick="onCommitAudit(false);">保存更改</button>
+
+
+	@if (!User.CanOperate() && SettingService.Current.OpenUserReviewRequest)
+	{
+		// 当用户不能具有操作权限时，显示提交审核；否则界面中可以直接设定审核状态。
+		<button type="submit" class="btn btn-primary btn-success" onclick="onCommitAudit(true);">保存更改并提交审核</button>
+	}
+
+	<button type="reset" class="btn btn-default">撤销更改</button>
+
+</form>
+
+
+@await Html.PartialAsync("_FileUploadPartial")
+
+@section scripts{
+
+
+	@await Html.PartialAsync("_ValidationScriptsPartial")
+	@await Html.PartialAsync("_AjaxPartial")
+
+	<script type="text/javascript" language="javascript">
+
+		$(document).ready(function () {
+
+			$('#cc98id-input').change(function () {
+				$('#edit-cc98id-warning').removeClass('hide');
+			});
+
+			rebuildItems();
+
+		});
+
+		function onSubmit() {
+
+			var canOperate = $('#edit-member-form').data('can-operate');
+
+			// 是否是覆盖操作。
+			var isOverride = $('#edit-member-form').data('override');
+
+			// 是否提交审核。
+			var isCommit = $('commit-audit-input').val();
+
+			// 操作员不显示任何提示
+			if (canOperate) {
+				return true;
+			}
+
+			if (isOverride) {
+
+				if (isCommit) {
+					return confirm('你之前已经申请了审核。如果你重新提交审核，将会刷新你的提交审核时间，这可能影响到你和其他人的提交时间顺序。如果你认为审核结果有误，请直接联系管理员，而不要重新提交审核。你确定要重新提交审核吗？');
+				} else {
+					return confirm('你之前已经申请了审核。如果你重新保存你的资料，你需要稍后再次提交审核，这将会刷新你的提交审核时间，可能影响到你和其他人的提交时间顺序。如果你认为审核结果有误，请直接联系管理员，而不要重新提交审核。你确定要重新提交审核吗？');
+				}
+			} else {
+
+				if (isCommit) {
+					return confirm('提交审核后，你将不能随意修改资料。重新修改资料将需要再次提交，这回刷新你的提交审核时间，可能影响到你和其他人的提交时间顺序。你确定要提交审核吗？');
+				} else {
+					return true;
+				}
+			}
+		}
+
+		function onCommitAudit(value) {
+			$('#commit-audit-input').val(value);
+		}
+
+	</script>
+}

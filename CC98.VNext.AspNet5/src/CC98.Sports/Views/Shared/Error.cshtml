@@ -1,0 +1,24 @@
+﻿@using Microsoft.AspNet.Diagnostics.Views
+@model ErrorPageModel
+@{
+	ViewData["Title"] = "错误";
+}
+
+<h1 class="text-danger">网站发生错误</h1>
+
+<p>这可能是网站临时维护造成的。如果你持续看到这个问题，请联系网站管理员。</p>
+
+@if (User.IsSystemAdmin())
+{
+	<br />
+
+	<p>适用于管理员的详细信息：</p>
+
+	<ul>
+		@foreach (var error in Model.ErrorDetails)
+		{
+			<li>@error.Error.Message</li>
+		}
+	</ul>
+
+}

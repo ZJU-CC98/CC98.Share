@@ -1,0 +1,123 @@
+﻿@model AutoGenerateGameViewModel
+
+@{
+	var eventItem = (Event)ViewBag.Event;
+	ViewBag.Title = string.Format(CultureInfo.CurrentCulture, "自动生成赛程 - {0}", eventItem.Name);
+}
+
+<h1 class="page-header lead text-center">@ViewBag.Title</h1>
+
+<form asp-antiforgery="true" method="post">
+
+	<input type="hidden" asp-for="EventId" value="@eventItem.Id" />
+
+	<div class="row">
+
+		<div class="col-md-6">
+			<div class="panel panel-primary">
+				<div class="panel-heading">
+					<h2 class="panel-title">小组赛</h2>
+				</div>
+				<div class="panel-body">
+
+					<p class="text-info">在生成小组赛前，请首先确保已经通过 <a asp-controller="Event" asp-action="GroupTeams" asp-route-id="@eventItem.Id">分组管理</a> 功能为该赛事的所有队伍设定了正确的分组编号。</p>
+
+					<div class="checkbox">
+						<label>
+							<input type="checkbox" asp-for="GenerateGroupMatches" /> 生成小组赛
+						</label>
+						<p class="help-block">选中上面的复选框以自动生成小组赛信息。</p>
+						<span asp-validation-for="GenerateGroupMatches" class="text-danger"></span>
+					</div>
+
+					<hr />
+
+					<div class="form-group">
+						<label class="control-label" asp-for="GroupMatchTitleFormat">小组赛标题格式</label>
+						<input type="text" class="form-control" asp-for="GroupMatchTitleFormat" />
+						<p class="help-block">上面的选项用于生成小组赛赛程项目的标题格式。可用的参数请参照 <a href="#" onclick="showTitlePlaceHolderInfo();">标题格式参数说明</a>。</p>
+						<span asp-validation-for="GroupMatchTitleFormat" class="text-danger"></span>
+					</div>
+
+					<div class="checkbox">
+						<label>
+							<input type="checkbox" asp-for="UseDuplexGroupMatch" disabled="disabled" /> 双向小组赛模式
+						</label>
+						<span asp-validation-for="UseDuplexGroupMatch" class="text-danger"></span>
+						<p class="help-block">如果选中上面的复选框，则小组赛中每两支队伍之间将以相反的顺序生成两项赛程；否则，每两支队伍只生成一项赛程。</p>
+					</div>
+
+				</div>
+			</div>
+		</div>
+
+		<div class="col-md-6">
+			<div class="panel panel-primary">
+				<div class="panel-heading">
+					<h2 class="panel-title">淘汰赛</h2>
+				</div>
+				<div class="panel-body">
+
+					<p class="text-info">系统并不能自动生成淘汰赛和小组赛之间的关系。在生成淘汰赛后，你可能需要通过 <a asp-controller="Game" asp-action="BatchEdit" asp-route-eventId="@eventItem.Id">批量编辑</a> 功能设定第一轮淘汰赛的名称。</p>
+
+					<div class="checkbox">
+						<label>
+							<input type="checkbox" asp-for="GenerateKnockoutMatches" /> 生成淘汰赛
+						</label>
+						<p class="help-block">选中上面的复选框以自动生成淘汰赛信息。</p>
+						<span asp-validation-for="GenerateKnockoutMatches" class="text-danger"></span>
+					</div>
+
+					<hr />
+
+					<div class="form-group">
+						<label class="control-label" asp-for="KnockoutMatchTitleFormat">淘汰赛标题格式</label>
+						<input type="text" class="form-control" asp-for="KnockoutMatchTitleFormat" />
+						<span asp-validation-for="KnockoutMatchTitleFormat" class="text-danger"></span>
+						<p class="help-block">上面的选项用于生成淘汰赛赛程项目的标题格式。可用的参数请参照 <a href="#" onclick="showTitlePlaceHolderInfo();">标题格式参数说明</a>。</p>
+					</div>
+
+					<div class="form-group">
+						<label class="control-label" asp-for="KnockoutRoundCount">淘汰赛轮次</label>
+						<input type="number" class="form-control" asp-for="KnockoutRoundCount" />
+						<span asp-validation-for="KnockoutRoundCount" class="text-danger"></span>
+						<p class="help-block">淘汰赛轮次是一个整数，用于描述淘汰赛关联的级别。输入 1 表示淘汰赛仅包含决赛；输入 2 表示包含决赛和半决赛；输入 3 表示包含 1/4 决赛，以此类推。</p>
+					</div>
+
+					<div class="form-group">
+						<label class="control-label" asp-for="LoserKnockoutRountCount">败者组淘汰赛轮次</label>
+						<input type="number" class="form-control" asp-for="LoserKnockoutRountCount" />
+						<span asp-validation-for="LoserKnockoutRountCount" class="text-danger"></span>
+						<p class="help-block">指定败者组淘汰赛的轮次。输入 0 表示该赛事不启用败者组淘汰赛。</p>
+					</div>
+
+					<div class="checkbox">
+						<label>
+							<input type="checkbox" asp-for="UseDuplexKnockoutMatch" disabled="disabled" /> 双向淘汰赛模式
+						</label>
+						<span asp-validation-for="UseDuplexKnockoutMatch" class="text-danger"></span>
+						<p class="help-block">如果选中上面的复选框，则淘汰赛中每两支队伍之间将以相反的顺序生成两项赛程；否则，每两支队伍只生成一项赛程。</p>
+					</div>
+
+
+				</div>
+			</div>
+		</div>
+
+	</div>
+
+	<hr />
+	<div asp-validation-summary="ValidationSummary.ModelOnly" class="text-danger"></div>
+
+	<button type="submit" class="btn btn-primary">自动生成所有赛程</button>
+	<button type="reset" class="btn btn-default">清空输入</button>
+
+</form>
+
+@await Html.PartialAsync("_TitlePlaceHolderDialogPartial")
+
+@section scripts{
+
+	@await Html.PartialAsync("_ValidationScriptsPartial")
+
+}

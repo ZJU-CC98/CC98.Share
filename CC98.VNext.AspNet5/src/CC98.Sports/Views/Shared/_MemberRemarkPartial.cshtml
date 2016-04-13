@@ -1,0 +1,58 @@
+﻿@model Member
+@inject AppSettingService<SystemSetting> SettingService
+
+@{ 
+	var standardNation = SettingService.Current.DefaultNation;
+	var teamDepartment = ViewBag.TeamDepartment as string;
+}
+
+@if (Model.Type == MemberType.Player)
+{
+	var marks = Model.GetSpecialRemark(standardNation, teamDepartment);
+
+	if (marks == PlayerSpecialRemarks.None)
+	{
+		<span class="text-muted">无</span>
+	}
+	else
+	{
+		if (marks.HasFlag(PlayerSpecialRemarks.Professional))
+		{
+			<span class="label label-success">专业</span>
+		}
+
+		if (marks.HasFlag(PlayerSpecialRemarks.Foreign))
+		{
+			<span class="label label-success">外籍</span>
+		}
+
+		if (marks.HasFlag(PlayerSpecialRemarks.External))
+		{
+			<span class="label label-success">外援</span>
+		}
+	}
+}
+else if (Model.Type == MemberType.Officer && Model.OfficerTypes != OfficerTypes.None)
+{
+	if (Model.OfficerTypes.HasFlag(OfficerTypes.Referee))
+	{
+		<span class="label label-default">裁判</span>
+	}
+	if (Model.OfficerTypes.HasFlag(OfficerTypes.AssistantReferee))
+	{
+		<span class="label label-default">助理</span>
+	}
+	if (Model.OfficerTypes.HasFlag(OfficerTypes.FourthOfficial))
+	{
+		<span class="label label-default">四官</span>
+	}
+	if (Model.OfficerTypes.HasFlag(OfficerTypes.Commissioner))
+	{
+		<span class="label label-default">监督</span>
+	}
+}
+else
+{
+	<span class="text-muted">无</span>
+
+}

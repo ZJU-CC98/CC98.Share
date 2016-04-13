@@ -1,0 +1,102 @@
+﻿@using CC98
+
+@model IEnumerable<Team>
+@inject AppSettingService<SystemSetting> SettingService
+
+@{
+	var showAdmin = (bool)ViewBag.ShowAdmin;
+	var forceAdmin = (bool)ViewBag.ForceAdmin;
+	var canOperate = User.CanOperate();
+}
+
+<table class="table table-hover table-striped">
+	<thead>
+		<tr>
+			<th>编号</th>
+			<th>名称</th>
+			<th>领队</th>
+			<th>队长</th>
+			<th>教练</th>
+			<th>成员数目</th>
+
+			@if (showAdmin)
+			{
+				<th>操作</th>
+			}
+
+		</tr>
+	</thead>
+	<tbody>
+		@foreach (var item in Model)
+		{
+			var idText = item.Id.ToString(SettingService.Current.TeamIdFormat);
+
+			<tr>
+				<th><a asp-controller="Team" asp-action="Detail" asp-route-id="@item.Id">@idText</a></th>
+				<th>@item.Name</th>
+				<td>
+					@if (item.Skipper == null)
+					{
+						<span class="text-muted">暂无</span>
+					}
+					else
+					{
+						<a asp-controller="Member" asp-action="Detail" asp-route-id="@item.Skipper.Id">@item.Skipper.Name</a>
+					}
+				</td>
+				<td>
+					@if (item.Captain == null)
+					{
+						<span class="text-muted">暂无</span>
+					}
+					else
+					{
+						<a asp-controller="Member" asp-action="Detail" asp-route-id="@item.Captain.Id">@item.Captain.Name</a>
+					}
+				</td>
+				<td>
+					@if (item.Coach == null)
+					{
+						<span class="text-muted">暂无</span>
+					}
+					else
+					{
+						<a asp-controller="Member" asp-action="Detail" asp-route-id="@item.Coach.Id">@item.Coach.Name</a>
+					}
+				</td>
+				<td>
+				@if (showAdmin)
+				{
+					<span>@item.MemberRegistrations.Count</span>
+				}
+				else
+				{
+					// 非管理模式只显示完整的用户
+					<span>@item.MemberRegistrations.Count(i => i.MemberAuditState == AuditState.Accepted && i.TeamAuditState == AuditState.Accepted)</span>
+				}
+				</td>
+
+				@if (showAdmin)
+				{
+					// 锁定标志
+					var isLocked = item.IsLocked || item.IsLockedByEvent();
+					<td>
+
+						@if (!isLocked || (canOperate && forceAdmin))
+						{
+							<div class="btn-group btn-group-xs">
+								<a asp-controller="Team" asp-action="Edit" asp-route-id="@item.Id" class="btn btn-default">编辑</a>
+								<button type="button" class="btn btn-danger" data-name="@item.Name" data-id-text="@idText" data-id-value="@item.Id" onclick="showDeleteTeam(this);">删除</button>
+							</div>
+						}
+						else
+						{
+							<span class="text-muted">已锁定</span>
+						}
+
+					</td>
+				}
+			</tr>
+		}
+	</tbody>
+</table>

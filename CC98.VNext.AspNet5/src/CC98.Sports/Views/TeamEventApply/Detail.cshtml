@@ -1,0 +1,247 @@
+﻿@using System.Globalization
+@model EventTeamRegistration
+
+@{
+	ViewBag.Title = string.Format(CultureInfo.CurrentCulture, "赛事报名详情 - {0} - {1}", Model.Team.Name, Model.Event.Name);
+
+	// 审核界面
+	var showReview = User.CanReview();
+}
+
+<h1 class="page-header lead text-center">@ViewBag.Title</h1>
+
+@switch (Model.AuditState)
+{
+	case AuditState.NotCommitted:
+		<div class="alert alert-info">目前该名单还未提交管理员进行审核。</div>
+		break;
+	case AuditState.Pending:
+		<div class="alert alert-warning">目前该名单还未经过管理员审核。</div>
+		break;
+	case AuditState.Accepted:
+		<div class="alert alert-success">该名单已经被管理员通过审核申请。</div>
+		break;
+	case AuditState.Rejected:
+		<div class="alert alert-danger">该名单已经被管理员驳回审核申请。</div>
+		break;
+}
+
+<h2>基本信息</h2>
+
+<table class="table table-striped">
+	<tbody>
+		<tr>
+			<th>赛事</th>
+			<td><a asp-controller="Event" asp-action="Detail" asp-route-id="@Model.Event.Id">@Model.Event.Name</a></td>
+		</tr>
+		<tr>
+			<th>队伍</th>
+			<td><a asp-controller="Team" asp-action="Detail" asp-route-id="@Model.Team.Id">@Model.Team.Name</a></td>
+		</tr>
+		<tr>
+			<th>领队</th>
+			<td>
+				@if (Model.Skipper != null)
+				{
+					<a asp-controller="Member" asp-action="Detail" asp-route-id="@Model.Skipper.Id">@Model.Skipper.Name</a>
+				}
+				else
+				{
+					<span class="text-muted">暂无</span>
+				}
+			</td>
+		</tr>
+		<tr>
+			<th>队长</th>
+			<td>
+				@if (Model.Captain != null)
+				{
+					<a asp-controller="Member" asp-action="Detail" asp-route-id="@Model.Captain.Id">@Model.Captain.Name</a>
+				}
+				else
+				{
+					<span class="text-muted">暂无</span>
+				}
+			</td>
+		</tr>
+		<tr>
+			<th>教练</th>
+			<td>
+				@if (Model.Coach != null)
+			{
+					<a asp-controller="Member" asp-action="Detail" asp-route-id="@Model.Coach.Id">@Model.Coach.Name</a>
+			}
+			else
+			{
+					<span class="text-muted">暂无</span>
+			}
+			</td>
+		</tr>
+		<tr>
+			<th>说明</th>
+			<td>
+				@if (Model.Description != null)
+			{
+					<span>@Model.Description</span>
+			}
+			else
+			{
+					<span class="text-muted">无</span>
+			}
+			</td>
+		</tr>
+	</tbody>
+</table>
+
+<h2>成员名单</h2>
+
+@if (Model.Members.Any())
+{
+	// 外援信息标记
+	ViewBag.TeamDepartment = Model.Team.Department;
+
+	<table class="table table-striped">
+		<thead>
+			<tr>
+				<th>姓名</th>
+				<th>身份</th>
+				<th>身份详情</th>
+				<th>编号</th>
+				<th>备注说明</th>
+			</tr>
+		</thead>
+
+		<tbody>
+			@foreach (var i in Model.Members.OrderBy(i => i.Member.Type).ThenBy(i => i.Member.Name))
+			{
+				<tr>
+					<th><a asp-controller="Member" asp-action="Detail" asp-route-id="@i.Member.Id">@i.Member.Name</a></th>
+					<td>@await Html.PartialAsync("_MemberTypePartial", i.Member.Type)</td>
+					<td>@await Html.PartialAsync("_MemberRemarkPartial", i.Member)</td>
+					<td>
+						@if (i.Member.Type != MemberType.Player)
+						{
+							<span class="text-muted">不适用</span>
+						}
+						else if (!string.IsNullOrEmpty(i.Number))
+						{
+							<span>@i.Number</span>
+						}
+						else
+						{
+							<span class="text-muted">无</span>
+						}
+					</td>
+					<td>
+						@if (!string.IsNullOrEmpty(i.Remark))
+						{
+							<span>@i.Remark</span>
+						}
+						else
+						{
+							<span class="text-muted">无</span>
+						}
+					</td>
+				</tr>
+
+			}
+		</tbody>
+
+	</table>
+
+	@await Html.PartialAsync("_StatisticsPartial")
+
+}
+else
+{
+	<p class="text-muted text-center">该队伍目前没有任何成员</p>
+}
+
+@if (showReview)
+{
+	<hr />
+	<h2>信息审核</h2>
+
+	<p class="text-info">请仔细检查上面列出的报名表信息，并在下方做出审核决定。</p>
+
+	// 覆盖审核提示
+	var overrideText = (Model.AuditState != AuditState.Pending).ToJavaScriptString();
+
+	<hr />
+
+	if (Model.EventState != TeamEventState.NotStarted)
+	{
+		<p class="text-muted">当前队伍正在参与某项赛事。在参与赛事期间，无法修改该成员的审核状态。</p>
+	}
+	else if (Model.AuditState != AuditState.NotCommitted)
+	{
+		<form asp-controller="TeamEventApply" asp-action="Review" asp-antiforgery="true" method="post" id="review-form" data-override="@overrideText" onsubmit="return onReviewSubmit();">
+
+			<input type="hidden" name="returnUrl" value="@ViewBag.ReturnUrl" />
+			<input type="hidden" name="teamId" value="@Model.TeamId" />
+			<input type="hidden" name="eventId" value="@Model.EventId" />
+			<input type="hidden" id="review-state-input" name="reviewState" />
+
+
+			<div class="form-group">
+				<label for="audit-reason-input" class="control-label">审核操作原因</label>
+				<textarea id="audit-reason-input" name="reason" class="form-control" rows="3" placeholder="在此处写入审核操作原因，然后单击相应的按钮"></textarea>
+			</div>
+
+			<button class="btn btn-success" type="button" onclick="onAcceptReview();"><span class="glyphicon glyphicon-ok"></span> 通过审核</button>
+			<button class="btn btn-danger" type="button" onclick="onRejectReview();"><span class="glyphicon glyphicon-remove"></span> 拒绝审核</button>
+
+			@if (Model.AuditState != AuditState.Pending)
+			{
+				<button class="btn btn-warning" type="button" onclick="onResetReview();"><span class="glyphicon glyphicon-repeat"></span> 恢复为未审核状态</button>
+			}
+
+		</form>
+	}
+	else
+	{
+		<p class="text-muted">该参赛名单尚未申请审核。必须首先由该队伍的领队发起审核申请，你才能通过或者驳回审核。</p>
+
+	}
+}
+
+
+@section scripts{
+
+	@await Html.PartialAsync("_ValidationScriptsPartial")
+	@await Html.PartialAsync("_AjaxPartial")
+
+	@if (showReview)
+	{
+
+
+		<script type="text/javascript" language="javascript">
+
+			function onReviewSubmit() {
+
+				if ($('#review-form').data('override')) {
+					return confirm('该成员已经进行过审核操作。继续操作将会覆盖之前的审核结果。你确定要继续吗？');
+				}
+
+				return true;
+			}
+
+			function onAcceptReview() {
+
+				$('#review-state-input').val('Accepted');
+				$('#review-form').submit();
+			}
+
+			function onRejectReview() {
+				$('#review-state-input').val('Rejected');
+				$('#review-form').submit();
+			}
+
+			function onResetReview() {
+				$('#review-state-input').val('Pending');
+				$('#review-form').submit();
+			}
+
+		</script>
+	}
+}

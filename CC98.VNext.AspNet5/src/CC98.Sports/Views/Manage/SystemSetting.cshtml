@@ -1,0 +1,131 @@
+﻿@model SystemSetting
+
+@{
+	ViewBag.Title = "管理系统设置";
+}
+
+<h1 class="page-header lead text-center">@ViewBag.Title</h1>
+
+<div asp-message-list="Sakura.AspNet.Mvc.Messages.MessageListStyle.AlertDialogClosable"></div>
+
+<form method="post" asp-antiforgery="true">
+
+	<div class="row">
+
+		<div class="col-md-6">
+
+			<div class="panel panel-info">
+				<div class="panel-heading">
+					<h2 class="panel-title">显示设置</h2>
+				</div>
+				<div class="panel-body">
+
+					<div>
+						<div class="form-group">
+							<label asp-for="Announcement" class="control-label">公告文字</label>
+							<textarea asp-for="Announcement" rows="5" class="form-control"></textarea>
+							<span asp-validation-for="Announcement" class="text-danger"></span>
+							<p class="help-block">公告文字将用较大的字体显示在主页面正上方。</p>
+						</div>
+					</div>
+
+					<hr />
+					<div>
+						<div class="form-group">
+							<label asp-for="PageSize" class="control-label">分页尺寸</label>
+							<input asp-for="PageSize" type="number" class="form-control" />
+							<span asp-validation-for="PageSize" class="text-danger"></span>
+							<p class="help-block">在大部分列表页面中，每一页显示的项目数量。</p>
+						</div>
+					</div>
+
+					<hr />
+
+					<p>在系统内部，每个记录都使用其各自的标识进行区分。标识是一个递增的整数且永远不会重复，在显示时，可以对这个编号应用特定的显示格式，以便于设定显示长度、前缀、后缀等信息。要了解编号显示格式的具体设定方法，请查阅 <a href="https://msdn.microsoft.com/zh-cn/library/0c899ak8(v=vs.110).aspx">.NET Framework 数字格式字符串</a> 中的说明。</p>
+
+					<div>
+						<div class="form-group">
+							<label asp-for="MemberIdFormat" class="control-label">成员编号格式</label>
+							<input asp-for="MemberIdFormat" class="form-control" />
+							<span asp-validation-for="MemberIdFormat" class="text-danger"></span>
+							<p class="help-block">用于显示每个成员的编号格式。</p>
+						</div>
+						<div class="form-group">
+							<label asp-for="EventIdFormat" class="control-label">赛事编号格式</label>
+							<input asp-for="EventIdFormat" class="form-control"/>
+							<span asp-validation-for="EventIdFormat" class="text-danger"></span>
+							<p class="help-block">用于显示每个赛事的编号格式。</p>
+						</div>
+						<div class="form-group">
+							<label asp-for="TeamIdFormat" class="control-label">队伍编号格式</label>
+							<input asp-for="TeamIdFormat" class="form-control" />
+							<span asp-validation-for="TeamIdFormat" class="text-danger"></span>
+							<p class="help-block">用于显示每个队伍的编号格式。</p>
+						</div>
+					</div>
+
+				</div>
+			</div>
+		</div>
+
+		<div class="col-md-6">
+			<div class="panel panel-info">
+				<div class="panel-heading">
+					<h2 class="panel-title">系统设置</h2>
+				</div>
+				<div class="panel-body">
+
+					<div>
+
+						 <div class="form-group">
+							<label asp-for="DefaultNation" class="control-label">标准国籍</label>
+							<input asp-for="DefaultNation" type="text" class="form-control" />
+							<span asp-validation-for="DefaultNation" class="text-danger"></span>
+							 <p class="help-block">如果用户在<q>国籍</q>一栏中填写了标准国籍以外的内容，将被视为留学生。</p>
+						</div>
+
+						<div class="form-group">
+							<label asp-for="DepartmentList" class="control-label">部门列表</label>
+							<textarea asp-for="DepartmentList" rows="10" class="form-control"></textarea>
+							<span asp-validation-for="DepartmentList" class="text-danger"></span>
+							<p class="help-block">在此栏中列出所有系统中预定义的部门（每行一个）。这可帮助用户规范填写<q>所属部门</q>一栏，防止在外援检测时发生问题。
+							</p>
+						</div>
+
+						<div class="form-group">
+							<label asp-for="LocationList" class="control-label">位置列表</label>
+							<textarea asp-for="LocationList" rows="10" class="form-control"></textarea>
+							<span asp-validation-for="LocationList" class="text-danger"></span>
+							<p class="help-block">在此栏中列出所有系统中预定义的位置（每行一个）。这可简化用户填写所在位置。</p>
+						</div>
+
+						<hr />
+
+						<div class="form-group">
+							<label asp-for="MaxAttachementSize" class="control-label">最大附件尺寸</label>
+							<input asp-for="MaxAttachementSize" type="number" class="form-control" />
+							<span asp-validation-for="MaxAttachementSize" class="text-danger"></span>
+							<p class="help-block">用户上传的单个附件的最大文件尺寸，以字节为单位。</p>
+						</div>
+
+						<div class="form-group">
+							<label asp-for="MaxAttachementCount" class="control-label">最大附件数量</label>
+							<input asp-for="MaxAttachementCount" type="number" class="form-control" />
+							<span asp-validation-for="MaxAttachementCount" class="text-danger"></span>
+							<p class="help-block">用户允许上传的附件数量。</p>
+						</div>
+
+					</div>
+
+				</div>
+			</div>
+		</div>
+	</div>
+
+	<hr />
+
+	<div asp-validation-summary="ValidationSummary.ModelOnly"></div>
+	<button type="submit" class="btn btn-default btn-primary">修改设置</button>
+	<button type="reset" class="btn btn-default">撤销修改</button>
+
+</form>

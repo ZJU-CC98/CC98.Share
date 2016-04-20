@@ -1,0 +1,30 @@
+{
+  "name": "jquery-ajax-form",
+  "main": "jquery-ajax-form.js",
+  "version": "0.0.1",
+  "homepage": "https://github.com/incraigulous/jquery-ajax-form",
+  "authors": [
+    "Incraigulous <craigwann1@gmail.com>"
+  ],
+  "description": "Ajax based form processing. Parses JSON responses for common actions like redirects, DOM updates o",
+  "keywords": [
+    "jQuery",
+    "Ajax",
+    "Form",
+    "ajaxform",
+    "json",
+    "from",
+    "processor"
+  ],
+  "license": "MIT",
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "test",
+    "tests"
+  ],
+  "dependencies": {
+    "json-processor": "~0.0.4",
+    "class.js": "~1.0.0"
+  }
+}

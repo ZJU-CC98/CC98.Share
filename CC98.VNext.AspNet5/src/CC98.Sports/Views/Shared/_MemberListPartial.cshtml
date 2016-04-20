@@ -1,0 +1,149 @@
+﻿@using System.Globalization
+@using CC98
+
+@model IEnumerable<Member>
+@inject AppSettingService<SystemSetting> SettingService
+
+@{
+	var showAdmin = (bool)ViewBag.ShowAdmin;
+	var showAuditState = (bool)ViewBag.ShowAuditState;
+	var forceAdmin = (bool)ViewBag.ForceAdmin;
+}
+
+
+<table class="table table-striped table-hover">
+	<thead>
+		<tr>
+			<th>编号</th>
+			<th>姓名</th>
+			<th>性别</th>
+			<th>国籍</th>
+			<th>学院</th>
+			<th>身份</th>
+			<th>备注</th>
+
+			@if (showAuditState)
+			{
+				<th>审核申请时间</th>
+				<th>审核状态</th>
+
+			}
+
+			@if (showAdmin)
+			{
+				<th>操作</th>
+			}
+		</tr>
+	</thead>
+
+	<tbody>
+
+		@foreach (var member in Model)
+		{
+			var idText = member.Id.ToString(SettingService.Current.MemberIdFormat, CultureInfo.CurrentCulture);
+
+			<tr>
+				<th><a asp-controller="Member" asp-action="Detail" asp-route-id="@member.Id" asp-route-returnUrl="@ViewBag.ReturnUrl">@idText</a></th>
+				<th>@member.Name</th>
+				<td>
+					@switch (member.Gender)
+					{
+						case Gender.Male:
+							<span>男</span>
+							break;
+						case Gender.Female:
+							<span>女</span>
+							break;
+					}
+				</td>
+				<td>
+					@if (string.IsNullOrEmpty(member.Nationality))
+					{
+						<span class="text-muted">尚未填写</span>
+					}
+					else
+					{
+						<span>@member.Nationality</span>
+
+					}
+				</td>
+				<td>
+					@if (string.IsNullOrEmpty(member.Department))
+					{
+						<span class="text-muted">尚未填写</span>
+					}
+					else
+					{
+						<span>@member.Department</span>
+					}
+				</td>
+
+				<td>
+					@await Html.PartialAsync("_MemberTypePartial", member.Type)
+				</td>
+
+				<td>
+					@await Html.PartialAsync("_MemberRemarkPartial", member)
+				</td>
+
+				@if (showAuditState)
+				{
+					<td>
+						@if (member.AuditCommitTime != null)
+						{
+							<span>@member.AuditCommitTime.Value.ToString("G")</span>
+						}
+						else
+						{
+							<span class="text-muted">无</span>
+						}
+					</td>
+
+					<td>
+						<strong>
+							@switch (member.AuditState)
+							{
+								case AuditState.Accepted:
+									<span class="text-success">已通过</span>
+									break;
+								case AuditState.Rejected:
+									<span class="text-danger">已拒绝</span>
+									break;
+								case AuditState.Pending:
+									<span class="text-warning">审核中</span>
+									break;
+								case AuditState.NotCommitted:
+									<span class="text-muted">未申请</span>
+									break;
+							}
+						</strong>
+
+					</td>
+				}
+
+				@if (showAdmin)
+				{
+					<td>
+
+						@if (forceAdmin || member.EventRegistrations.All(i => i.TeamRegistration.EventState == TeamEventState.Ended))
+						{
+							// 管理员有权限，或者所有比赛都已经结束
+
+							<div class="btn-group btn-group-xs">
+								<a asp-controller="Member" asp-action="Edit" asp-route-id="@member.Id" class="btn btn-default">编辑</a>
+								<button data-name="@member.Name" data-id-text="@idText" data-id-value="@member.Id" class="btn btn-default btn-danger" onclick="showDeleteMember(this);">删除</button>
+							</div>
+
+						}
+						else
+						{
+							<span class="text-muted">已锁定</span>
+						}
+					</td>
+				}
+			</tr>
+		}
+
+	</tbody>
+
+</table>

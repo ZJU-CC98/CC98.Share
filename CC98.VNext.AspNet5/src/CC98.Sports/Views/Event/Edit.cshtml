@@ -1,0 +1,34 @@
+﻿@using System.Threading.Tasks
+@using System.Globalization
+@using CC98.Sports
+
+@model CC98.Sports.Event
+
+@{
+	ViewBag.Title = string.Format(CultureInfo.CurrentCulture, "编辑赛事 - {0}", Model.Name);
+
+	var viewData = new ViewDataDictionary<Event>(ViewData, Model);
+	ViewData["IsEditMode"] = true;
+}
+
+<h1 class="page-header lead text-center">@ViewBag.Title</h1>
+
+<form method="POST" asp-antiforgery="true">
+
+	@await Html.PartialAsync("_EditPartial", viewData)
+
+	<hr />
+
+	<div asp-validation-summary="ValidationSummary.ModelOnly" class="text-danger">
+	</div>
+
+	<button type="submit" class="btn btn-default btn-primary">提交修改</button>
+	<button type="reset" class="btn btn-default">撤销修改</button>
+
+</form>
+
+@section scripts{
+
+	@await Html.PartialAsync("_ValidationScriptsPartial")
+
+}

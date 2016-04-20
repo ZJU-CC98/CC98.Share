@@ -1,0 +1,34 @@
+﻿@model CC98.LogOn.ViewModels.ZjuSso.BindViewModel
+
+@{
+	ViewBag.Title = "绑定 CC98 账户";
+}
+
+<h1 class="page-header lead text-center">@ViewBag.Title</h1>
+
+<p>在该页面，你可以将一个 CC98 账户绑定到你当前登录的浙大通行证账户。绑定后，该 CC98 账户将解锁论坛的功能限制，可以在大部分板块发表或回复话题。<span class="text-warning">注意：绑定账户操作是不可逆的。根据学校信息安全管理要求，我们目前不支持取消或者更改 CC98 账户关联的浙大通行证账户。每个浙大通行证账户可绑定的 CC98 账户有数量限制，因此请珍惜你的绑定权力。</span></p>
+
+<hr />
+
+<form asp-controller="ZjuSso" asp-action="Bind" method="post" asp-antiforgery="true" onsubmit="return confirm('绑定不可撤销或更改，你确定要继续吗？');">
+	<div class="form-group">
+		<label asp-for="CC98UserName" class="control-label">CC98 账户名</label>
+		<input asp-for="CC98UserName" type="text" class="form-control" />
+		<span asp-validation-for="CC98UserName" class="text-danger"></span>
+	</div>
+
+	<div class="form-group">
+		<label asp-for="CC98Password" class="control-label">CC98 账户密码</label>
+		<input asp-for="CC98Password" type="text" class="form-control" />
+		<span asp-validation-for="CC98Password" class="text-danger"></span>
+	</div>
+
+	<hr />
+	<div asp-validation-summary="ValidationSummary.ModelOnly"></div>
+	<button type="submit" class="btn btn-primary">执行绑定</button>
+	<button type="reset" class="btn btn-default">清除输入</button>
+</form>
+
+@section scripts{
+	@await Html.PartialAsync("_ValidationScriptsPartial")
+}

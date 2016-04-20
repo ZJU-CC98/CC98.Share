@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Ajax Form Demo</title>
+
+    <!-- Bootstrap isn't required. I'm just using it for the demo. -->
+    <link href="//maxcdn.bootstrapcdn.com/bootstrap/3.3.2/css/bootstrap.min.css" rel="stylesheet">
+
+</head>
+<body>
+<div class="container">
+
+    <h1>Ajax Form Demo</h1>
+
+    <p>Get it on <a href="https://github.com/incraigulous/jquery-ajax-form">Github</a> or <a href="http://bower.io/search/?q=jquery%20ajax%20form">Bower</a>.</p>
+
+    <form role="form" class="json-form" method="post" action="response.json">
+            <div class="form-group">
+                <label>Name:</label>
+                <input type="text" class="form-control" name="name">
+            </div>
+            <div class="form-group">
+                <label>Email:</label>
+                <input type="text" class="form-control" name="email">
+            </div>
+        <input type="submit">
+    </form>
+
+    <hr>
+
+    <h2>HTML Rsponse</h2>
+
+    <div class="result"></div>
+
+    <form role="form" class="ajax-form" method="post" action="html.html">
+        <div class="form-group">
+            <label>Name:</label>
+            <input type="text" class="form-control" name="name">
+        </div>
+        <div class="form-group">
+            <label>Email:</label>
+            <input type="text" class="form-control" name="email">
+        </div>
+        <input type="submit">
+    </form>
+</div>
+
+<!-- jQuery and class.js are required -->
+<script src="bower_components/jquery/dist/jquery.min.js"></script>
+<script src="bower_components/json-processor/jquery.json-processor.js"></script>
+<script src="bower_components/class.js/src/class.min.js"></script>
+
+<script src="jquery-ajax-form.js"></script>
+
+<!-- Bootstrap isn't required. I'm just using it for the demo. -->
+<script src="//maxcdn.bootstrapcdn.com/bootstrap/3.3.2/js/bootstrap.min.js"></script>
+
+<script type="text/javascript">
+
+    //All options are optional.
+    new AjaxForm($('.json-form'));
+
+    //All options are optional.
+    new AjaxForm($('.ajax-form'), {
+        target: '.result',
+        dataType: 'html',
+    });
+</script>
+</body>
+</html>

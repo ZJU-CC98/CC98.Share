@@ -1,0 +1,111 @@
+﻿@model Game
+
+@{
+	var eventItem = (Event)ViewBag.Event;
+	var teams = from i in eventItem.TeamRegistrations
+				where i.EventState != TeamEventState.Ended && i.AuditState == AuditState.Accepted
+				orderby i.Team.Name ascending
+				select i.Team;
+
+	var teamList = new SelectList(teams, nameof(Team.Id), nameof(Team.Name));
+}
+
+<div class="row">
+	<div class="col-md-6">
+
+		<div class="panel panel-primary">
+			<div class="panel-heading">
+				<h2 class="panel-title">主要信息</h2>
+			</div>
+			<div class="panel-body">
+
+				<div>
+
+					<div class="form-group">
+
+						<input type="hidden" asp-for="EventId" value="@eventItem.Id" />
+
+						<label class="control-label">关联赛事</label>
+						<input class="form-control" type="text" value="@eventItem.Name" readonly="readonly" />
+						<p class="help-block">比赛关联到的赛事。这个字段是只读的。</p>
+					</div>
+
+					<div class="form-group">
+						<label asp-for="Name" class="control-label">比赛名称</label>
+						<input type="text" asp-for="Name" class="form-control" />
+						<span asp-validation-for="Name" class="text-danger"></span>
+						<p class="help-block">比赛的名称将会显示在列表页面。</p>
+					</div>
+
+					<div class="form-group">
+						<label asp-for="Round" class="control-label">比赛轮次</label>
+						<input type="text" asp-for="Round" class="form-control" />
+						<span asp-validation-for="Round" class="text-danger"></span>
+						<p class="help-block">比赛轮次是一个整数，将会影响到比赛的显示顺序，轮次较小的赛事将排列在更前面。</p>
+					</div>
+
+
+					<div class="form-group">
+						<label asp-for="StartTime" class="control-label">开始时间</label>
+
+						<div class="input-group date">
+							<input type="text" asp-for="StartTime" class="form-control" placeholder="待定" />
+							<span class="input-group-addon">
+								<span class="glyphicon glyphicon-calendar"></span>
+							</span>
+						</div>
+						<span asp-validation-for="StartTime" class="text-danger"></span>
+						<p class="help-block">比赛的预计开始时间。</p>
+					</div>
+
+					<div class="form-group">
+						<label asp-for="EndTime" class="control-label">结束时间</label>
+
+						<div class="input-group date">
+							<input type="text" asp-for="EndTime" class="form-control" placeholder="待定" />
+							<span class="input-group-addon">
+								<span class="glyphicon glyphicon-calendar"></span>
+							</span>
+						</div>
+						<span asp-validation-for="EndTime" class="text-danger"></span>
+						<p class="help-block">比赛的预计结束时间。</p>
+					</div>
+
+					<div class="form-group">
+						<label asp-for="Team1Id" class="control-label">比赛队伍 1</label>
+						<select type="text" asp-for="Team1Id" asp-items="teamList" class="form-control" asp-option-label="待定">	</select>
+						<span asp-validation-for="Team1Id" class="text-danger"></span>
+						<p class="help-block">比赛相关的第一支比赛队伍。</p>
+					</div>
+
+					<div class="form-group">
+						<label asp-for="Team2Id" class="control-label">比赛队伍 2</label>
+						<select type="text" asp-for="Team2Id" asp-items="teamList" class="form-control" asp-option-label="待定"></select>
+						<span asp-validation-for="Team2Id" class="text-danger"></span>
+						<p class="help-block">比赛相关的第二支比赛队伍。</p>
+					</div>
+
+					<hr />
+					<div class="form-group">
+						<label asp-for="State" class="control-label">比赛状态</label>
+						<select type="text" asp-enum-for="State" asp-text-source="EnumOptionTextSource.Name" class="form-control" asp-option-label="选择一个赛事状态"></select>
+						<span asp-validation-for="State" class="text-danger"></span>
+						<p class="help-block">比赛的当前状态。修改该信息会对比赛进程产生较大影响，请谨慎操作。</p>
+					</div>
+
+				</div>
+			</div>
+		</div>
+
+	</div>
+	<div class="col-md-6">
+		<div class="panel panel-info">
+			<div class="panel-heading">
+				<h2 class="panel-title">人员安排</h2>
+			</div>
+			<div class="panel-body">
+				<p class="text-center text-muted">该功能尚未实现，请等待后续系统更新</p>
+			</div>
+		</div>
+	</div>
+</div>

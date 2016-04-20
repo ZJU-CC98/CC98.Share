@@ -1,0 +1,106 @@
+﻿@model Event
+@inject AppSettingService<SystemSetting> SettingService
+
+@{
+	ViewBag.Title = string.Format(CultureInfo.CurrentCulture, "分组管理 - {0}", Model.Name);
+
+	var items = (from i in Model.TeamRegistrations
+				 where i.AuditState == AuditState.Accepted
+				 orderby i.Group ascending, i.GroupNumber ascending
+				 select i).ToArray();
+}
+
+<h1 class="page-header lead text-center">@ViewBag.Title</h1>
+<div asp-message-list="MessageListStyle.AlertDialogClosable"></div>
+
+<div class="alert alert-info">队伍分组信息可用于自动化生成赛程安排。分组名称和组内编号可以使用任意文字，但建议你使用英文大写字母（A、B 等）作为分组名称，使用数字（1、2）等作为组内编号。本页面只显示通过审核验证的参赛名单，未经审核的名单请先让审核员通过审核。</div>
+
+@if (items.Any())
+{
+	<form asp-controller="Event" asp-action="GroupTeams" asp-route-id="@Model.Id" asp-antiforgery="true" method="post">
+
+		<table class="table table-striped table-hover">
+			<thead>
+				<tr>
+					<th>编号</th>
+					<th>名称</th>
+					<th>领队</th>
+					<th>队长</th>
+					<th>教练</th>
+					<th>分组名称</th>
+					<th>组内编号</th>
+				</tr>
+			</thead>
+
+			<tbody>
+
+				@for (var i = 0; i < items.Length; i++)
+				{
+					var item = items[i];
+					var team = item.Team;
+
+					<tr>
+						<th>
+							<input type="hidden" name="[@i].TeamId" value="@item.TeamId" />
+
+							<a asp-controller="Team" asp-action="Detail" asp-route-id="@team.Id">@team.Id.ToString(SettingService.Current.TeamIdFormat)</a>
+						</th>
+						<th>
+							@team.Name
+						</th>
+						<td>
+							@if (item.Skipper != null)
+							{
+								<a asp-controller="Member" asp-action="Detail" asp-route-id="@item.Skipper.Id">@item.Skipper.Name</a>
+							}
+							else
+							{
+								<span class="text-muted">暂无</span>
+							}
+						</td>
+						<td>
+							@if (item.Captain != null)
+							{
+								<a asp-controller="Member" asp-action="Detail" asp-route-id="@item.Captain.Id">@item.Captain.Name</a>
+							}
+							else
+							{
+								<span class="text-muted">暂无</span>
+							}
+						</td>
+						<td>
+							@if (item.Coach != null)
+							{
+								<a asp-controller="Member" asp-action="Detail" asp-route-id="@item.Coach.Id">@item.Coach.Name</a>
+							}
+							else
+							{
+								<span class="text-muted">暂无</span>
+							}
+						</td>
+						<td>
+							<input class="form-control input-sm" type="text" name="[@i].Group" value="@item.Group" />
+						</td>
+						<td>
+							<input class="form-control input-sm" type="text" name="[@i].GroupNumber" value="@item.GroupNumber" />
+						</td>
+					</tr>
+
+				}
+
+			</tbody>
+
+		</table>
+
+		<hr />
+		<button type="submit" class="btn btn-primary">更新队伍分组</button>
+		<button type="reset" class="btn btn-default">撤销更改</button>
+
+	</form>
+}
+else
+{
+	<p class="text-muted text-center">目前还没有任何通过审核的队伍</p>
+
+}
+

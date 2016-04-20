@@ -1,0 +1,173 @@
+﻿
+
+<environment names="Development">
+	<script src="~/lib/jquery-form/jquery.form.js"></script>
+	<script src="~/lib/Microsoft.jQuery.Unobtrusive.Ajax/jquery.unobtrusive-ajax.js"></script>
+</environment>
+
+<environment names="Staging,Production">
+
+	<script src="//oss.maxcdn.com/jquery.form/3.50/jquery.form.min.js"
+	        asp-fallback-src="~/lib/jquery-form/jquery.form.js"
+	        asp-fallback-test="window.jquery && window.jquery.fn.ajaxSubmit"></script>
+
+	<script src="~/lib/Microsoft.jQuery.Unobtrusive.Ajax/jquery.unobtrusive-ajax.min.js"></script>
+</environment>
+
+<script type="text/javascript" language="javascript">
+
+	function getErrorText(xhr) {
+		if (xhr.responseText != null && xhr.responseText != "") {
+			return xhr.responseText;
+		}
+
+		switch(xhr.status) {
+			case 400:
+				return "提交的数据不正确。";
+			case 401:
+				return "当前用户未登录，无法执行该操作。";
+			case 403:
+				return "你没有权限执行这个操作。";
+			case 404:
+				return "操作目标不存在或已经被删除。";
+			default:
+				return "操作中发生错误，请稍后再试一次。";
+		}
+	}
+
+</script>
+
+<!-- The template to display files available for upload -->
+<script id="template-upload" type="text/x-tmpl">
+	{% for (var i=0, file; file=o.files[i]; i++) { %}
+	<tr class="template-upload fade">
+		<td>
+			<span class="preview"></span>
+		</td>
+		<td>
+			<p class="name">{%=file.name%}</p>
+			<strong class="error text-danger"></strong>
+		</td>
+		<td>
+			<p class="size">正在处理……</p>
+			<div class="progress progress-striped active" role="progressbar" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0"><div class="progress-bar progress-bar-success" style="width:0;"></div></div>
+		</td>
+		<td>
+			{% if (!i && !o.options.autoUpload) { %}
+			<button class="btn btn-primary start" disabled>
+				<i class="glyphicon glyphicon-upload"></i>
+				<span>开始</span>
+			</button>
+			{% } %}
+			{% if (!i) { %}
+			<button class="btn btn-warning cancel">
+				<i class="glyphicon glyphicon-ban-circle"></i>
+				<span>取消</span>
+			</button>
+			{% } %}
+		</td>
+	</tr>
+	{% } %}
+</script>
+<!-- The template to display files available for download -->
+<script id="template-download" type="text/x-tmpl">
+	{% for (var i=0, file; file=o.files[i]; i++) { %}
+	<tr class="template-download fade">
+		<td>
+			<span class="preview">
+				{% if (file.thumbnailUrl) { %}
+				<a target="_blank" href="{%=file.url%}" title="{%=file.name%}" download="{%=file.name%}" data-gallery><img src="{%=file.thumbnailUrl%}"></a>
+				{% } %}
+			</span>
+		</td>
+		<td>
+			<p class="name">
+				{% if (file.url) { %}
+				<a href="{%=file.url%}" target="_blank" title="{%=file.name%}" download="{%=file.name%}" {%=file.thumbnailUrl?'data-gallery':''%}>{%=file.name%}</a>
+				{% } else { %}
+				<span>{%=file.name%}</span>
+				{% } %}
+			</p>
+			{% if (file.error) { %}
+			<div><span class="label label-danger">错误</span> {%=file.error%}</div>
+			{% } %}
+		</td>
+		<td>
+			<span class="size">{%=o.formatFileSize(file.size)%}</span>
+		</td>
+		<td>
+			{% if (file.deleteUrl) { %}
+			<button class="btn btn-danger delete" data-type="{%=file.deleteType%}" data-url="{%=file.deleteUrl%}" {% if (file.deleteWithCredentials) { %} data-xhr-fields='{"withCredentials":true}' {% } %}>
+				<i class="glyphicon glyphicon-trash"></i>
+				<span>删除</span>
+			</button>
+			<input type="checkbox" name="delete" value="1" class="toggle">
+			{% } else { %}
+			<button class="btn btn-warning cancel">
+				<i class="glyphicon glyphicon-ban-circle"></i>
+				<span>取消</span>
+			</button>
+			{% } %}
+		</td>
+	</tr>
+	{% } %}
+</script>
+<!-- The Templates plugin is included to render the upload/download listings -->
+<script src="~/lib/blueimp-tmpl/js/tmpl.min.js"></script>
+<!-- The Load Image plugin is included for the preview images and image resizing functionality -->
+<script src="~/lib/blueimp-load-image/js/load-image.all.min.js"></script>
+<!-- The Canvas to Blob plugin is included for image resizing functionality -->
+<script src="~/lib/blueimp-canvas-to-blob/js/canvas-to-blob.min.js"></script>
+
+<!-- The Iframe Transport is required for browsers without support for XHR file uploads -->
+<script src="~/lib/jquery.iframe-transport/jquery.iframe-transport.js"></script>
+<!-- The basic File Upload plugin -->
+<script src="~/lib/jquery-file-upload/js/jquery.fileupload.js"></script>
+<!-- The File Upload processing plugin -->
+<script src="/lib/jquery-file-upload/js/jquery.fileupload-process.js"></script>
+<!-- The File Upload image preview & resize plugin -->
+<script src="/lib/jquery-file-upload/js/jquery.fileupload-image.js"></script>
+<!-- The File Upload audio preview plugin -->
+<script src="/lib/jquery-file-upload/js/jquery.fileupload-audio.js"></script>
+<!-- The File Upload video preview plugin -->
+<script src="/lib/jquery-file-upload/js/jquery.fileupload-video.js"></script>
+<!-- The File Upload validation plugin -->
+<script src="/lib/jquery-file-upload/js/jquery.fileupload-validate.js"></script>
+<!-- The File Upload user interface plugin -->
+<script src="/lib/jquery-file-upload/js/jquery.fileupload-ui.js"></script>
+<!-- The XDomainRequest Transport is included for cross-domain file deletion for IE 8 and IE 9 -->
+<!--[if (gte IE 8)&(lt IE 10)]>
+<script src="js/cors/jquery.xdr-transport.js"></script>
+<![endif]-->
+
+
+<script type="text/javascript" language="javascript">
+
+
+	function beginUpload(selector) {
+
+		// 清空
+		fileUploadList = {};
+
+		// Initialize the jQuery File Upload widget:
+		$(selector).fileupload();
+
+		// Load existing files:
+		$(selector).addClass('fileupload-processing');
+
+		$.ajax({
+			// Uncomment the following to send cross-domain cookies:
+			//xhrFields: {withCredentials: true},
+			url: $(selector).fileupload('option', 'url'),
+			dataType: 'json',
+			context: $(selector)[0]
+		}).always(function () {
+			$(this).removeClass('fileupload-processing');
+		}).done(function (result) {
+			$(this).fileupload('option', 'done')
+				.call(this, $.Event('done'), { result: result });
+		});
+
+	}
+
+</script>

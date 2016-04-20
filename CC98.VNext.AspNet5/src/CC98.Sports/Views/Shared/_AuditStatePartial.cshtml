@@ -1,0 +1,21 @@
+﻿@model AuditState
+
+<strong>
+
+	@switch (Model)
+	{
+		case AuditState.NotCommitted:
+			<span class="text-muted">未提交</span>
+			break;
+		case AuditState.Pending:
+			<span class="text-warning">待审核</span>
+			break;
+		case AuditState.Accepted:
+			<span class="text-success">已通过</span>
+			break;
+		case AuditState.Rejected:
+			<span class="text-danger">已拒绝</span>
+			break;
+	}
+
+</strong>

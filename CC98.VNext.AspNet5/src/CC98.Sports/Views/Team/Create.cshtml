@@ -1,0 +1,36 @@
+﻿@using CC98
+@model Team
+
+@{
+	ViewBag.Title = "创建队伍";
+	ViewBag.IsEdit = false;
+}
+
+<h1 class="page-header lead text-center">@ViewBag.Title</h1>
+
+<form asp-controller="Team" asp-action="Create" method="POST" asp-antiforgery="true">
+
+	@await Html.PartialAsync("_EditPartial")
+
+	<hr />
+
+	<div asp-validation-summary="ValidationSummary.ModelOnly" class="text-danger"></div>
+
+	<button type="submit" class="btn btn-default btn-primary">创建队伍</button>
+	<button type="reset" class="btn btn-default">清空内容</button>
+
+</form>
+
+
+@section scripts{
+
+	@await Html.PartialAsync("_ValidationScriptsPartial")
+
+	<script type="text/javascript" language="javascript">
+
+		function setDepartmentText(item) {
+			$('#department-input').val($(item).data('text'));
+		}
+
+	</script>
+}

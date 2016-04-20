@@ -1,0 +1,120 @@
+﻿@model EventTeamRegistration
+@inject AppSettingService<SystemSetting> SettingService
+
+@{
+	// 标准比较数据
+	var standardNation = SettingService.Current.DefaultNation;
+	var teamDepartment = Model.Team.Department;
+
+	// 计数器
+	var professionalCount = 0;
+	var foreignCount = 0;
+	var externalCount = 0;
+
+	var playerCount = 0;
+
+	// 循环检索
+	foreach (var i in Model.Members)
+	{
+		if (i.Member.Type == MemberType.Player)
+		{
+			var specialMark = i.Member.GetSpecialRemark(standardNation, teamDepartment);
+
+			if (specialMark.HasFlag(PlayerSpecialRemarks.Professional))
+			{
+				professionalCount++;
+			}
+
+			if (specialMark.HasFlag(PlayerSpecialRemarks.Foreign))
+			{
+				foreignCount++;
+			}
+
+			if (specialMark.HasFlag(PlayerSpecialRemarks.External))
+			{
+				externalCount++;
+			}
+
+			playerCount++;
+		}
+	}
+
+	// 判断标准
+	var professionalOk = !(Model.Event.ProfessionalMax < professionalCount);
+	var foreignOk = !(Model.Event.ForeignMax < foreignCount);
+	var externalOk = !(Model.Event.ExternalMax < externalCount);
+
+	var playerOk = !(Model.Event.PlayerMin > playerCount) && !(Model.Event.PlayerMax < playerCount);
+
+	// 最终标准
+	var allOk = professionalOk && foreignOk && externalOk && playerOk;
+}
+
+<table class="table">
+	<thead>
+		<tr>
+			<th>总人数</th>
+			<th>运动员数</th>
+			<th>高水平数</th>
+			<th>留学生数</th>
+			<th>外援数</th>
+		</tr>
+		<tr>
+			<td>
+				@if(allOk)
+				{
+					<span class="text-success"><span class="glyphicon glyphicon-ok"></span> @Model.Members.Count</span>
+				}
+				else
+				{
+					<span class="text-danger"><span class="glyphicon glyphicon-remove"></span> @Model.Members.Count</span>
+				}
+			</td>
+
+			<td>
+				@if (playerOk)
+				{
+					<span class="text-success"><span class="glyphicon glyphicon-ok"></span> @playerCount</span>
+				}
+				else
+				{
+					<span class="text-danger"><span class="glyphicon glyphicon-remove"></span> @playerCount</span>
+				}
+			</td>
+
+			<td>
+				@if (professionalOk)
+				{
+					<span class="text-success"><span class="glyphicon glyphicon-ok"></span> @professionalCount</span>
+				}
+				else
+				{
+					<span class="text-danger"><span class="glyphicon glyphicon-remove"></span> @professionalCount</span>
+				}
+			</td>
+
+			<td>
+				@if (foreignOk)
+				{
+					<span class="text-success"><span class="glyphicon glyphicon-ok"></span> @foreignCount</span>
+				}
+				else
+				{
+					<span class="text-danger"><span class="glyphicon glyphicon-remove"></span> @foreignCount</span>
+				}
+			</td>
+
+			<td>
+				@if (externalOk)
+				{
+					<span class="text-success"><span class="glyphicon glyphicon-ok"></span> @externalCount</span>
+				}
+				else
+				{
+					<span class="text-danger"><span class="glyphicon glyphicon-remove"></span> @externalCount</span>
+				}
+			</td>
+
+		</tr>
+	</thead>
+</table>

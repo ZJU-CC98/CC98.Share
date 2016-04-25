@@ -76,7 +76,7 @@ namespace CC98.Share.Controllers
 
 				ViewData["List"] = result.ToArray();
 				ViewData["CHECK"] = search.Words;
-				TempData["list"] = result.ToArray();
+				//TempData["list"] = result.ToArray();
 				ViewData["SEARCH"] = search;
 
 				var products = result.ToArray(); //returns IQueryable<Product> representing an unknown number of products. a thousand maybe?
@@ -119,7 +119,7 @@ namespace CC98.Share.Controllers
 
 				ViewData["List"] = result.ToArray();
 				ViewData["CHECK"] = search.Words;
-				TempData["list"] = result.ToArray();
+			//	TempData["list"] = result.ToArray();
 				ViewData["SEARCH"] = search;
 
 				var products = result.ToArray(); //returns IQueryable<Product> representing an unknown number of products. a thousand maybe?

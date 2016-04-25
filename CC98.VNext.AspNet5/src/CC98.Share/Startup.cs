@@ -14,6 +14,8 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Microsoft.Framework.DependencyInjection;
+using Sakura.AspNet.Mvc;
+using Sakura.AspNet.Mvc.PagedList;
 
 namespace CC98.Share
 {
@@ -81,8 +83,63 @@ namespace CC98.Share
 					options.UseSqlServer(Configuration["Data:ShareDatabase:ConnectionString"]);
 				});
 
-			// 为应用程序添加 MVC 功能
-			services.AddMvc();
+            services.UseBootstrapPagerGenerator(options =>
+            {
+                options.ExpandPageLinksForCurrentPage = 2;
+                options.PageLinksForEndings = 3;
+
+                options.Layout = PagedListPagerLayouts.Default;
+
+                options.Items = new PagerItemOptions
+                {
+                    EncodeText = true,
+                    LinkParameterName = "page",
+                    TextFormat = "{0:d}",
+                };
+
+                options.Omitted = new PagerItemOptions
+                {
+                    Text = "...",
+                    Link = string.Empty
+                };
+
+                options.FirstButton = new FirstAndLastPagerItemOptions
+                {
+                    Text = "&laquo;",
+                    EncodeText = false,
+                    ActiveMode = FirstAndLastPagerItemActiveMode.Always,
+                    InactiveBehavior = SpecialPagerItemInactiveBehavior.Disable,
+                    LinkParameterName = "page",
+                };
+
+                options.LastButton = new FirstAndLastPagerItemOptions
+                {
+                    Text = "&raquo;",
+                    EncodeText = false,
+                    ActiveMode = FirstAndLastPagerItemActiveMode.Always,
+                    InactiveBehavior = SpecialPagerItemInactiveBehavior.Disable,
+                    LinkParameterName = "page",
+                };
+
+                options.PreviousButton = new SpecialPagerItemOptions
+                {
+                    Text = "&lsaquo;",
+                    EncodeText = false,
+                    InactiveBehavior = SpecialPagerItemInactiveBehavior.Disable,
+                    LinkParameterName = "page",
+                };
+
+                options.NextButton = new SpecialPagerItemOptions
+                {
+                    Text = "&rsaquo;",
+                    EncodeText = false,
+                    InactiveBehavior = SpecialPagerItemInactiveBehavior.Disable,
+                    LinkParameterName = "page",
+                };
+            });
+
+            // 为应用程序添加 MVC 功能
+            services.AddMvc();
 
 			// 配置应用程序的身份验证设置
 			services.Configure<IdentityOptions>(identityOptions =>

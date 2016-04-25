@@ -8,6 +8,7 @@ using Microsoft.AspNet.Http;
 using System.Security.Claims;
 using Microsoft.AspNet.Authorization;
 using System.Threading.Tasks;
+using Microsoft.Extensions.OptionsModel;
 
 namespace CC98.Share.Controllers
 {
@@ -48,6 +49,12 @@ namespace CC98.Share.Controllers
 			get;
 			set;
 		}
+        [FromServices]
+        public IOptions<Setting> Folder
+        {
+            get;
+            set;
+        }
         /// <summary>
         /// 提供下载功能。
         /// </summary>
@@ -56,8 +63,8 @@ namespace CC98.Share.Controllers
         [HttpPost]
         public IActionResult Download(int id)
         {
-            try
-            {
+            //try
+           // {
                 //将文件在数据库中的标识传入函数。
                 //并在数据库中找到此文件，返回给用户
                 var output = from i in Model.Items where i.Id == id select i;
@@ -65,17 +72,17 @@ namespace CC98.Share.Controllers
                 if (result != null)
                 {
                     string addressName = result.Path;
-                    return PhysicalFile(addressName, "application/octet-stream");
+                    return File(addressName, "application/octet-stream");
                 }
                 else
                 {
                     return new HttpStatusCodeResult(404);
                 }
-            }
-            catch
-            {
-                return new HttpStatusCodeResult(404);
-            }
+           // }
+            //catch
+            //{
+            //    return new HttpStatusCodeResult(404);
+            //}
         }
         /// <summary>
         /// 获取ContentDisposition中的文件名称。
@@ -110,21 +117,21 @@ namespace CC98.Share.Controllers
             string fileNameRandom = Path.GetRandomFileName();
             var fileName = Path.Combine(Address.MapPath("Upload"), fileNameRandom);
             ShareItem tm = new ShareItem();
-            try
-            {
+            //try
+            //{
                 string s = GetFileName(file.ContentDisposition);
-                file.SaveAs(fileName);
-                tm.Path = fileName;
+                tm.Path = "Upload" + "\\" + fileNameRandom;
+                file.SaveAs(Folder.Value.StoreFolder + "\\" + fileNameRandom);
                 tm.Name = s;
                 tm.UserName = User.GetUserName();
                 Model.Items.Add(tm);
                 await Model.SaveChangesAsync();
                 return new HttpStatusCodeResult(200);
-            }
-            catch
-            {
-                return new HttpStatusCodeResult(404);
-            }
+            //}
+            //catch
+            //{
+            //    return new HttpStatusCodeResult(404);
+            //}
         }
     }
 }

@@ -1,4 +1,26 @@
-﻿using System;
+﻿/* MIT License
+
+Copyright (c) 2016 JetBrains http://www.jetbrains.com
+
+Permission is hereby granted, free of charge, to any person obtaining a copy
+of this software and associated documentation files (the "Software"), to deal
+in the Software without restriction, including without limitation the rights
+to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+copies of the Software, and to permit persons to whom the Software is
+furnished to do so, subject to the following conditions:
+
+The above copyright notice and this permission notice shall be included in all
+copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+SOFTWARE. */
+
+using System;
 using System.Diagnostics;
 
 #pragma warning disable 1591
@@ -8,6 +30,7 @@ using System.Diagnostics;
 // ReSharper disable IntroduceOptionalParameters.Global
 // ReSharper disable MemberCanBeProtected.Global
 // ReSharper disable InconsistentNaming
+
 // ReSharper disable once CheckNamespace
 namespace JetBrains.Annotations
 {
@@ -98,11 +121,12 @@ namespace JetBrains.Annotations
 		/// <param name="formatParameterName">
 		/// Specifies which parameter of an annotated method should be treated as format-string
 		/// </param>
-		public StringFormatMethodAttribute(string formatParameterName)
+		public StringFormatMethodAttribute([NotNull] string formatParameterName)
 		{
 			FormatParameterName = formatParameterName;
 		}
 
+		[NotNull]
 		public string FormatParameterName { get; private set; }
 	}
 
@@ -114,7 +138,7 @@ namespace JetBrains.Annotations
 	[Conditional("JETBRAINS_ANNOTATIONS")]
 	internal sealed class ValueProviderAttribute : Attribute
 	{
-		public ValueProviderAttribute(string name)
+		public ValueProviderAttribute([NotNull] string name)
 		{
 			Name = name;
 		}
@@ -181,11 +205,12 @@ namespace JetBrains.Annotations
 	internal sealed class NotifyPropertyChangedInvocatorAttribute : Attribute
 	{
 		public NotifyPropertyChangedInvocatorAttribute() { }
-		public NotifyPropertyChangedInvocatorAttribute(string parameterName)
+		public NotifyPropertyChangedInvocatorAttribute([NotNull] string parameterName)
 		{
 			ParameterName = parameterName;
 		}
 
+		[CanBeNull]
 		public string ParameterName { get; private set; }
 	}
 
@@ -237,8 +262,7 @@ namespace JetBrains.Annotations
 	internal sealed class ContractAnnotationAttribute : Attribute
 	{
 		public ContractAnnotationAttribute([NotNull] string contract)
-		  : this(contract, false)
-		{ }
+		  : this(contract, false) { }
 
 		public ContractAnnotationAttribute([NotNull] string contract, bool forceFullStates)
 		{
@@ -246,6 +270,7 @@ namespace JetBrains.Annotations
 			ForceFullStates = forceFullStates;
 		}
 
+		[NotNull]
 		public string Contract { get; private set; }
 		public bool ForceFullStates { get; private set; }
 	}
@@ -330,16 +355,13 @@ namespace JetBrains.Annotations
 	internal sealed class UsedImplicitlyAttribute : Attribute
 	{
 		public UsedImplicitlyAttribute()
-		  : this(ImplicitUseKindFlags.Default, ImplicitUseTargetFlags.Default)
-		{ }
+		  : this(ImplicitUseKindFlags.Default, ImplicitUseTargetFlags.Default) { }
 
 		public UsedImplicitlyAttribute(ImplicitUseKindFlags useKindFlags)
-		  : this(useKindFlags, ImplicitUseTargetFlags.Default)
-		{ }
+		  : this(useKindFlags, ImplicitUseTargetFlags.Default) { }
 
 		public UsedImplicitlyAttribute(ImplicitUseTargetFlags targetFlags)
-		  : this(ImplicitUseKindFlags.Default, targetFlags)
-		{ }
+		  : this(ImplicitUseKindFlags.Default, targetFlags) { }
 
 		public UsedImplicitlyAttribute(ImplicitUseKindFlags useKindFlags, ImplicitUseTargetFlags targetFlags)
 		{
@@ -360,16 +382,13 @@ namespace JetBrains.Annotations
 	internal sealed class MeansImplicitUseAttribute : Attribute
 	{
 		public MeansImplicitUseAttribute()
-		  : this(ImplicitUseKindFlags.Default, ImplicitUseTargetFlags.Default)
-		{ }
+		  : this(ImplicitUseKindFlags.Default, ImplicitUseTargetFlags.Default) { }
 
 		public MeansImplicitUseAttribute(ImplicitUseKindFlags useKindFlags)
-		  : this(useKindFlags, ImplicitUseTargetFlags.Default)
-		{ }
+		  : this(useKindFlags, ImplicitUseTargetFlags.Default) { }
 
 		public MeansImplicitUseAttribute(ImplicitUseTargetFlags targetFlags)
-		  : this(ImplicitUseKindFlags.Default, targetFlags)
-		{ }
+		  : this(ImplicitUseKindFlags.Default, targetFlags) { }
 
 		public MeansImplicitUseAttribute(ImplicitUseKindFlags useKindFlags, ImplicitUseTargetFlags targetFlags)
 		{
@@ -429,6 +448,7 @@ namespace JetBrains.Annotations
 			Comment = comment;
 		}
 
+		[CanBeNull]
 		public string Comment { get; private set; }
 	}
 
@@ -469,6 +489,7 @@ namespace JetBrains.Annotations
 			Justification = justification;
 		}
 
+		[CanBeNull]
 		public string Justification { get; private set; }
 	}
 
@@ -502,11 +523,12 @@ namespace JetBrains.Annotations
 	internal sealed class PathReferenceAttribute : Attribute
 	{
 		public PathReferenceAttribute() { }
-		public PathReferenceAttribute([PathReference] string basePath)
+		public PathReferenceAttribute([NotNull, PathReference] string basePath)
 		{
 			BasePath = basePath;
 		}
 
+		[CanBeNull]
 		public string BasePath { get; private set; }
 	}
 
@@ -596,11 +618,12 @@ namespace JetBrains.Annotations
 	[Conditional("JETBRAINS_ANNOTATIONS")]
 	internal sealed class AspMvcAreaMasterLocationFormatAttribute : Attribute
 	{
-		public AspMvcAreaMasterLocationFormatAttribute(string format)
+		public AspMvcAreaMasterLocationFormatAttribute([NotNull] string format)
 		{
 			Format = format;
 		}
 
+		[NotNull]
 		public string Format { get; private set; }
 	}
 
@@ -608,11 +631,12 @@ namespace JetBrains.Annotations
 	[Conditional("JETBRAINS_ANNOTATIONS")]
 	internal sealed class AspMvcAreaPartialViewLocationFormatAttribute : Attribute
 	{
-		public AspMvcAreaPartialViewLocationFormatAttribute(string format)
+		public AspMvcAreaPartialViewLocationFormatAttribute([NotNull] string format)
 		{
 			Format = format;
 		}
 
+		[NotNull]
 		public string Format { get; private set; }
 	}
 
@@ -620,11 +644,12 @@ namespace JetBrains.Annotations
 	[Conditional("JETBRAINS_ANNOTATIONS")]
 	internal sealed class AspMvcAreaViewLocationFormatAttribute : Attribute
 	{
-		public AspMvcAreaViewLocationFormatAttribute(string format)
+		public AspMvcAreaViewLocationFormatAttribute([NotNull] string format)
 		{
 			Format = format;
 		}
 
+		[NotNull]
 		public string Format { get; private set; }
 	}
 
@@ -644,11 +669,12 @@ namespace JetBrains.Annotations
 	[Conditional("JETBRAINS_ANNOTATIONS")]
 	internal sealed class AspMvcPartialViewLocationFormatAttribute : Attribute
 	{
-		public AspMvcPartialViewLocationFormatAttribute(string format)
+		public AspMvcPartialViewLocationFormatAttribute([NotNull] string format)
 		{
 			Format = format;
 		}
 
+		[NotNull]
 		public string Format { get; private set; }
 	}
 
@@ -656,11 +682,12 @@ namespace JetBrains.Annotations
 	[Conditional("JETBRAINS_ANNOTATIONS")]
 	internal sealed class AspMvcViewLocationFormatAttribute : Attribute
 	{
-		public AspMvcViewLocationFormatAttribute(string format)
+		public AspMvcViewLocationFormatAttribute([NotNull] string format)
 		{
 			Format = format;
 		}
 
+		[NotNull]
 		public string Format { get; private set; }
 	}
 
@@ -675,11 +702,12 @@ namespace JetBrains.Annotations
 	internal sealed class AspMvcActionAttribute : Attribute
 	{
 		public AspMvcActionAttribute() { }
-		public AspMvcActionAttribute(string anonymousProperty)
+		public AspMvcActionAttribute([NotNull] string anonymousProperty)
 		{
 			AnonymousProperty = anonymousProperty;
 		}
 
+		[CanBeNull]
 		public string AnonymousProperty { get; private set; }
 	}
 
@@ -693,11 +721,12 @@ namespace JetBrains.Annotations
 	internal sealed class AspMvcAreaAttribute : Attribute
 	{
 		public AspMvcAreaAttribute() { }
-		public AspMvcAreaAttribute(string anonymousProperty)
+		public AspMvcAreaAttribute([NotNull] string anonymousProperty)
 		{
 			AnonymousProperty = anonymousProperty;
 		}
 
+		[CanBeNull]
 		public string AnonymousProperty { get; private set; }
 	}
 
@@ -712,11 +741,12 @@ namespace JetBrains.Annotations
 	internal sealed class AspMvcControllerAttribute : Attribute
 	{
 		public AspMvcControllerAttribute() { }
-		public AspMvcControllerAttribute(string anonymousProperty)
+		public AspMvcControllerAttribute([NotNull] string anonymousProperty)
 		{
 			AnonymousProperty = anonymousProperty;
 		}
 
+		[CanBeNull]
 		public string AnonymousProperty { get; private set; }
 	}
 
@@ -826,11 +856,12 @@ namespace JetBrains.Annotations
 	internal sealed class HtmlElementAttributesAttribute : Attribute
 	{
 		public HtmlElementAttributesAttribute() { }
-		public HtmlElementAttributesAttribute(string name)
+		public HtmlElementAttributesAttribute([NotNull] string name)
 		{
 			Name = name;
 		}
 
+		[CanBeNull]
 		public string Name { get; private set; }
 	}
 
@@ -984,13 +1015,15 @@ namespace JetBrains.Annotations
 	[Conditional("JETBRAINS_ANNOTATIONS")]
 	internal sealed class AspChildControlTypeAttribute : Attribute
 	{
-		public AspChildControlTypeAttribute(string tagName, Type controlType)
+		public AspChildControlTypeAttribute([NotNull] string tagName, [NotNull] Type controlType)
 		{
 			TagName = tagName;
 			ControlType = controlType;
 		}
 
+		[NotNull]
 		public string TagName { get; private set; }
+		[NotNull]
 		public Type ControlType { get; private set; }
 	}
 
@@ -1015,6 +1048,7 @@ namespace JetBrains.Annotations
 			Attribute = attribute;
 		}
 
+		[NotNull]
 		public string Attribute { get; private set; }
 	}
 
@@ -1034,11 +1068,12 @@ namespace JetBrains.Annotations
 	[Conditional("JETBRAINS_ANNOTATIONS")]
 	internal sealed class RazorImportNamespaceAttribute : Attribute
 	{
-		public RazorImportNamespaceAttribute(string name)
+		public RazorImportNamespaceAttribute([NotNull] string name)
 		{
 			Name = name;
 		}
 
+		[NotNull]
 		public string Name { get; private set; }
 	}
 
@@ -1046,13 +1081,15 @@ namespace JetBrains.Annotations
 	[Conditional("JETBRAINS_ANNOTATIONS")]
 	internal sealed class RazorInjectionAttribute : Attribute
 	{
-		public RazorInjectionAttribute(string type, string fieldName)
+		public RazorInjectionAttribute([NotNull] string type, [NotNull] string fieldName)
 		{
 			Type = type;
 			FieldName = fieldName;
 		}
 
+		[NotNull]
 		public string Type { get; private set; }
+		[NotNull]
 		public string FieldName { get; private set; }
 	}
 
@@ -1060,11 +1097,12 @@ namespace JetBrains.Annotations
 	[Conditional("JETBRAINS_ANNOTATIONS")]
 	internal sealed class RazorDirectiveAttribute : Attribute
 	{
-		public RazorDirectiveAttribute(string directive)
+		public RazorDirectiveAttribute([NotNull] string directive)
 		{
 			Directive = directive;
 		}
 
+		[NotNull]
 		public string Directive { get; private set; }
 	}
 

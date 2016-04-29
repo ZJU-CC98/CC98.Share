@@ -1,11 +1,9 @@
-using System;
-using System.Collections.Generic;
 using Microsoft.Data.Entity.Migrations;
 using Microsoft.Data.Entity.Metadata;
 
 namespace CC98.Share.Migrations
 {
-    public partial class sb : Migration
+	public partial class sb : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {

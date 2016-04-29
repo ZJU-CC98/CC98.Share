@@ -1,6 +1,4 @@
-﻿using System.Security.Claims;
-using CC98.Authentication;
-using CC98.Sports.Services;
+﻿using CC98.Authentication;
 using Microsoft.AspNet.Authentication;
 using Microsoft.AspNet.Authentication.Cookies;
 using Microsoft.AspNet.Builder;
@@ -12,12 +10,8 @@ using Microsoft.AspNet.Mvc.Razor;
 using Microsoft.Data.Entity;
 using Microsoft.Framework.DependencyInjection;
 using Sakura.AspNet.Mvc.PagedList;
-using Sakura.AspNet.Mvc.TagHelpers;
 using System.Threading.Tasks;
-using CC98.Identity.External;
 using Microsoft.AspNet.FileProviders;
-using Microsoft.AspNet.Http.Authentication;
-using Microsoft.AspNet.Mvc.ModelBinding;
 using Microsoft.AspNet.StaticFiles;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -57,6 +51,9 @@ namespace CC98.Sports
 		/// </summary>
 		private IConfigurationRoot Configuration { get; }
 
+		/// <summary>
+		/// 实现 <see cref="ISecurityStampValidator" /> 以处理 Cookie 过期问题。
+		/// </summary>
 		private class SimpleSecurityStampValidator : ISecurityStampValidator
 		{
 			/// <summary>
@@ -305,9 +302,6 @@ namespace CC98.Sports
 		/// 应用程序的入口点。
 		/// </summary>
 		/// <param name="args">应用程序启动参数。</param>
-		public static void Main(string[] args)
-		{
-			WebApplication.Run<Startup>(args);
-		}
+		public static void Main(string[] args) => WebApplication.Run<Startup>(args);
 	}
 }

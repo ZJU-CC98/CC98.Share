@@ -29,5 +29,10 @@ namespace CC98.LogOn.ViewModels.Account
 		/// 获取或设置登录的有效期。
 		/// </summary>
 		public TimeSpan? ValidTime { get; set; }
+
+		/// <summary>
+		/// 获取或设置本次登录相关的消息标识。这可用于鉴别登录的发起原因。
+		/// </summary>
+		public string MessageId { get; set; }
 	}
 }

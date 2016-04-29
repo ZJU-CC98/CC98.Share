@@ -849,15 +849,13 @@ namespace CC98.Sports.Controllers
 		/// <returns>如果可以按照原样排序，返回 true；如果需要交换排序，返回 false。</returns>
 		private static bool DetermineSwitch(int team1, int team2, int count)
 		{
-			var diff = team2 - team1;
-
 			if (team1 < (count + 1) / 2)
 			{
-				return diff > 0 && diff <= (count + 1) / 2;
+				return team2 > team1 && team2 - team1 <= count / 2;
 			}
 			else
 			{
-				return diff < 0 || diff > (count + 1) / 2;
+				return team2 > team1 || team1 - team2 > count / 2;
 			}
 		}
 

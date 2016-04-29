@@ -1,0 +1,107 @@
+﻿@using System.Security.Claims
+@using CC98.LogOn.ViewModels.Account
+@model AuthorizeViewModel
+@{
+	ViewBag.Title = "用户授权";
+	var userName = User.GetUserName();
+}
+
+<h1 class="page-header lead text-center">@ViewBag.Title</h1>
+
+<div class="row">
+	<div class="col-md-6 col-md-offset-3">
+
+		<form asp-controller="Account" asp-action="Authorize" asp-antiforgery="true" method="post">
+
+			<input type="hidden" asp-for="Operation" id="operation-input" />
+
+			<div class="panel panel-default">
+				<div class="panel-heading">
+					<h2 class="panel-title">账户授权</h2>
+				</div>
+				<div class="panel-body">
+					<p class="text-center h4">
+						<strong>@Model.AppInfo.Name</strong> 正在请求你的授权
+					</p>
+					<hr />
+					@if (Model.Scopes.Any())
+					{
+						<p class="text-info">该应用向你申请了如下的授权权限。请仔细阅读每一项权限的说明，并决定是否授予该应用这些权限。</p>
+
+						foreach (var scope in Model.Scopes)
+						{
+							<div class="checkbox">
+								<label>
+									<input type="checkbox" name="scope" value="@scope.Name" asp-for="ConsentScopes" readonly="@(!scope.IsRequired)" /> <strong>@scope.Title</strong>
+								</label>
+								<p class="help-block">@scope.Description</p>
+							</div>
+						}
+					}
+					else
+					{
+						<p class="help-block">
+							当你单击<q>确认授权</q>后，这个应用就可以确信你具有当前 CC98 账号的使用权限。这个应用只能获得你登录的用户名，不能获得其他信息（如你的密码以及在 CC98 上的发言和短消息等）。如果你单击<q>拒绝授权</q>，我们将会将这一拒绝行为告知你当前的应用，应用将不能获得其它任何信息。
+						</p>
+					}
+					<hr />
+
+					@switch (Model.AppInfo.AuditState)
+					{
+						case AppAuditState.Verified:
+						case AppAuditState.Unverified:
+
+							if (Model.AppInfo.IsEnabled)
+							{
+								if (Model.AppInfo.AuditState == AppAuditState.Unverified)
+								{
+									<p class="text-warning">这个应用目前未经管理员审核，CC98 管理团队可能无法对它的使用情况进行有效监管。应用可以在授权范围内对获取的信息进行任意处置，请谨慎授权。</p>
+								}
+
+								<hr />
+
+								<div class="checkbox">
+									<label>
+										<input type="checkbox" asp-for="RememberCensent" /> 记住本次授权
+									</label>
+									<p class="help-block">如果你选中上面的复选框，则短期内这个应用重新请求你的授权时，你将不需要再次进行确认或者拒绝。</p>
+								</div>
+
+								<div class="btn-group">
+									<button type="submit" class="btn btn-success" onclick="onConsent(true);">确认授权</button>
+									<button type="submit" class="btn btn-danger" onclick="onConsent(false);">拒绝授权</button>
+								</div>
+								<button type="reset" class="btn btn-default">重置输入</button>
+								<a asp-controller="Account" asp-action="LogOn" class="btn btn-default">切换账号</a>
+							}
+							else
+							{
+								<p class="text-warning">这个应用已经被停用，你无法继续授权操作。如果要了解详细信息，请联系应用作者。</p>
+							}
+							break;
+						default:
+							<p class="text-warning">因为一些管理原因，你现在不能使用这个应用登录。如果要了解详细信息，请联系应用作者或 CC98 管理团队。</p>
+							break;
+					}
+
+				</div>
+			</div>
+		</form>
+
+	</div>
+</div>
+
+
+@section scripts{
+
+	<script type="text/javascript" language="javascript">
+
+		function onConsent(result){
+			var value = result ? '@nameof(AuthorizeOperation.Accept)' : '@nameof(AuthorizeOperation.Reject)';
+			$('#operation-input').val(value);
+		}
+
+	</script>
+
+}
+

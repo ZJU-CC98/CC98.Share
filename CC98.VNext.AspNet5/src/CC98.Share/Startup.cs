@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using CC98.Authentication;
+﻿using CC98.Authentication;
 using CC98.Share.Models;
 using JetBrains.Annotations;
 using Microsoft.AspNet.Authentication;
@@ -11,12 +7,10 @@ using Microsoft.AspNet.Builder;
 using Microsoft.AspNet.Hosting;
 using Microsoft.AspNet.Http;
 using Microsoft.AspNet.Identity;
-using Microsoft.AspNet.Identity.EntityFramework;
 using Microsoft.Data.Entity;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
-using Microsoft.Extensions.OptionsModel;
 using Microsoft.Framework.DependencyInjection;
 
 namespace CC98.Share
@@ -116,6 +110,8 @@ namespace CC98.Share
 			services.AddEnhancedTempData();
 			// 通过 TempData 在网页间传输标准化提示消息的功能
 			services.AddOperationMessages();
+
+			services.Configure<AppSetting>(Configuration.GetSection(""))
 		}
 
 		/// <summary>

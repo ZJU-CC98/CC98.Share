@@ -81,13 +81,21 @@ namespace CC98.LogOn
 
 			// IdentityServer 和必要服务
 
-			services.AddTransient<IClientStore, CC98ClientStore>();
+			services.AddTransient<IClientStore, CC98AppManager>();
 			services.AddSingleton<IScopeStore, CC98ScopeStore>();
 			services.AddTransient<IProfileService, CC98ProfileService>();
 			services.AddSingleton<IRedirectUriValidator, RedirectUriValidator>();
 
 
-			services.AddIdentityServer();
+			services.AddIdentityServer(options =>
+			{
+				// IdentityServer 默认身份验证类型
+				options.AuthenticationOptions.PrimaryAuthenticationScheme =
+					IdentityCookieOptions.ApplicationCookieAuthenticationType;
+			});
+
+			// 应用管理器
+			services.AddTransient<CC98AppManager>();
 		}
 
 		private class RedirectUriValidator : IRedirectUriValidator
@@ -121,16 +129,6 @@ namespace CC98.LogOn
 			else
 			{
 				app.UseExceptionHandler("/Home/Error");
-
-				// For more details on creating database during deployment see http://go.microsoft.com/fwlink/?LinkID=615859
-				try
-				{
-					using (var serviceScope = app.ApplicationServices.GetRequiredService<IServiceScopeFactory>()
-						.CreateScope())
-					{
-					}
-				}
-				catch { }
 			}
 
 			app.UseIISPlatformHandler(options => options.AuthenticationDescriptions.Clear());

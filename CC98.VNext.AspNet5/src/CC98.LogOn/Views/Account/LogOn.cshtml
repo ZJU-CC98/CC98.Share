@@ -16,6 +16,8 @@
 
 <form asp-antiforgery="true" method="post">
 
+	<input asp-for="MessageId" type="hidden"/>
+
 	<div class="form-group">
 		<label asp-for="UserName" class="control-label">用户名</label>
 		<input asp-for="UserName" type="text" class="form-control" placeholder="你的 CC98 账户名" />

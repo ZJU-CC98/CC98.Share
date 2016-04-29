@@ -72,17 +72,17 @@
 					</div>
 
 					<div class="form-group">
-						<label asp-for="Team1Id" class="control-label">比赛队伍 1</label>
+						<label asp-for="Team1Id" class="control-label">主场队伍</label>
 						<select type="text" asp-for="Team1Id" asp-items="teamList" class="form-control" asp-option-label="待定">	</select>
 						<span asp-validation-for="Team1Id" class="text-danger"></span>
-						<p class="help-block">比赛相关的第一支比赛队伍。</p>
+						<p class="help-block">比赛的主场队伍。</p>
 					</div>
 
 					<div class="form-group">
-						<label asp-for="Team2Id" class="control-label">比赛队伍 2</label>
+						<label asp-for="Team2Id" class="control-label">客场队伍</label>
 						<select type="text" asp-for="Team2Id" asp-items="teamList" class="form-control" asp-option-label="待定"></select>
 						<span asp-validation-for="Team2Id" class="text-danger"></span>
-						<p class="help-block">比赛相关的第二支比赛队伍。</p>
+						<p class="help-block">比赛的客场队伍。</p>
 					</div>
 
 					<hr />

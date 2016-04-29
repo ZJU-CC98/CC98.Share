@@ -1,10 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Security.Claims;
+﻿using System.Security.Claims;
 using System.Threading.Tasks;
 using CC98.Authentication;
-using CC98.Identity;
 using CC98.Identity.External;
 using Microsoft.AspNet.Authorization;
 using Microsoft.AspNet.Http.Authentication;

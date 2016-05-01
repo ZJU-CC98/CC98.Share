@@ -9,6 +9,7 @@ using System.Security.Claims;
 using Microsoft.AspNet.Authorization;
 using System.Threading.Tasks;
 using Microsoft.Extensions.OptionsModel;
+using CC98.Share.ViewModels;
 
 namespace CC98.Share.Controllers
 {

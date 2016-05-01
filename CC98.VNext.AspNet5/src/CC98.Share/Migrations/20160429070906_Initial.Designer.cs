@@ -8,9 +8,10 @@ using Microsoft.Data.Entity.Migrations;
 namespace CC98.Share.Migrations
 {
     [DbContext(typeof(CC98ShareModel))]
-    partial class CC98ShareModelModelSnapshot : ModelSnapshot
+    [Migration("20160429070906_Initial")]
+    partial class Initial
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
             modelBuilder
                 .HasAnnotation("ProductVersion", "7.0.0-rc1-16348")

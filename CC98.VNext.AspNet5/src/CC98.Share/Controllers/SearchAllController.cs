@@ -3,11 +3,12 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using CC98.Share.Models;
-using Microsoft.AspNet.Hosting;
+using CC98.Share.ViewModels;
 using Microsoft.AspNet.Mvc;
-using Microsoft.AspNet;
 using Sakura.AspNet;
 using JetBrains.Annotations;
+using Microsoft.AspNet.Hosting;
+
 
 // For more information on enabling MVC for empty projects, visit http://go.microsoft.com/fwlink/?LinkID=397860
 
@@ -157,7 +158,7 @@ namespace CC98.Share.Controllers
                     //returns IQueryable<Product> representing an unknown number of products. a thousand maybe?
                     var products = result.ToArray();
                     //var pageNumber = page ?? 1;  if no page was specified in the querystring, default to the first page (1)
-                    
+
 
                     // ViewBag.onePageOfProducts = onePageOfProducts;
 
@@ -171,7 +172,7 @@ namespace CC98.Share.Controllers
                     return View();
                 }
             }
-            else 
+            else
             {
                 if (search.Acc == Accuracy.Accurate)
                 {
@@ -285,12 +286,12 @@ namespace CC98.Share.Controllers
 
 
                     //returns IQueryable<Product> representing an unknown number of products. a thousand maybe?
-                    
+
                     //var pageNumber = page ?? 1;  if no page was specified in the querystring, default to the first page (1)
-                    
+
 
                     // ViewBag.onePageOfProducts = onePageOfProducts;
-                    
+
                     /*	var ChangedResult = result.ToArray();*/
                     var products = result.ToArray();
                     var onePageOfProducts = products.OrderBy(p => p.Id);

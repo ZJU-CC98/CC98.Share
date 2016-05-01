@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using CC98.Share.Models;
+using CC98.Share.ViewModels;
 using Microsoft.AspNet.Hosting;
 using Microsoft.AspNet.Mvc;
 using Sakura.AspNet;

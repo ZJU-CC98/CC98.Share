@@ -1,15 +1,15 @@
 using System;
+using CC98.Share.ViewModels;
 using Microsoft.Data.Entity;
 using Microsoft.Data.Entity.Infrastructure;
 using Microsoft.Data.Entity.Metadata;
 using Microsoft.Data.Entity.Migrations;
-using CC98.Share.Models;
 
 namespace CC98.Share.Migrations
 {
     [DbContext(typeof(CC98ShareModel))]
-    [Migration("20160411123858_2333")]
-    partial class _2333
+    [Migration("20160429070906_Initial")]
+    partial class Initial
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {

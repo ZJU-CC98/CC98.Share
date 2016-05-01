@@ -1,5 +1,5 @@
 ﻿using CC98.Authentication;
-using CC98.Share.Models;
+using CC98.Share.ViewModels;
 using JetBrains.Annotations;
 using Microsoft.AspNet.Authentication;
 using Microsoft.AspNet.Authentication.Cookies;
@@ -19,18 +19,18 @@ using Sakura.AspNet.Mvc.PagedList;
 
 namespace CC98.Share
 {
-    public class Setting
-    {
-        public string StoreFolder
-        {
-            get;
-            set;
-        }
-    }
-    /// <summary>
-    /// 应用程序的启动类型。
-    /// </summary>
-    [UsedImplicitly(ImplicitUseKindFlags.InstantiatedNoFixedConstructorSignature)]
+	public class Setting
+	{
+		public string StoreFolder
+		{
+			get;
+			set;
+		}
+	}
+	/// <summary>
+	/// 应用程序的启动类型。
+	/// </summary>
+	[UsedImplicitly(ImplicitUseKindFlags.InstantiatedNoFixedConstructorSignature)]
 	public class Startup
 	{
 		/// <summary>
@@ -40,8 +40,8 @@ namespace CC98.Share
 		[UsedImplicitly]
 		public Startup(IHostingEnvironment env)
 		{
-            // 导入应用程序配置
-            var builder = new ConfigurationBuilder()
+			// 导入应用程序配置
+			var builder = new ConfigurationBuilder()
 				.AddJsonFile("appsettings.json")
 				.AddJsonFile($"appsettings.{env.EnvironmentName}.json", optional: true);
 
@@ -71,9 +71,9 @@ namespace CC98.Share
 		[UsedImplicitly]
 		public void ConfigureServices(IServiceCollection services)
 		{
-            services.Configure<Setting>(Configuration.GetSection("FileSetting"));
-            // 为应用程序添加数据访问支持
-            services.AddEntityFramework()
+			services.Configure<Setting>(Configuration.GetSection("FileSetting"));
+			// 为应用程序添加数据访问支持
+			services.AddEntityFramework()
 				// 添加 SQL 数据库链接功能
 				.AddSqlServer()
 				// 添加 CC98ShareModel 数据存储
@@ -83,63 +83,63 @@ namespace CC98.Share
 					options.UseSqlServer(Configuration["Data:ShareDatabase:ConnectionString"]);
 				});
 
-            services.UseBootstrapPagerGenerator(options =>
-            {
-                options.ExpandPageLinksForCurrentPage = 2;
-                options.PageLinksForEndings = 3;
+			services.UseBootstrapPagerGenerator(options =>
+			{
+				options.ExpandPageLinksForCurrentPage = 2;
+				options.PageLinksForEndings = 3;
 
-                options.Layout = PagedListPagerLayouts.Default;
+				options.Layout = PagedListPagerLayouts.Default;
 
-                options.Items = new PagerItemOptions
-                {
-                    EncodeText = true,
-                    LinkParameterName = "page",
-                    TextFormat = "{0:d}",
-                };
+				options.Items = new PagerItemOptions
+				{
+					EncodeText = true,
+					LinkParameterName = "page",
+					TextFormat = "{0:d}",
+				};
 
-                options.Omitted = new PagerItemOptions
-                {
-                    Text = "...",
-                    Link = string.Empty
-                };
+				options.Omitted = new PagerItemOptions
+				{
+					Text = "...",
+					Link = string.Empty
+				};
 
-                options.FirstButton = new FirstAndLastPagerItemOptions
-                {
-                    Text = "&laquo;",
-                    EncodeText = false,
-                    ActiveMode = FirstAndLastPagerItemActiveMode.Always,
-                    InactiveBehavior = SpecialPagerItemInactiveBehavior.Disable,
-                    LinkParameterName = "page",
-                };
+				options.FirstButton = new FirstAndLastPagerItemOptions
+				{
+					Text = "&laquo;",
+					EncodeText = false,
+					ActiveMode = FirstAndLastPagerItemActiveMode.Always,
+					InactiveBehavior = SpecialPagerItemInactiveBehavior.Disable,
+					LinkParameterName = "page",
+				};
 
-                options.LastButton = new FirstAndLastPagerItemOptions
-                {
-                    Text = "&raquo;",
-                    EncodeText = false,
-                    ActiveMode = FirstAndLastPagerItemActiveMode.Always,
-                    InactiveBehavior = SpecialPagerItemInactiveBehavior.Disable,
-                    LinkParameterName = "page",
-                };
+				options.LastButton = new FirstAndLastPagerItemOptions
+				{
+					Text = "&raquo;",
+					EncodeText = false,
+					ActiveMode = FirstAndLastPagerItemActiveMode.Always,
+					InactiveBehavior = SpecialPagerItemInactiveBehavior.Disable,
+					LinkParameterName = "page",
+				};
 
-                options.PreviousButton = new SpecialPagerItemOptions
-                {
-                    Text = "&lsaquo;",
-                    EncodeText = false,
-                    InactiveBehavior = SpecialPagerItemInactiveBehavior.Disable,
-                    LinkParameterName = "page",
-                };
+				options.PreviousButton = new SpecialPagerItemOptions
+				{
+					Text = "&lsaquo;",
+					EncodeText = false,
+					InactiveBehavior = SpecialPagerItemInactiveBehavior.Disable,
+					LinkParameterName = "page",
+				};
 
-                options.NextButton = new SpecialPagerItemOptions
-                {
-                    Text = "&rsaquo;",
-                    EncodeText = false,
-                    InactiveBehavior = SpecialPagerItemInactiveBehavior.Disable,
-                    LinkParameterName = "page",
-                };
-            });
+				options.NextButton = new SpecialPagerItemOptions
+				{
+					Text = "&rsaquo;",
+					EncodeText = false,
+					InactiveBehavior = SpecialPagerItemInactiveBehavior.Disable,
+					LinkParameterName = "page",
+				};
+			});
 
-            // 为应用程序添加 MVC 功能
-            services.AddMvc();
+			// 为应用程序添加 MVC 功能
+			services.AddMvc();
 
 			// 配置应用程序的身份验证设置
 			services.Configure<IdentityOptions>(identityOptions =>
@@ -189,9 +189,9 @@ namespace CC98.Share
 		[UsedImplicitly]
 		public void Configure(IApplicationBuilder app, IHostingEnvironment env, ILoggerFactory loggerFactory)
 		{
-            
-            // 如果项目通过控制台承载，在控制台输出所有网站运行的日志信息
-            loggerFactory.AddConsole(Configuration.GetSection("Logging"));
+
+			// 如果项目通过控制台承载，在控制台输出所有网站运行的日志信息
+			loggerFactory.AddConsole(Configuration.GetSection("Logging"));
 
 			// 在开发环境的调试窗口输出所有日志信息
 			loggerFactory.AddDebug();
@@ -241,12 +241,12 @@ namespace CC98.Share
 				options.ClientSecret = Configuration["Authentication:CC98:ClientSecret"];
 			});
 
-            // 允许网站直接返回静态文件（样式表，脚本等）的内容
-            var option = new StaticFileOptions();
-            option.RequestPath = new PathString(Configuration["WebFolder"]);
-            option.FileProvider = new PhysicalFileProvider(Configuration["StoreFolder"]);
-            option.ServeUnknownFileTypes = true;
-            app.UseStaticFiles();
+			// 允许网站直接返回静态文件（样式表，脚本等）的内容
+			var option = new StaticFileOptions();
+			option.RequestPath = new PathString(Configuration["WebFolder"]);
+			option.FileProvider = new PhysicalFileProvider(Configuration["StoreFolder"]);
+			option.ServeUnknownFileTypes = true;
+			app.UseStaticFiles();
 
 			// 配置 MVC 的路径映射表
 			app.UseMvc(routes =>

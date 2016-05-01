@@ -5,7 +5,7 @@ using Microsoft.Data.Entity.Metadata;
 
 namespace CC98.Share.Migrations
 {
-    public partial class xxx : Migration
+    public partial class Initial : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {

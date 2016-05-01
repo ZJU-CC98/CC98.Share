@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using CC98.Share.Models;
 using Microsoft.AspNet.Hosting;
 using Microsoft.AspNet.Mvc;
+using Microsoft.AspNet;
 using Sakura.AspNet;
 using JetBrains.Annotations;
 

@@ -31,9 +31,9 @@
 		"CC98.Identity.External": "1.0.0",
 
 		"Sakura.AspNet.Mvc.TempDataExtensions": "1.0.0-rc1-update2",
-    "Sakura.AspNet.Mvc.Messages": "1.0.0-rc1-update2"
+    "Sakura.AspNet.Mvc.Messages": "1.0.0-rc1-update2",
     
-     "Sakura.AspNet.Mvc.PagedList": "1.0.0-rc1-update2"
+    "Sakura.AspNet.Mvc.PagedList": "1.0.0-rc1-update2"
 	},
 
 	"commands": {

@@ -23,6 +23,14 @@ namespace CC98.Share.Controllers
 		{
 			return View();
 		}
+		public ActionResult Login()
+		{
+			return View();
+		}
+		public ActionResult FileInfo()
+		{
+			return View();
+		}
 
 		public ActionResult Search(SearchModeViewModels search,int ?page)
 		{

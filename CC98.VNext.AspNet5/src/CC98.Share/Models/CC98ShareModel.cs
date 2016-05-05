@@ -1,7 +1,7 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using JetBrains.Annotations;
 using Microsoft.Data.Entity;
-
+//
 namespace CC98.Share.Models
 {
 	/// <summary>

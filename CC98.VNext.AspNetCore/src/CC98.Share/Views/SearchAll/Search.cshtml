@@ -1,0 +1,123 @@
+﻿@using System.Collections.Generic
+@using CC98.Share.ViewModels.SearchAll
+@using Sakura.AspNetCore
+@model SearchModeViewModel
+
+@{
+
+
+    var list = new List<SelectListItem>();
+
+    list.Add(new SelectListItem {Text = "发布者", Value = nameof(Valuation.UserName), Selected = false});
+    list.Add(new SelectListItem {Text = "文件名", Value = nameof(Valuation.FileName), Selected = false});
+    list.Add(new SelectListItem {Text = "描述", Value = nameof(Valuation.Discription), Selected = false});
+    list.Add(new SelectListItem {Text = "文件名及描述", Value = nameof(Valuation.FileNameAndDis), Selected = false});
+    var data = (ShareItem[]) ViewData["List"];
+    var list1 = new List<SelectListItem>();
+    var dataSource = (IPagedList<ShareItem>) ViewData["datasource"];
+    list1.Add(new SelectListItem {Text = "精确匹配", Value = nameof(Accuracy.Accurate), Selected = false});
+    list1.Add(new SelectListItem {Text = "部分匹配", Value = nameof(Accuracy.Vague), Selected = false});
+
+    var transdata = ViewBag.onePageOfProducts;
+    var transsearch = (SearchModeViewModel) ViewData["SEARCH"];
+}
+<br />
+
+@if (ViewData["CHECK"] == null)
+{
+<html>
+<head>
+    <title>Bootstrap 实例 - 基本的表格</title>
+    <link href="http://libs.baidu.com/bootstrap/3.0.3/css/bootstrap.min.css" rel="stylesheet">
+    <script src="http://libs.baidu.com/jquery/2.0.0/jquery.min.js"></script>
+    <script src="http://libs.baidu.com/bootstrap/3.0.3/js/bootstrap.min.js"></script>
+</head>
+<body>
+    <table class="table">
+
+        <thead>
+            <tr>
+                <span>请在下方的搜索框内输入关键词并选择搜索的类型</span>
+            </tr>
+        </thead>
+        <tbody></tbody>
+    </table>
+</body>
+</html>
+}
+else if (data.Length == 0)
+{
+<html>
+<body>
+    <div class="alert alert-warning">
+        <a href="#" class="close" data-dismiss="alert">
+            &times;
+        </a>
+        <strong>未找到文件</strong>
+    </div>
+</body>
+</html>
+}
+
+else
+{
+<html>
+<head>
+    <title>Bootstrap 实例 - 基本的表格</title>
+    <link href="http://libs.baidu.com/bootstrap/3.0.3/css/bootstrap.min.css" rel="stylesheet">
+    <script src="http://libs.baidu.com/jquery/2.0.0/jquery.min.js"></script>
+    <script src="http://libs.baidu.com/bootstrap/3.0.3/js/bootstrap.min.js"></script>
+</head>
+<body>
+    <table class="table table-striped">
+        <caption>搜索结果</caption>
+        <thead>
+            <tr>
+                <th>文件名</th>
+                <th>文件路径</th>
+                <th>文件描述</th>
+            </tr>
+        </thead>
+        <tbody>
+
+            @foreach (var item in dataSource)
+            {
+            <tr>
+                <td>@item.Name</td>
+                <td>@item.Path</td>
+
+                <td>@item.Description</td>
+            </tr>
+            }
+
+
+
+        </tbody>
+    </table>
+    <pager source="dataSource" />
+
+
+</body>
+</html>
+
+
+<html>
+
+<body>
+    <div class="alert alert-info">
+        <a href="#" class="close" data-dismiss="alert">
+            &times;
+        </a>
+        <strong>共找到</strong> @data.Count() <strong>个文件</strong>
+    </div>
+</body>
+</html>
+}
+
+<form asp-action="Search" asp-controller="SearchAll" method="get">
+    <input type="text" asp-for="Words" class="form-control" placeholder="请输入内容" />
+    <select asp-for="Mode" asp-items="list" class="form-control"></select>
+    <select asp-for="Acc" asp-items="list1" class="form-control"></select>
+
+    <button type="submit" class="btn btn-default btn-primary">搜索</button>
+</form>

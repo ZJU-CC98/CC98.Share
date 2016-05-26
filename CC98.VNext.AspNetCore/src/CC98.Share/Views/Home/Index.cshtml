@@ -1,146 +1,200 @@
-﻿@{
-    ViewBag.PageTitle = "主页";
+﻿
+@{
+	//ViewBag.Title = "首页";
+}
+@addTagHelper "*, Sakura.AspNet.Mvc.PagedList"
+@using System.Threading.Tasks
+@using CC98.Share.Models
+@using Sakura.AspNet
+@using Sakura.AspNet.Mvc.PagedList
+@using CC98.Share.ViewModels
+@model SearchModeViewModels
+
+
+
+
+<style type="text/css">
+	.person-li{
+		float:left;
+		padding:15px;
+		text-align:center;
+		
+	}
+
+</style>
+
+@if (this.User.Identity.IsAuthenticated == false)
+{
+	
+	<div style="text-align:center"><h3 style="color:#004b83"><b>请登录</b></h3><img src="~/images/index_pic.png"style="text-align:center"/></div>
+
+}
+else
+{
+	var DataSourceBefore = (IPagedList<ShareItem>)ViewData["datasource"];
+	var DataSource = DataSourceBefore.ToArray();
+
+	<div id="person-info" style="display:inline-block;" >
+	<ul  style="list-style:none;">
+		<li class="person-li">
+			<img class="img-thumbnail" width="120" height="120"  src="~/images/index_pic.png" />
+		</li>
+		<li class="person-li">			
+			<h4>@this.User.Identity.Name<br /></h4>
+			<img src="~/images/male.png" />
+		</li>
+		<li class="person-li">
+			<br />
+			<p>1</p>
+			分享数
+		</li>
+		<li class="person-li">
+			<br />
+			<p>1</p>
+			文件数
+		</li>
+		<li class="person-li">
+			<br />
+			<p>1</p>
+			网盘容量
+		</li>
+		<li class="person-li">
+			<br />
+			<p>1</p>
+			可用容量
+		</li>
+		
+	</ul>
+		
+	</div>
+	<hr style="height:1px;border:none;border-top:1px solid #eee;" />
+	<div style="height:10px"></div>
+	
+	<div class="container">
+	
+
+		<div style="display:inline;text-align:right;">
+
+			<form class="form-inline" style="float:left;text-align:left;">
+				<input id="lefile" type="file" style="display:none; float:left;text-align:left;">
+				<div class="input-append">
+
+					<a onclick="$('input[id=lefile]').click();">
+						<input id="photoCover" class="btn btn-default" type="text">
+						<a asp-action="Upload" asp-controller="FileController" class="btn btn-default"> 上传文件 </a>
+
+					</a>
+				</div>
+			</form>
+			<script type="text/javascript">
+				$('input[id=lefile]').change(function () {
+					$('#photoCover').val($(this).val());
+				});
+			</script>
+
+			<form class="form-inline" style="float:right; text-align:left;margin-left:10px">
+				<div class="form-group">
+					<input type="email" class="form-control" id="exampleInputEmail2" placeholder="输入要搜索的文件">
+				</div>
+				<button type="submit" class="btn btn-default">搜索</button>
+			</form>
+		</div>
+		<table class="table table-striped" style="margin-top:20px">
+			<thead style="border:2px solid #eee">
+				<tr>
+					
+					<th>文件名称</th>
+					<th style="text-align:center">操作</th>
+					<th>上传日期</th>
+					<th>文件大小</th>
+				</tr>
+			</thead>
+			<tbody>
+				@for (int i = 0; i < DataSource.Count() ;i++)
+				{
+					//ShareItem item= DataSource[i];
+					ShareItem item = DataSource[i];
+					<tr>
+						
+							<td><a asp-controller="Home" asp-action="Fileinfo">@item.Name</a></td>
+
+							<td style="text-align:center"><button class="btn-link"><a asp-action="Download" asp-controller="FileController">下载</a></button><button class="btn-link" data-toggle="modal" href="#deletefile">删除</button><button class="btn-link" data-toggle="modal" href="#sharefile">分享</button></td>
+							<td>Debbie</td>
+							<td>Anna</td>
+</tr>
+				}
+
+			</tbody>
+		</table>
+		<div class="pagination-index" style="float:right">
+			<ul class="pagination">
+				<li><a href="#">&laquo;</a></li>
+				<li><a href="#">1</a></li>
+				<li><a href="#">2</a></li>
+				<li><a href="#">3</a></li>
+				<li><a href="#">4</a></li>
+				<li><a href="#">&raquo;</a></li>
+			</ul>
+		</div>
+	</div>
+
+
 }
 
-<div id="myCarousel" class="carousel slide" data-ride="carousel" data-interval="6000">
-    <ol class="carousel-indicators">
-        <li data-target="#myCarousel" data-slide-to="0" class="active"></li>
-        <li data-target="#myCarousel" data-slide-to="1"></li>
-        <li data-target="#myCarousel" data-slide-to="2"></li>
-        <li data-target="#myCarousel" data-slide-to="3"></li>
-    </ol>
-    <div class="carousel-inner" role="listbox">
-        <div class="item active">
-            <img src="~/images/ASP-NET-Banners-01.png" alt="ASP.NET" class="img-responsive"/>
-            <div class="carousel-caption">
-                <p>
-                    Learn how to build ASP.NET apps that can run anywhere.
-                    <a class="btn btn-default btn-default" href="http://go.microsoft.com/fwlink/?LinkID=525028&clcid=0x409">
-                        Learn More
-                    </a>
-                </p>
-            </div>
-        </div>
-        <div class="item">
-            <img src="~/images/Banner-02-VS.png" alt="Visual Studio" class="img-responsive"/>
-            <div class="carousel-caption">
-                <p>
-                    There are powerful new features in Visual Studio for building modern web apps.
-                    <a class="btn btn-default btn-default" href="http://go.microsoft.com/fwlink/?LinkID=525030&clcid=0x409">
-                        Learn More
-                    </a>
-                </p>
-            </div>
-        </div>
-        <div class="item">
-            <img src="~/images/ASP-NET-Banners-02.png" alt="Package Management" class="img-responsive"/>
-            <div class="carousel-caption">
-                <p>
-                    Bring in libraries from NuGet, Bower, and npm, and automate tasks using Grunt or Gulp.
-                    <a class="btn btn-default btn-default" href="http://go.microsoft.com/fwlink/?LinkID=525029&clcid=0x409">
-                        Learn More
-                    </a>
-                </p>
-            </div>
-        </div>
-        <div class="item">
-            <img src="~/images/Banner-01-Azure.png" alt="Microsoft Azure" class="img-responsive"/>
-            <div class="carousel-caption">
-                <p>
-                    Learn how Microsoft's Azure cloud platform allows you to build, deploy, and scale web apps.
-                    <a class="btn btn-default btn-default" href="http://go.microsoft.com/fwlink/?LinkID=525027&clcid=0x409">
-                        Learn More
-                    </a>
-                </p>
-            </div>
-        </div>
-    </div>
-    <a class="left carousel-control" href="#myCarousel" role="button" data-slide="prev">
-        <span class="glyphicon glyphicon-chevron-left" aria-hidden="true"></span>
-        <span class="sr-only">Previous</span>
-    </a>
-    <a class="right carousel-control" href="#myCarousel" role="button" data-slide="next">
-        <span class="glyphicon glyphicon-chevron-right" aria-hidden="true"></span>
-        <span class="sr-only">Next</span>
-    </a>
+<!--以下是bootstrap组态，一群各种弹出框-->
+<!--批量下载，暂时不用-->
+<div id="download" class="modal fade in" style="width:500px;height:300px;position:absolute;margin: 10% 25%;
+background-color:#efefef;display:none;">
+	<div class="modal-header">
+		<a class="close" data-dismiss="modal">×</a>
+		<h3>您选择下载以下文件</h3>
+	</div>
+	<div class="modal-body" style="margin:0px 40px;">
+		<ul class="list-group">
+			<li class="list-group-item">文件1</li>
+			<li class="list-group-item">文件2</li>
+		</ul>
+		<p>合计：1GB</p>
+	</div>
+	<div class="modal-footer">
+		<a href="#" class="btn btn-success">确认</a>
+		<a href="#" class="btn" data-dismiss="modal">取消</a>
+	</div>
+</div>
+<!--分享界面，需要产生独特的链接-->
+<div id="sharefile" class="modal fade in" style="width:450px;height:350px;position:absolute;margin: 10% 25%;
+background-color:#efefef;display:none;">
+	<div class="modal-header">
+		<a class="close" data-dismiss="modal">×</a>
+		<h3>分享文件<small>文件XXX</small></h3>
+	</div>
+	<div class="modal-body" style="margin-left:20px">
+		<h5>链接已创建</h5>
+		<input type="text" class="form-control" value="http://pan.baidu.com/s/1hrkN9Ta" />
+		
+	</div>
+	<div class="modal-footer">
+		<span id="copysuccess" style="display:none">复制成功！</span>
+		<a href="#" class="btn btn-success">复制链接</a>
+		<a href="#" class="btn" data-dismiss="modal">关闭</a>
+	</div>
+</div>
+<!--删除界面，需要获取文件名以及对按钮操作进行绑定函数-->
+<div id="deletefile" class="modal fade in" style="width:450px;height:200px;position:absolute;margin: 10% 25%;
+background-color:#efefef;display:none;">
+	<div class="modal-header">
+
+		<a class="close" data-dismiss="modal">×</a>
+		<h4>永久删除以下文件</h4>
+	</div>
+	<div class="modal-body" style="margin-left:20px">
+
+		<p>文件XXX</p>
+	</div>
+	<div class="modal-footer">
+
+		<a href="#" class="btn btn-success">确认</a>
+		<a href="#" class="btn" data-dismiss="modal">取消</a>
+	</div>
 </div>
 
-<div class="row">
-    <div class="col-md-3">
-        <h2>Application uses</h2>
-        <ul>
-            <li>Sample pages using ASP.NET MVC 6</li>
-            <li><a href="http://go.microsoft.com/fwlink/?LinkId=518007">Gulp</a> and <a href="http://go.microsoft.com/fwlink/?LinkId=518004">Bower</a> for managing client-side libraries</li>
-            <li>Theming using <a href="http://go.microsoft.com/fwlink/?LinkID=398939">Bootstrap</a></li>
-        </ul>
-    </div>
-    <div class="col-md-3">
-        <h2>How to</h2>
-        <ul>
-            <li>
-                <a href="http://go.microsoft.com/fwlink/?LinkID=398600">Add a Controller and View</a>
-            </li>
-            <li>
-                <a href="http://go.microsoft.com/fwlink/?LinkID=699314">Add an appsetting in config and access it in app.</a>
-            </li>
-            <li>
-                <a href="http://go.microsoft.com/fwlink/?LinkId=699315">Manage User Secrets using Secret Manager.</a>
-            </li>
-            <li>
-                <a href="http://go.microsoft.com/fwlink/?LinkId=699316">Use logging to log a message.</a>
-            </li>
-            <li>
-                <a href="http://go.microsoft.com/fwlink/?LinkId=699317">Add packages using NuGet.</a>
-            </li>
-            <li>
-                <a href="http://go.microsoft.com/fwlink/?LinkId=699318">Add client packages using Bower.</a>
-            </li>
-            <li>
-                <a href="http://go.microsoft.com/fwlink/?LinkId=699319">Target development, staging or production environment.</a>
-            </li>
-        </ul>
-    </div>
-    <div class="col-md-3">
-        <h2>Overview</h2>
-        <ul>
-            <li>
-                <a href="http://go.microsoft.com/fwlink/?LinkId=518008">Conceptual overview of what is ASP.NET 5</a>
-            </li>
-            <li>
-                <a href="http://go.microsoft.com/fwlink/?LinkId=699320">Fundamentals of ASP.NET 5 such as Startup and middleware.</a>
-            </li>
-            <li>
-                <a href="http://go.microsoft.com/fwlink/?LinkId=398602">Working with Data</a>
-            </li>
-            <li>
-                <a href="http://go.microsoft.com/fwlink/?LinkId=398603">Security</a>
-            </li>
-            <li>
-                <a href="http://go.microsoft.com/fwlink/?LinkID=699321">Client side development</a>
-            </li>
-            <li>
-                <a href="http://go.microsoft.com/fwlink/?LinkID=699322">Develop on different platforms</a>
-            </li>
-            <li>
-                <a href="http://go.microsoft.com/fwlink/?LinkID=699323">Read more on the documentation site</a>
-            </li>
-        </ul>
-    </div>
-    <div class="col-md-3">
-        <h2>Run & Deploy</h2>
-        <ul>
-            <li>
-                <a href="http://go.microsoft.com/fwlink/?LinkID=517851">Run your app</a>
-            </li>
-            <li>
-                <a href="http://go.microsoft.com/fwlink/?LinkID=517852">Run your app on .NET Core</a>
-            </li>
-            <li>
-                <a href="http://go.microsoft.com/fwlink/?LinkID=517853">Run commands in your project.json</a>
-            </li>
-            <li>
-                <a href="http://go.microsoft.com/fwlink/?LinkID=398609">Publish to Microsoft Azure Web Apps</a>
-            </li>
-        </ul>
-    </div>
-</div>

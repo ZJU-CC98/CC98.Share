@@ -71,11 +71,12 @@ namespace CC98.Share
             services.Configure<Setting>(Configuration.GetSection("FileSetting"));
 
             // 添加 CC98ShareModel 数据存储
-            services.AddDbContext<CC98ShareModel>(options =>
-            {
-                // 从配置文件中读取连接到数据库使用的连接字符串
-                options.UseSqlServer(Configuration["ConnectionStrings:ShareDatabase"]);
-            });
+            services
+                .AddDbContext<CC98ShareModel>(options =>
+                {
+                    // 从配置文件中读取连接到数据库使用的连接字符串
+                    options.UseSqlServer(Configuration["ConnectionStrings:ShareDatabase"]);
+                });
 
             // 添加分页支持
             services.AddBootstrapPagerGenerator(options => { options.ConfigureDefault(); });

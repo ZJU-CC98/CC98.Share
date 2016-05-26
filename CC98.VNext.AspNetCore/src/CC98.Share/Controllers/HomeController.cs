@@ -7,56 +7,56 @@ using Sakura.AspNetCore;
 
 namespace CC98.Share.Controllers
 {
-    /// <summary>
-    ///     提供网站最常用功能的访问。
-    /// </summary>
-    public class HomeController : Controller
-    {
-        public HomeController(IHostingEnvironment environment, CC98ShareModel userDb)
-        {
-            Environment = environment;
-            UserDb = userDb;
-        }
+	/// <summary>
+	///     提供网站最常用功能的访问。
+	/// </summary>
+	public class HomeController : Controller
+	{
+		public HomeController(IHostingEnvironment environment, CC98ShareModel userDb)
+		{
+			Environment = environment;
+			UserDb = userDb;
+		}
 
-        private IHostingEnvironment Environment { get; }
+		private IHostingEnvironment Environment { get; }
 
-        private CC98ShareModel UserDb { get; }
+		private CC98ShareModel UserDb { get; }
 
-        /// <summary>
-        ///     显示网站主页。
-        /// </summary>
-        /// <returns>操作结果。</returns>
-        public IActionResult Index()
-        {
-            return View();
-        }
+		/// <summary>
+		///     显示网站主页。
+		/// </summary>
+		/// <returns>操作结果。</returns>
+		public IActionResult Index()
+		{
+			return View();
+		}
 
-        public IActionResult About()
-        {
-            ViewData["Message"] = "Your application description page.";
+		public IActionResult About()
+		{
+			ViewData["Message"] = "Your application description page.";
 
-            return View();
-        }
+			return View();
+		}
 
-        public IActionResult Contact()
-        {
-            ViewData["Message"] = "Your contact page.";
+		public IActionResult Contact()
+		{
+			ViewData["Message"] = "Your contact page.";
 
-            return View();
-        }
+			return View();
+		}
 
-        /// <summary>
-        ///     当网站发生错误时显示的页面。
-        /// </summary>
-        /// <returns>操作结果。</returns>
-        public IActionResult Error()
-        {
-            return View();
-        }
+		/// <summary>
+		///     当网站发生错误时显示的页面。
+		/// </summary>
+		/// <returns>操作结果。</returns>
+		public IActionResult Error()
+		{
+			return View();
+		}
 
-        public IActionResult Search(SearchModeViewModel search, int? page)
-        {
-            /*
+		public IActionResult Search(SearchModeViewModel search, int? page)
+		{
+			/*
 						if (Select == "1")
 						{
 							var result1 = from i in UserDb.Items where i.Name == keywords select i;
@@ -72,104 +72,104 @@ namespace CC98.Share.Controllers
 						else
 							return Index();
 			*/
-            IQueryable<ShareItem> result;
+			IQueryable<ShareItem> result;
 
 
-            if (search.Acc == Accuracy.Accurate)
-            {
-                switch (search.Mode)
-                {
-                    case Valuation.UserName:
-                        result = from i in UserDb.Items orderby i.Id where i.UserName == search.Words select i;
-                        break;
+			if (search.Acc == Accuracy.Accurate)
+			{
+				switch (search.Mode)
+				{
+					case Valuation.UserName:
+						result = from i in UserDb.Items orderby i.Id where i.UserName == search.Words select i;
+						break;
 
 
-                    case Valuation.FileName:
-                        result = from i in UserDb.Items orderby i.Id where i.Name == search.Words select i;
-                        break;
+					case Valuation.FileName:
+						result = from i in UserDb.Items orderby i.Id where i.Name == search.Words select i;
+						break;
 
-                    case Valuation.Discription:
-                        result = from i in UserDb.Items orderby i.Id where i.Description == search.Words select i;
-                        break;
+					case Valuation.Discription:
+						result = from i in UserDb.Items orderby i.Id where i.Description == search.Words select i;
+						break;
 
-                    case Valuation.FileNameAndDis:
-                        result = from i in UserDb.Items
-                            orderby i.Id
-                            where i.Description == search.Words && i.Name == search.Words
-                            select i;
-                        break;
+					case Valuation.FileNameAndDis:
+						result = from i in UserDb.Items
+							orderby i.Id
+							where i.Description == search.Words && i.Name == search.Words
+							select i;
+						break;
 
-                    default:
-                        return Index();
-                }
+					default:
+						return Index();
+				}
 
-                ViewData["List"] = result.ToArray();
-                ViewData["CHECK"] = search.Words;
+				ViewData["List"] = result.ToArray();
+				ViewData["CHECK"] = search.Words;
 
-                //TempData["list"] = result.ToArray();
-                ViewData["SEARCH"] = search;
+				//TempData["list"] = result.ToArray();
+				ViewData["SEARCH"] = search;
 
-                var products = result.ToArray();
-                //returns IQueryable<Product> representing an unknown number of products. a thousand maybe?
+				var products = result.ToArray();
+				//returns IQueryable<Product> representing an unknown number of products. a thousand maybe?
 
-                //var pageNumber = page ?? 1; if no page was specified in the querystring, default to the first page (1)
-                var onePageOfProducts = products.OrderBy(p => p.Id);
-                //.ToPagedList(pageNumber, 4);  will only contain 25 products max because of the pageSize
+				//var pageNumber = page ?? 1; if no page was specified in the querystring, default to the first page (1)
+				var onePageOfProducts = products.OrderBy(p => p.Id);
+				//.ToPagedList(pageNumber, 4);  will only contain 25 products max because of the pageSize
 
-                // ViewBag.onePageOfProducts = onePageOfProducts;
+				// ViewBag.onePageOfProducts = onePageOfProducts;
 
-                /*	var ChangedResult = result.ToArray();*/
-                return View();
-            }
-            else
-            {
-                switch (search.Mode)
-                {
-                    case Valuation.UserName:
-                        result = from i in UserDb.Items orderby i.Id where i.UserName.Contains(search.Words) select i;
-                        break;
-
-
-                    case Valuation.FileName:
-                        result = from i in UserDb.Items orderby i.Id where i.Name.Contains(search.Words) select i;
-                        break;
-
-                    case Valuation.Discription:
-                        result = from i in UserDb.Items orderby i.Id where i.Description.Contains(search.Words) select i;
-                        break;
-
-                    case Valuation.FileNameAndDis:
-                        result = from i in UserDb.Items
-                            orderby i.Id
-                            where i.Description.Contains(search.Words) && i.Name.Contains(search.Words)
-                            select i;
-                        break;
-
-                    default:
-                        return Index();
-                }
-
-                ViewData["List"] = result.ToArray();
-                ViewData["CHECK"] = search.Words;
-                // TempData["list"] = result.ToArray();
-                ViewData["SEARCH"] = search;
+				/*	var ChangedResult = result.ToArray();*/
+				return View();
+			}
+			else
+			{
+				switch (search.Mode)
+				{
+					case Valuation.UserName:
+						result = from i in UserDb.Items orderby i.Id where i.UserName.Contains(search.Words) select i;
+						break;
 
 
-                //returns IQueryable<Product> representing an unknown number of products. a thousand maybe?
-                var products = result.ToArray();
-                //var pageNumber = page ?? 1;  if no page was specified in the querystring, default to the first page (1)
-                var onePageOfProducts = products.OrderBy(p => p.Id);
+					case Valuation.FileName:
+						result = from i in UserDb.Items orderby i.Id where i.Name.Contains(search.Words) select i;
+						break;
 
-                // ViewBag.onePageOfProducts = onePageOfProducts;
+					case Valuation.Discription:
+						result = from i in UserDb.Items orderby i.Id where i.Description.Contains(search.Words) select i;
+						break;
 
-                /*	var ChangedResult = result.ToArray();*/
-                var pageNumber = 1;
-                var pageSize = 10;
+					case Valuation.FileNameAndDis:
+						result = from i in UserDb.Items
+							orderby i.Id
+							where i.Description.Contains(search.Words) && i.Name.Contains(search.Words)
+							select i;
+						break;
+
+					default:
+						return Index();
+				}
+
+				ViewData["List"] = result.ToArray();
+				ViewData["CHECK"] = search.Words;
+				// TempData["list"] = result.ToArray();
+				ViewData["SEARCH"] = search;
 
 
-                var pageData = products.ToPagedList(pageSize, pageNumber);
-                return View();
-            }
-        }
-    }
+				//returns IQueryable<Product> representing an unknown number of products. a thousand maybe?
+				var products = result.ToArray();
+				//var pageNumber = page ?? 1;  if no page was specified in the querystring, default to the first page (1)
+				var onePageOfProducts = products.OrderBy(p => p.Id);
+
+				// ViewBag.onePageOfProducts = onePageOfProducts;
+
+				/*	var ChangedResult = result.ToArray();*/
+				var pageNumber = 1;
+				var pageSize = 10;
+
+
+				var pageData = products.ToPagedList(pageSize, pageNumber);
+				return View();
+			}
+		}
+	}
 }

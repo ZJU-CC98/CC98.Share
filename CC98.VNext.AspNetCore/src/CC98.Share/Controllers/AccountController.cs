@@ -1,11 +1,10 @@
 ﻿using System.Threading.Tasks;
+using CC98.Authentication;
+using CC98.Identity;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http.Authentication;
-using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Sakura.AspNetCore;
-using CC98.Identity;
-using CC98.Authentication;
 
 // For more information on enabling MVC for empty projects, visit http://go.microsoft.com/fwlink/?LinkID=397860
 

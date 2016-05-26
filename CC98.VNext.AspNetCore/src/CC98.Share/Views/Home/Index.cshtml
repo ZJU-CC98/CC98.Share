@@ -1,142 +1,135 @@
-﻿
+﻿@using System.Linq
+@using CC98.Share.Data
+@using Sakura.AspNetCore
+@model CC98.Share.ViewModels.SearchAll.SearchModeViewModel
 @{
-	//ViewBag.Title = "首页";
+    Layout = "_Layout";
+    ViewBag.PageTitle = "首页";
+
+    var dataSource = (IPagedList<ShareItem>)ViewData["datasource"];
 }
-@addTagHelper "*, Sakura.AspNet.Mvc.PagedList"
-@using System.Threading.Tasks
-@using CC98.Share.Models
-@using Sakura.AspNet
-@using Sakura.AspNet.Mvc.PagedList
-@using CC98.Share.ViewModels
-@model SearchModeViewModels
-
-
-
 
 <style type="text/css">
-	.person-li{
-		float:left;
-		padding:15px;
-		text-align:center;
-		
-	}
-
+    .person-li {
+        float: left;
+        padding: 15px;
+        text-align: center;
+    }
 </style>
 
 @if (this.User.Identity.IsAuthenticated == false)
 {
-	
-	<div style="text-align:center"><h3 style="color:#004b83"><b>请登录</b></h3><img src="~/images/index_pic.png"style="text-align:center"/></div>
+
+    <div style="text-align:center"><h3 style="color:#004b83"><b>请登录</b></h3><img src="~/images/index_src.png" style="text-align:center" /></div>
 
 }
 else
 {
-	var DataSourceBefore = (IPagedList<ShareItem>)ViewData["datasource"];
-	var DataSource = DataSourceBefore.ToArray();
 
-	<div id="person-info" style="display:inline-block;" >
-	<ul  style="list-style:none;">
-		<li class="person-li">
-			<img class="img-thumbnail" width="120" height="120"  src="~/images/index_pic.png" />
-		</li>
-		<li class="person-li">			
-			<h4>@this.User.Identity.Name<br /></h4>
-			<img src="~/images/male.png" />
-		</li>
-		<li class="person-li">
-			<br />
-			<p>1</p>
-			分享数
-		</li>
-		<li class="person-li">
-			<br />
-			<p>1</p>
-			文件数
-		</li>
-		<li class="person-li">
-			<br />
-			<p>1</p>
-			网盘容量
-		</li>
-		<li class="person-li">
-			<br />
-			<p>1</p>
-			可用容量
-		</li>
-		
-	</ul>
-		
-	</div>
-	<hr style="height:1px;border:none;border-top:1px solid #eee;" />
-	<div style="height:10px"></div>
-	
-	<div class="container">
-	
+    <div id="person-info" style="display:inline-block;">
+        <ul style="list-style:none;">
+            <li class="person-li">
+                <img class="img-thumbnail" width="120" height="120" src="~/images/index_pic.png" />
+            </li>
+            <li class="person-li">
+                <h4>@this.User.Identity.Name<br /></h4>
+                <img src="~/images/male.png" />
+            </li>
+            <li class="person-li">
+                <br />
+                <p>1</p>
+                分享数
+            </li>
+            <li class="person-li">
+                <br />
+                <p>1</p>
+                文件数
+            </li>
+            <li class="person-li">
+                <br />
+                <p>1</p>
+                网盘容量
+            </li>
+            <li class="person-li">
+                <br />
+                <p>1</p>
+                可用容量
+            </li>
 
-		<div style="display:inline;text-align:right;">
+        </ul>
 
-			<form class="form-inline" style="float:left;text-align:left;">
-				<input id="lefile" type="file" style="display:none; float:left;text-align:left;">
-				<div class="input-append">
+    </div>
+    <hr style="height:1px;border:none;border-top:1px solid #eee;" />
+    <div style="height:10px"></div>
 
-					<a onclick="$('input[id=lefile]').click();">
-						<input id="photoCover" class="btn btn-default" type="text">
-						<a asp-action="Upload" asp-controller="FileController" class="btn btn-default"> 上传文件 </a>
+    <div class="container">
 
-					</a>
-				</div>
-			</form>
-			<script type="text/javascript">
-				$('input[id=lefile]').change(function () {
-					$('#photoCover').val($(this).val());
-				});
-			</script>
 
-			<form class="form-inline" style="float:right; text-align:left;margin-left:10px">
-				<div class="form-group">
-					<input type="email" class="form-control" id="exampleInputEmail2" placeholder="输入要搜索的文件">
-				</div>
-				<button type="submit" class="btn btn-default">搜索</button>
-			</form>
-		</div>
-		<table class="table table-striped" style="margin-top:20px">
-			<thead style="border:2px solid #eee">
-				<tr>
-					
-					<th>文件名称</th>
-					<th style="text-align:center">操作</th>
-					<th>上传日期</th>
-					<th>文件大小</th>
-				</tr>
-			</thead>
-			<tbody>
-				@for (int i = 0; i < DataSource.Count() ;i++)
-				{
-					//ShareItem item= DataSource[i];
-					ShareItem item = DataSource[i];
-					<tr>
-						
-							<td><a asp-controller="Home" asp-action="Fileinfo">@item.Name</a></td>
+        <div style="display:inline;text-align:right;">
 
-							<td style="text-align:center"><button class="btn-link"><a asp-action="Download" asp-controller="FileController">下载</a></button><button class="btn-link" data-toggle="modal" href="#deletefile">删除</button><button class="btn-link" data-toggle="modal" href="#sharefile">分享</button></td>
-							<td>Debbie</td>
-							<td>Anna</td>
-</tr>
-				}
+            <form class="form-inline" style="float:left;text-align:left;">
+                <input id="lefile" type="file" style="display:none; float:left;text-align:left;">
+                <div class="input-append">
 
-			</tbody>
-		</table>
-		<div class="pagination-index" style="float:right">
-			<ul class="pagination">
-				<li><a href="#">&laquo;</a></li>
-				<li><a href="#">1</a></li>
-				<li><a href="#">2</a></li>
-				<li><a href="#">3</a></li>
-				<li><a href="#">4</a></li>
-				<li><a href="#">&raquo;</a></li>
-			</ul>
-		</div>
-	</div>
+                    <a onclick="$('input[id=lefile]').click();">
+                        <input id="photoCover" class="btn btn-default" type="text">
+                        <a asp-action="Upload" asp-controller="FileController" class="btn btn-default"> 上传文件 </a>
+
+                    </a>
+                </div>
+            </form>
+            <script type="text/javascript">
+                $('input[id=lefile]').change(function () {
+                    $('#photoCover').val($(this).val());
+                });
+            </script>
+
+            <form class="form-inline" style="float:right; text-align:left;margin-left:10px">
+                <div class="form-group">
+                    <input type="email" class="form-control" id="exampleInputEmail2" placeholder="输入要搜索的文件">
+                </div>
+                <button type="submit" class="btn btn-default">搜索</button>
+            </form>
+        </div>
+        <table class="table table-striped" style="margin-top:20px">
+            <thead style="border:2px solid #eee">
+                <tr>
+
+                    <th>文件名称</th>
+                    <th style="text-align:center">操作</th>
+                    <th>上传日期</th>
+                    <th>文件大小</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var item in dataSource.ToArray())
+                {
+                    <tr>
+
+                        <td><a asp-controller="Home" asp-action="Fileinfo">@item.Name</a></td>
+
+                        <td style="text-align: center">
+                            <a class="btn btn-default" asp-action="Download" asp-controller="FileController">下载</a>
+                            <a class="btn btn-default" data-toggle="modal" data-target="#deletefile">删除</a><a class="btn btn-default" data-toggle="modal" href="#sharefile">分享</a>
+                        </td>
+                        <td>Debbie</td>
+                        <td>Anna</td>
+                    </tr>
+                }
+
+            </tbody>
+        </table>
+        <div class="pagination-index" style="float:right">
+            <ul class="pagination">
+                <li><a href="#">&laquo;</a></li>
+                <li><a href="#">1</a></li>
+                <li><a href="#">2</a></li>
+                <li><a href="#">3</a></li>
+                <li><a href="#">4</a></li>
+                <li><a href="#">&raquo;</a></li>
+            </ul>
+        </div>
+    </div>
 
 
 }
@@ -145,56 +138,56 @@ else
 <!--批量下载，暂时不用-->
 <div id="download" class="modal fade in" style="width:500px;height:300px;position:absolute;margin: 10% 25%;
 background-color:#efefef;display:none;">
-	<div class="modal-header">
-		<a class="close" data-dismiss="modal">×</a>
-		<h3>您选择下载以下文件</h3>
-	</div>
-	<div class="modal-body" style="margin:0px 40px;">
-		<ul class="list-group">
-			<li class="list-group-item">文件1</li>
-			<li class="list-group-item">文件2</li>
-		</ul>
-		<p>合计：1GB</p>
-	</div>
-	<div class="modal-footer">
-		<a href="#" class="btn btn-success">确认</a>
-		<a href="#" class="btn" data-dismiss="modal">取消</a>
-	</div>
+    <div class="modal-header">
+        <a class="close" data-dismiss="modal">×</a>
+        <h3>您选择下载以下文件</h3>
+    </div>
+    <div class="modal-body" style="margin:0px 40px;">
+        <ul class="list-group">
+            <li class="list-group-item">文件1</li>
+            <li class="list-group-item">文件2</li>
+        </ul>
+        <p>合计：1GB</p>
+    </div>
+    <div class="modal-footer">
+        <a href="#" class="btn btn-success">确认</a>
+        <a href="#" class="btn" data-dismiss="modal">取消</a>
+    </div>
 </div>
 <!--分享界面，需要产生独特的链接-->
 <div id="sharefile" class="modal fade in" style="width:450px;height:350px;position:absolute;margin: 10% 25%;
 background-color:#efefef;display:none;">
-	<div class="modal-header">
-		<a class="close" data-dismiss="modal">×</a>
-		<h3>分享文件<small>文件XXX</small></h3>
-	</div>
-	<div class="modal-body" style="margin-left:20px">
-		<h5>链接已创建</h5>
-		<input type="text" class="form-control" value="http://pan.baidu.com/s/1hrkN9Ta" />
-		
-	</div>
-	<div class="modal-footer">
-		<span id="copysuccess" style="display:none">复制成功！</span>
-		<a href="#" class="btn btn-success">复制链接</a>
-		<a href="#" class="btn" data-dismiss="modal">关闭</a>
-	</div>
+    <div class="modal-header">
+        <a class="close" data-dismiss="modal">×</a>
+        <h3>分享文件<small>文件XXX</small></h3>
+    </div>
+    <div class="modal-body" style="margin-left:20px">
+        <h5>链接已创建</h5>
+        <input type="text" class="form-control" value="http://pan.baidu.com/s/1hrkN9Ta" />
+
+    </div>
+    <div class="modal-footer">
+        <span id="copysuccess" style="display:none">复制成功！</span>
+        <a href="#" class="btn btn-success">复制链接</a>
+        <a href="#" class="btn" data-dismiss="modal">关闭</a>
+    </div>
 </div>
 <!--删除界面，需要获取文件名以及对按钮操作进行绑定函数-->
 <div id="deletefile" class="modal fade in" style="width:450px;height:200px;position:absolute;margin: 10% 25%;
 background-color:#efefef;display:none;">
-	<div class="modal-header">
+    <div class="modal-header">
 
-		<a class="close" data-dismiss="modal">×</a>
-		<h4>永久删除以下文件</h4>
-	</div>
-	<div class="modal-body" style="margin-left:20px">
+        <a class="close" data-dismiss="modal">×</a>
+        <h4>永久删除以下文件</h4>
+    </div>
+    <div class="modal-body" style="margin-left:20px">
 
-		<p>文件XXX</p>
-	</div>
-	<div class="modal-footer">
+        <p>文件XXX</p>
+    </div>
+    <div class="modal-footer">
 
-		<a href="#" class="btn btn-success">确认</a>
-		<a href="#" class="btn" data-dismiss="modal">取消</a>
-	</div>
+        <a href="#" class="btn btn-success">确认</a>
+        <a href="#" class="btn" data-dismiss="modal">取消</a>
+    </div>
 </div>
 

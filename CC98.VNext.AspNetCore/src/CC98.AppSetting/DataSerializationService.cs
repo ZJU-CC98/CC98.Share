@@ -1,5 +1,7 @@
 ﻿using System;
 using System.Text;
+using JetBrains.Annotations;
+using Newtonsoft.Json;
 
 namespace CC98
 {

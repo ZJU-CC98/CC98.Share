@@ -17,6 +17,8 @@ using Sakura.AspNetCore.Mvc;
 
 namespace CC98.Share
 {
+    using Microsoft.EntityFrameworkCore.Infrastructure;
+
     /// <summary>
     ///     应用程序的启动类型。
     /// </summary>
@@ -72,6 +74,7 @@ namespace CC98.Share
 
             // 添加 CC98ShareModel 数据存储
             services
+
                 .AddDbContext<CC98ShareModel>(options =>
                 {
                     // 从配置文件中读取连接到数据库使用的连接字符串

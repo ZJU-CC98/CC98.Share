@@ -6,7 +6,7 @@
     Layout = "_Layout";
     ViewBag.PageTitle = "首页";
 
-    var dataSource = (IPagedList<ShareItem>)ViewData["datasource"];
+    
 }
 
 <style type="text/css">
@@ -25,6 +25,12 @@
 }
 else
 {
+	var dataSource = (IPagedList<ShareItem>)ViewData["datasource"];
+	var filesize = (int)ViewData["filesize"];
+	var filecount = (int)ViewData["filecount"];
+	var sharecount = (int)ViewData["sharecount"];
+
+
 
     <div id="person-info" style="display:inline-block;">
         <ul style="list-style:none;">
@@ -37,22 +43,22 @@ else
             </li>
             <li class="person-li">
                 <br />
-                <p>1</p>
+                <p>@sharecount</p>
                 分享数
             </li>
             <li class="person-li">
                 <br />
-                <p>1</p>
+                <p>@filecount</p>
                 文件数
             </li>
             <li class="person-li">
                 <br />
-                <p>1</p>
+                <p>2TB</p>
                 网盘容量
             </li>
             <li class="person-li">
                 <br />
-                <p>1</p>
+                <p>???</p>
                 可用容量
             </li>
 
@@ -109,11 +115,12 @@ else
                         <td><a asp-controller="Home" asp-action="Fileinfo">@item.Name</a></td>
 
                         <td style="text-align: center">
-                            <a class="btn btn-default" asp-action="Download" asp-controller="FileController">下载</a>
-                            <a class="btn btn-default" data-toggle="modal" data-target="#deletefile">删除</a><a class="btn btn-default" data-toggle="modal" href="#sharefile">分享</a>
+                            <a class="btn btn-default" asp-action="Download" asp-controller="FileController" id="@item.Id">下载</a>
+                            <a class="btn btn-default" asp-action="DeleteFile" asp-controller="FileController" id="@item.Id">删除</a>
+							<a class="btn btn-default" asp-action="ShareFile" asp-controller="FileController" id="@item.Id">分享</a>
                         </td>
-                        <td>Debbie</td>
-                        <td>Anna</td>
+                        <td>@item.UploadTime</td>
+                        <td>@item.Size</td>
                     </tr>
                 }
 

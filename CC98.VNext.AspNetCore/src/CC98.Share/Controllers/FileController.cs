@@ -53,6 +53,25 @@ namespace CC98.Share.Controllers
         {
             return View();
         }
+		/// <summary>
+		/// 删除文件(Ruiker Task)
+		/// </summary>
+		/// <param name="id"></param>
+		/// <returns></returns>
+		public IActionResult DeleteFile(int id)
+		{
+			return View();
+		}
+
+		/// <summary>
+		/// 分享文件(Ruiker Task)
+		/// </summary>
+		/// <param name="id"></param>
+		/// <returns></returns>
+		public IActionResult ShareFile(int id)
+		{
+			return View();
+		}
 
         /// <summary>
         ///     提供下载功能。

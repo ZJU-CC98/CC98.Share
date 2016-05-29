@@ -30,8 +30,6 @@ else
 	var filecount = (int)ViewData["filecount"];
 	var sharecount = (int)ViewData["sharecount"];
 
-
-
     <div id="person-info" style="display:inline-block;">
         <ul style="list-style:none;">
             <li class="person-li">
@@ -111,13 +109,13 @@ else
                 @foreach (var item in dataSource.ToArray())
                 {
                     <tr>
-
+			
                         <td><a asp-controller="Home" asp-action="Fileinfo">@item.Name</a></td>
 
                         <td style="text-align: center">
                             <a class="btn btn-default" asp-action="Download" asp-controller="FileController" id="@item.Id">下载</a>
-                            <a class="btn btn-default" asp-action="DeleteFile" asp-controller="FileController" id="@item.Id">删除</a>
-							<a class="btn btn-default" asp-action="ShareFile" asp-controller="FileController" id="@item.Id">分享</a>
+							<a class="btn btn-default" data-toggle="modal" data-target="#deletefile">删除</a>
+							<a class="btn btn-default" data-toggle="modal" href="#sharefile">分享</a>
                         </td>
                         <td>@item.UploadTime</td>
                         <td>@item.Size</td>
@@ -166,7 +164,7 @@ background-color:#efefef;display:none;">
 background-color:#efefef;display:none;">
     <div class="modal-header">
         <a class="close" data-dismiss="modal">×</a>
-        <h3>分享文件<small>文件XXX</small></h3>
+        <h3>分享文件<small></small>@</h3>
     </div>
     <div class="modal-body" style="margin-left:20px">
         <h5>链接已创建</h5>

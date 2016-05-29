@@ -73,7 +73,7 @@ namespace CC98.Share.Controllers
                     var addressName = Setting.Value.StoreFolder + result.Path;
                     return PhysicalFile(addressName, "application/octet-stream", result.Name);
                 }
-                return StatusCode(404);
+                return StatusCode(400);
             }
             catch
             {
@@ -110,7 +110,7 @@ namespace CC98.Share.Controllers
             //首先检测是否有文件传入函数。
             if (file == null)
             {
-                return StatusCode(404);
+                return StatusCode(400);
             }
             //随机生成一个文件名字，并将此文件插入数据库。
             var fileNameRandom = Path.GetRandomFileName();

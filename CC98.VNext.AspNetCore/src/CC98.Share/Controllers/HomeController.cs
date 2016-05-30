@@ -21,7 +21,7 @@ namespace CC98.Share.Controllers
 		
 		private IHostingEnvironment Environment { get; }
 
-		[FromServices]
+	
 		private CC98ShareModel UserDb { get; set; }
 
 		private IQueryable<ShareItem> GetUserFile(string username)

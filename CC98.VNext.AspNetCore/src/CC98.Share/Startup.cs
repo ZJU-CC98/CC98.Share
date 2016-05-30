@@ -52,7 +52,7 @@ namespace CC98.Share
             builder.AddEnvironmentVariables();
 
             // 生成配置对象
-            Configuration = builder.Build();
+             Configuration = builder.Build();
         }
 
         /// <summary>

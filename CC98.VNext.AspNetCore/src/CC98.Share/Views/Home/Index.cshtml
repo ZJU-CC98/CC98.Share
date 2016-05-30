@@ -26,9 +26,11 @@
 else
 {
 	var dataSource = (IPagedList<ShareItem>)ViewData["datasource"];
+	var dataShow = (IPagedList<ShareItem>)ViewData["datashow"];
 	var filesize = (int)ViewData["filesize"];
 	var filecount = (int)ViewData["filecount"];
 	var sharecount = (int)ViewData["sharecount"];
+	var pagersource = (IPagedList)ViewData["pagersource"];
 
     <div id="person-info" style="display:inline-block;">
         <ul style="list-style:none;">
@@ -113,9 +115,10 @@ else
                         <td><a asp-controller="Home" asp-action="Fileinfo">@item.Name</a></td>
 
                         <td style="text-align: center">
-                            <a class="btn btn-default" asp-action="Download" asp-controller="FileController" id="@item.Id">下载</a>
-							<a class="btn btn-default" data-toggle="modal" data-target="#deletefile">删除</a>
-							<a class="btn btn-default" data-toggle="modal" href="#sharefile">分享</a>
+                            <a class="btn btn-default" asp-action="Download" asp-controller="File" asp-route-id="@item.Id">下载</a>
+							<a class="btn btn-default" data-toggle="modal" data-target="#deletefile" onclick="DeleteFile('@item.Id')"><a id="delete-file-name" data-item="@item.Name">删除</a></a>
+							
+							<a class="btn btn-default" data-toggle="modal" href="#sharefile" onclick="ShareFile('@item.Id')"><a id="share-file-name" data-item="@item.Name">分享</a></a>
                         </td>
                         <td>@item.UploadTime</td>
                         <td>@item.Size</td>
@@ -126,12 +129,14 @@ else
         </table>
         <div class="pagination-index" style="float:right">
             <ul class="pagination">
+				<pager source="@pagersource"/>
+				<!--
                 <li><a href="#">&laquo;</a></li>
                 <li><a href="#">1</a></li>
                 <li><a href="#">2</a></li>
                 <li><a href="#">3</a></li>
                 <li><a href="#">4</a></li>
-                <li><a href="#">&raquo;</a></li>
+                <li><a href="#">&raquo;</a></li>-->
             </ul>
         </div>
     </div>
@@ -160,39 +165,54 @@ background-color:#efefef;display:none;">
     </div>
 </div>
 <!--分享界面，需要产生独特的链接-->
-<div id="sharefile" class="modal fade in" style="width:450px;height:350px;position:absolute;margin: 10% 25%;
+<form asp-action="ShareFile" asp-controller="File">
+	<input type="hidden" id="share-file-id-input" name="id" />
+		<div id="sharefile" class="modal fade in" style="width:450px;height:350px;position:absolute;margin: 10% 25%;
 background-color:#efefef;display:none;">
-    <div class="modal-header">
-        <a class="close" data-dismiss="modal">×</a>
-        <h3>分享文件<small></small>@</h3>
-    </div>
-    <div class="modal-body" style="margin-left:20px">
-        <h5>链接已创建</h5>
-        <input type="text" class="form-control" value="http://pan.baidu.com/s/1hrkN9Ta" />
+			<div class="modal-header">
+				<a class="close" data-dismiss="modal"></a>
+				<h3>分享文件<small></small>$('#share-file-name').data('item')</h3>
+			</div>
+			<div class="modal-body" style="margin-left:20px">
+				<h5>链接已创建</h5>
+				<input type="text" class="form-control" value="http://pan.baidu.com/s/1hrkN9Ta" />
 
-    </div>
-    <div class="modal-footer">
-        <span id="copysuccess" style="display:none">复制成功！</span>
-        <a href="#" class="btn btn-success">复制链接</a>
-        <a href="#" class="btn" data-dismiss="modal">关闭</a>
-    </div>
-</div>
+			</div>
+			<div class="modal-footer">
+				<span id="copysuccess" style="display:none">复制成功！</span>
+				<a href="#" class="btn btn-success">复制链接</a><!--How????-->
+				<a href="#" class="btn" data-dismiss="modal"><button type="submit">关闭</button></a>
+			</div>
+		</div>
+</form>
 <!--删除界面，需要获取文件名以及对按钮操作进行绑定函数-->
-<div id="deletefile" class="modal fade in" style="width:450px;height:200px;position:absolute;margin: 10% 25%;
+<form asp-action="DeleteFile" asp-controller="File">
+	<input type="hidden" id="delete-file-id-input" name="id" />
+	<div id="deletefile" class="modal fade in" style="width:450px;height:200px;position:absolute;margin: 10% 25%;
 background-color:#efefef;display:none;">
-    <div class="modal-header">
+		<div class="modal-header">
 
-        <a class="close" data-dismiss="modal">×</a>
-        <h4>永久删除以下文件</h4>
-    </div>
-    <div class="modal-body" style="margin-left:20px">
+			<a class="close" data-dismiss="modal">x</a>
+			<h4>永久删除以下文件</h4>
+		</div>
+		<div class="modal-body" style="margin-left:20px">
+			<p>$('#delete-file-name').data('item')</p>
+		</div>
+		<div class="modal-footer">
 
-        <p>文件XXX</p>
-    </div>
-    <div class="modal-footer">
+			<a href="#" class="btn btn-success"><button type="submit">确认</button></a>
+			<a href="#" class="btn" data-dismiss="modal">取消</a>
+		</div>
+	</div>
+</form>
+<script type="text/javascript">
+	function DeleteFile(id)
+	{
+		$('#delete-file-id-input').val(id);
+	}
 
-        <a href="#" class="btn btn-success">确认</a>
-        <a href="#" class="btn" data-dismiss="modal">取消</a>
-    </div>
-</div>
-
+	function ShareFile(id)
+	{
+		$('#share-file-id-input').val(id);
+	}
+</script>

@@ -24,7 +24,6 @@ namespace CC98.Share.Controllers
 		[FromServices]
 		private CC98ShareModel UserDb { get; set; }
 
-
 		private IQueryable<ShareItem> GetUserFile(string username)
 		{
 			IQueryable<ShareItem> result;
@@ -54,7 +53,8 @@ namespace CC98.Share.Controllers
 				var products = result.ToArray();
 				var PageNumber = page;
 				var PageSize = 10;
-				var PageData = products.OrderBy(p => p.Id).ToList(PageSize, PageNumber);
+				var PageData = products.OrderBy(p => p.Id).ToPagedList(PageSize, PageNumber);
+				IPagedList PagerSource=result.ToPagedList(PageSize,page);
 
 				foreach (var i in products)
 				{
@@ -66,10 +66,11 @@ namespace CC98.Share.Controllers
 					}
 				}
 
-				ViewBag["datasource"] = PageData;
+				ViewBag["datashow"] = PageData;
 				ViewBag["filecount"] = FileCount;
 				ViewBag["filesize"] = FileSize;
 				ViewBag["sharecount"] = ShareCount;
+				ViewBag["pagersource"] = PagerSource;
 
 				return View();
 			}

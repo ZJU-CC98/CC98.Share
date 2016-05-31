@@ -72,7 +72,7 @@ namespace CC98.Share.Controllers
 				ViewData["sharecount"] = ShareCount;
 				ViewData["pagersource"] = PagerSource;
 
-				return View();
+				return Index();
 			}
 			
 		}
@@ -100,53 +100,7 @@ namespace CC98.Share.Controllers
 			return View();
 		}
 
-		public IActionResult Search(SearchModeViewModel search, int? page,string username)
-		{
-			/*
-						if (Select == "1")
-						{
-							var result1 = from i in UserDb.Items where i.Name == keywords select i;
-							ShareItem[] ChangedResult1 = result1.ToArray();
-							return View(ChangedResult1);
-						}
-						else if (Select == "0")
-						{
-							var result2 = from i in UserDb.Items where i.UserName == keywords select i;
-							ShareItem[] ChangedResult2 = result2.ToArray();
-							return View(ChangedResult2);
-						}
-						else
-							return Index();
-			*/
-			IQueryable<ShareItem> result;
-            result = from i in UserDb.Items orderby i.Id where i.Name == search.Words && i.UserName ==username select i;
-						
-
-					
-
-				ViewData["List"] = result.ToArray();
-				ViewData["CHECK"] = search.Words;
-
-				//TempData["list"] = result.ToArray();
-				ViewData["SEARCH"] = search;
-			    ViewData["Check"] = 1;
-				var products = result.ToArray();
-            //returns IQueryable<Product> representing an unknown number of products. a thousand maybe?
-
-            //var pageNumber = page ?? 1; if no page was specified in the querystring, default to the first page (1)
-            var pageNumber = page ?? 1;
-            var pageSize = 10;
-
-
-            var pageData = products.OrderBy(p => p.Id).ToPagedList(pageSize, pageNumber);
-            ViewData["datasource"] = pageData;
-            //.ToPagedList(pageNumber, 4);  will only contain 25 products max because of the pageSize
-
-            // ViewBag.onePageOfProducts = onePageOfProducts;
-
-            /*	var ChangedResult = result.ToArray();*/
-            return View();
-			}
+		
 		
 		
 	}

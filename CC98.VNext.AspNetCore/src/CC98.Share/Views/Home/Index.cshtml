@@ -24,14 +24,35 @@
 }
 else
 {
-    var dataSource = (IPagedList<ShareItem>)ViewData["datasource"];
-    var dataShow = (IPagedList<ShareItem>)ViewData["datashow"];
-    var filesize = (long)ViewData["filesize"];
-    var filecount = (int)ViewData["filecount"];
-    var sharecount = (int)ViewData["sharecount"];
-    var pagersource = (IPagedList)ViewData["pagersource"];
-    var Check = (int)ViewData["Check"];
-    var Result = (IPagedList<ShareItem>)ViewData["List"];
+	var dataSource = (IPagedList<ShareItem>)ViewData["datasource"];
+	var dataShow = (IPagedList<ShareItem>)ViewData["datashow"];
+	var filesize = (long)ViewData["filesize"];
+	var filecount = (int)ViewData["filecount"];
+	var sharecount = (int)ViewData["sharecount"];
+	var pagersource = (IPagedList)ViewData["pagersource"];
+	int Check;
+	if (ViewData["Check"]==null)
+	{
+		Check = 0;
+
+	}
+	else
+	{
+		Check = (int)ViewData["Check"];
+
+	}
+	bool BiaJi = true;
+	var Temp = ViewData["List"];
+	if (Temp==null)
+	{
+		BiaJi = false;
+	}
+	else
+	{
+		BiaJi = true;
+		var Result = (IPagedList<ShareItem>)Temp;
+	}
+
 
     <div id="person-info" style="display:inline-block;">
         <ul style="list-style:none;">

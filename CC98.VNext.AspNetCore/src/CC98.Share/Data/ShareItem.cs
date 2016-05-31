@@ -1,5 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using JetBrains.Annotations;
+using System;
 
 namespace CC98.Share.Data
 {
@@ -49,8 +50,14 @@ namespace CC98.Share.Data
         [Range(0, int.MaxValue)]
         public int DownloadCount { get; set; }
 
-		public int Size { get; set; }
+		/// <summary>
+		/// 文件大小
+		/// </summary>
+		public long Size { get; set; }
 
-		public string UploadTime { get; set; }
+		/// <summary>
+		/// 上传时间
+		/// </summary>
+		public DateTime UploadTime { get; set; }
     }
 }

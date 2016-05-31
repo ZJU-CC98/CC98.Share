@@ -26,12 +26,12 @@ else
 {
     var dataSource = (IPagedList<ShareItem>)ViewData["datasource"];
     var dataShow = (IPagedList<ShareItem>)ViewData["datashow"];
-    var filesize = (int)ViewData["filesize"];
+    var filesize = (long)ViewData["filesize"];
     var filecount = (int)ViewData["filecount"];
     var sharecount = (int)ViewData["sharecount"];
     var pagersource = (IPagedList)ViewData["pagersource"];
     var Check = (int)ViewData["Check"];
-    var Result = (ShareItem)ViewData["List"];
+    var Result = (IPagedList<ShareItem>)ViewData["List"];
 
     <div id="person-info" style="display:inline-block;">
         <ul style="list-style:none;">

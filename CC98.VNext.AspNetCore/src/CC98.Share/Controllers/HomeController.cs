@@ -59,7 +59,7 @@ namespace CC98.Share.Controllers
 				foreach (var i in products)
 				{
 					FileCount = FileCount + 1;
-					FileSize = FileSize + i.Size;
+					//FileSize = FileSize + i.Size;
 					if (i.IsShared==true)
 					{
 						ShareCount = ShareCount + 1;

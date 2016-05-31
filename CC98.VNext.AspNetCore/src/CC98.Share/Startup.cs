@@ -180,8 +180,8 @@ namespace CC98.Share
 
             var option = new StaticFileOptions
             {
-                RequestPath = new PathString(Configuration["WebFolder"]),
-                FileProvider = new PhysicalFileProvider(Configuration["StoreFolder"]),
+                RequestPath = new PathString(Configuration["FileSetting:WebFolder"]),
+                FileProvider = new PhysicalFileProvider(Configuration["FileSetting:StoreFolder"]),
                 ServeUnknownFileTypes = true
             };
             app.UseStaticFiles(option);

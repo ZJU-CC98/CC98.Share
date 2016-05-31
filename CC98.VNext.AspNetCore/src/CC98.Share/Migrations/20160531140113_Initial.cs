@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Metadata;
 
-namespace CC98.Share.Migrations
+namespace cc98.share.Migrations
 {
     public partial class Initial : Migration
     {
@@ -20,6 +20,9 @@ namespace CC98.Share.Migrations
                     IsShared = table.Column<bool>(nullable: false),
                     Name = table.Column<string>(nullable: false),
                     Path = table.Column<string>(nullable: true),
+                    Size = table.Column<long>(nullable: false),
+                    TotalSize = table.Column<long>(nullable: false),
+                    UploadTime = table.Column<DateTime>(nullable: false),
                     UserName = table.Column<string>(nullable: false)
                 },
                 constraints: table =>

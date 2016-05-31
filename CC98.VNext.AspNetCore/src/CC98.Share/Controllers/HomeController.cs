@@ -47,7 +47,7 @@ namespace CC98.Share.Controllers
 			else
 			{
 				var result = GetUserFile(User.Identity.Name);
-				int FileSize = 0;
+				long FileSize = 0;
 				int FileCount = 0;
 				int ShareCount = 0;
 				var products = result.ToArray();

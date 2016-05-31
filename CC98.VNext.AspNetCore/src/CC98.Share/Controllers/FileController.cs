@@ -89,12 +89,15 @@ namespace CC98.Share.Controllers
                 //并在数据库中找到此文件，返回给用户
                 var output = from i in Model.Items where i.Id == id select i;
                 var result = output.SingleOrDefault();
-                if (result != null)
+                if (result != null&&result.IsShared||result != null&&result.UserName==this.User.Identity.Name)
                 {
                     var addressName = Setting.Value.StoreFolder + result.Path;
                     return PhysicalFile(addressName, "application/octet-stream", result.Name);
                 }
-                return StatusCode(400);
+				else
+				{
+					return StatusCode(403);
+				}
             }
             catch
             {

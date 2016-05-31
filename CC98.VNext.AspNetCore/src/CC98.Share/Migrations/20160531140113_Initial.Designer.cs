@@ -5,10 +5,10 @@ using Microsoft.EntityFrameworkCore.Metadata;
 using Microsoft.EntityFrameworkCore.Migrations;
 using CC98.Share.Data;
 
-namespace CC98.Share.Migrations
+namespace cc98.share.Migrations
 {
     [DbContext(typeof(CC98ShareModel))]
-    [Migration("20160530083826_Initial")]
+    [Migration("20160531140113_Initial")]
     partial class Initial
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -33,6 +33,12 @@ namespace CC98.Share.Migrations
                         .HasAnnotation("MaxLength", 50);
 
                     b.Property<string>("Path");
+
+                    b.Property<long>("Size");
+
+                    b.Property<long>("TotalSize");
+
+                    b.Property<DateTime>("UploadTime");
 
                     b.Property<string>("UserName")
                         .IsRequired();

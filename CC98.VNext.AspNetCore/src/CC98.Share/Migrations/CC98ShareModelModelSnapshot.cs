@@ -5,7 +5,7 @@ using Microsoft.EntityFrameworkCore.Metadata;
 using Microsoft.EntityFrameworkCore.Migrations;
 using CC98.Share.Data;
 
-namespace CC98.Share.Migrations
+namespace cc98.share.Migrations
 {
     [DbContext(typeof(CC98ShareModel))]
     partial class CC98ShareModelModelSnapshot : ModelSnapshot

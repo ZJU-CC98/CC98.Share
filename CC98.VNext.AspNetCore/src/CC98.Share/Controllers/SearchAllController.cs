@@ -40,7 +40,7 @@ namespace CC98.Share.Controllers
         {
             IQueryable<ShareItem> result;
 
-            if (username == User.Identity.Name)
+            if (username == this.User.Identity.Name)
             {
                 if (search.Acc == Accuracy.Accurate)
                 {

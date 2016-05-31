@@ -100,7 +100,7 @@ namespace CC98.Share.Controllers
 			return View();
 		}
 
-		public IActionResult Search(SearchModeViewModel search, int? page)
+		public IActionResult Search(SearchModeViewModel search, int? page,string username)
 		{
 			/*
 						if (Select == "1")
@@ -119,103 +119,35 @@ namespace CC98.Share.Controllers
 							return Index();
 			*/
 			IQueryable<ShareItem> result;
+            result = from i in UserDb.Items orderby i.Id where i.Name == search.Words && i.UserName ==username select i;
+						
 
-
-			if (search.Acc == Accuracy.Accurate)
-			{
-				switch (search.Mode)
-				{
-					case Valuation.UserName:
-						result = from i in UserDb.Items orderby i.Id where i.UserName == search.Words select i;
-						break;
-
-
-					case Valuation.FileName:
-						result = from i in UserDb.Items orderby i.Id where i.Name == search.Words select i;
-						break;
-
-					case Valuation.Discription:
-						result = from i in UserDb.Items orderby i.Id where i.Description == search.Words select i;
-						break;
-
-					case Valuation.FileNameAndDis:
-						result = from i in UserDb.Items
-							orderby i.Id
-							where i.Description == search.Words && i.Name == search.Words
-							select i;
-						break;
-
-					default:
-						return Index();
-				}
+					
 
 				ViewData["List"] = result.ToArray();
 				ViewData["CHECK"] = search.Words;
 
 				//TempData["list"] = result.ToArray();
 				ViewData["SEARCH"] = search;
-
+			    ViewData["Check"] = 1;
 				var products = result.ToArray();
-				//returns IQueryable<Product> representing an unknown number of products. a thousand maybe?
+            //returns IQueryable<Product> representing an unknown number of products. a thousand maybe?
 
-				//var pageNumber = page ?? 1; if no page was specified in the querystring, default to the first page (1)
-				var onePageOfProducts = products.OrderBy(p => p.Id);
-				//.ToPagedList(pageNumber, 4);  will only contain 25 products max because of the pageSize
+            //var pageNumber = page ?? 1; if no page was specified in the querystring, default to the first page (1)
+            var pageNumber = page ?? 1;
+            var pageSize = 10;
 
-				// ViewBag.onePageOfProducts = onePageOfProducts;
 
-				/*	var ChangedResult = result.ToArray();*/
-				return View();
+            var pageData = products.OrderBy(p => p.Id).ToPagedList(pageSize, pageNumber);
+            ViewData["datasource"] = pageData;
+            //.ToPagedList(pageNumber, 4);  will only contain 25 products max because of the pageSize
+
+            // ViewBag.onePageOfProducts = onePageOfProducts;
+
+            /*	var ChangedResult = result.ToArray();*/
+            return View();
 			}
-			else
-			{
-				switch (search.Mode)
-				{
-					case Valuation.UserName:
-						result = from i in UserDb.Items orderby i.Id where i.UserName.Contains(search.Words) select i;
-						break;
-
-
-					case Valuation.FileName:
-						result = from i in UserDb.Items orderby i.Id where i.Name.Contains(search.Words) select i;
-						break;
-
-					case Valuation.Discription:
-						result = from i in UserDb.Items orderby i.Id where i.Description.Contains(search.Words) select i;
-						break;
-
-					case Valuation.FileNameAndDis:
-						result = from i in UserDb.Items
-							orderby i.Id
-							where i.Description.Contains(search.Words) && i.Name.Contains(search.Words)
-							select i;
-						break;
-
-					default:
-						return Index();
-				}
-
-				ViewData["List"] = result.ToArray();
-				ViewData["CHECK"] = search.Words;
-				// TempData["list"] = result.ToArray();
-				ViewData["SEARCH"] = search;
-
-
-				//returns IQueryable<Product> representing an unknown number of products. a thousand maybe?
-				var products = result.ToArray();
-				//var pageNumber = page ?? 1;  if no page was specified in the querystring, default to the first page (1)
-				var onePageOfProducts = products.OrderBy(p => p.Id);
-
-				// ViewBag.onePageOfProducts = onePageOfProducts;
-
-				/*	var ChangedResult = result.ToArray();*/
-				var pageNumber = 1;
-				var pageSize = 10;
-
-
-				var pageData = products.ToPagedList(pageSize, pageNumber);
-				return View();
-			}
-		}
+		
+		
 	}
 }

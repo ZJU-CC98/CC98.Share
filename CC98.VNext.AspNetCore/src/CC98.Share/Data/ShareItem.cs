@@ -49,8 +49,14 @@ namespace CC98.Share.Data
         [Range(0, int.MaxValue)]
         public int DownloadCount { get; set; }
 
+		/// <summary>
+		/// 文件大小
+		/// </summary>
 		public int Size { get; set; }
 
+		/// <summary>
+		/// 上传时间
+		/// </summary>
 		public string UploadTime { get; set; }
     }
 }

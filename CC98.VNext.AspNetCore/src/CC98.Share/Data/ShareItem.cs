@@ -1,5 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using JetBrains.Annotations;
+using System;
 
 namespace CC98.Share.Data
 {
@@ -52,11 +53,11 @@ namespace CC98.Share.Data
 		/// <summary>
 		/// 文件大小
 		/// </summary>
-		public int Size { get; set; }
+		public long Size { get; set; }
 
 		/// <summary>
 		/// 上传时间
 		/// </summary>
-		public string UploadTime { get; set; }
+		public DateTime UploadTime { get; set; }
     }
 }

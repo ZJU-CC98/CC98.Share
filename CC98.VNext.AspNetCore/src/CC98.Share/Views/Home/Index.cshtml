@@ -25,15 +25,16 @@
 else
 {
 
-   
-    var dataShow = (IPagedList<ShareItem>)ViewData["datashow"];
-    var filesize = (long)ViewData["filesize"];
-    var filecount = (int)ViewData["filecount"];
-    var sharecount = (int)ViewData["sharecount"];
-    var pagersource = (IPagedList)ViewData["pagersource"];
-    
-    
 
+	var dataShow = (IPagedList<ShareItem>)ViewData["datashow"];
+	var filesize = (long)ViewData["filesize"];
+	var filecount = (int)ViewData["filecount"];
+	var sharecount = (int)ViewData["sharecount"];
+
+	var pagersource = (IPagedList)ViewData["pagersource"];
+
+
+	
     <div id="person-info" style="display:inline-block;">
         <ul style="list-style:none;">
             <li class="person-li">
@@ -120,13 +121,10 @@ else
                         <td><a asp-controller="Home" asp-action="Fileinfo">@item.Name</a></td>
 
                         <td style="text-align: center">
-                            <a class="btn btn-default" asp-action="Download" asp-controller="File" asp-route-id="@item.Id">下载</a>
-                            <a class="btn btn-default" data-toggle="modal" data-target="#deletefile" onclick="DeleteFile('@item.Id')"><a id="delete-file-name" data-item="@item.Name">删除</a></a>
-							@*在这里写一个判断，根据用户文件情况选择显示“取消分享”或“分享”*@
-                            <a class="btn btn-default" data-toggle="modal" href="#sharefile" onclick="ShareFile('@item.Id')"><a id="share-file-name" data-item="@item.Name">分享</a></a>
+                            <a class="btn btn-link" asp-action="Download" asp-controller="File" asp-route-id="@item.Id">下载</a>
+							<button class="btn btn-link" data-toggle="modal" data-target="#deletefile" onclick="DeleteFile('@item.Id')"><a id="delete-file-name" data-item="@item.Name">删除</a></button>
 
-							<a class="btn btn-default" data-toggle="modal" href="#sharefile" onclick="CancelShare('@item.Id')"><a id="share-file-name" data-item="@item.Name">取消分享</a></a>
-
+							<button class="btn btn-link" data-toggle="modal" href="#sharefile" onclick="ShareFile('@item.Id')"><a id="share-file-name" data-item="@item.Name">分享</a></button>
                         </td>
                         <td>@item.UploadTime</td>
                         <td>@item.Size</td>

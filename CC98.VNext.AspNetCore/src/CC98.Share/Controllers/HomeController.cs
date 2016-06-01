@@ -72,7 +72,7 @@ namespace CC98.Share.Controllers
 				ViewData["sharecount"] = ShareCount;
 				ViewData["pagersource"] = PagerSource;
 
-				return Index();
+				return View();
 			}
 			
 		}

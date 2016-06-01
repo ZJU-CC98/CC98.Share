@@ -38,11 +38,12 @@ else
     <div id="person-info" style="display:inline-block;">
         <ul style="list-style:none;">
             <li class="person-li">
+				@*需要后端调用一下用户头像*@
                 <img class="img-thumbnail" width="120" height="120" src="~/images/index_pic.png" />
             </li>
             <li class="person-li">
                 <h4>@this.User.Identity.Name<br /></h4>
-                <img src="~/images/male.png" />
+                
             </li>
             <li class="person-li">
                 <br />
@@ -95,7 +96,7 @@ else
 
             <form class="form-inline" style="float:right; text-align:left;margin-left:10px">
                 <div class="form-group">
-                    <input type="email" class="form-control" id="exampleInputEmail2" placeholder="输入要搜索的文件">
+                    <input type="text" class="form-control" id="exampleInputEmail2" placeholder="输入要搜索的文件">
                 </div>
                 <button type="submit" class="btn btn-default">搜索</button>
             </form>
@@ -125,6 +126,7 @@ else
 							<button class="btn btn-link" data-toggle="modal" data-target="#deletefile" onclick="DeleteFile('@item.Id')"><a id="delete-file-name" data-item="@item.Name">删除</a></button>
 
 							<button class="btn btn-link" data-toggle="modal" href="#sharefile" onclick="ShareFile('@item.Id')"><a id="share-file-name" data-item="@item.Name">分享</a></button>
+							<button class="btn btn-link" data-toggle="modal" href="#sharefile" onclick="CancelShare('@item.Id')">取消分享</button>
                         </td>
                         <td>@item.UploadTime</td>
                         <td>@item.Size</td>
@@ -188,7 +190,7 @@ background-color:#efefef;display:none;">
 			<div class="modal-footer">
 				<span id="copysuccess" style="display:none">复制成功！</span>
 				<a href="#" class="btn btn-success">复制链接</a><!--How????-->
-				<a href="#" class="btn" data-dismiss="modal"><button type="submit">关闭</button></a>
+				<a href="#" class="btn" data-dismiss="modal"type="submit">关闭</a>
 			</div>
 		</div>
 </form>

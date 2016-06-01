@@ -48,11 +48,12 @@ namespace CC98.Share.Controllers
         ///     显示下载界面。
         /// </summary>
         /// <returns>操作结果。</returns>
-        [HttpGet]
+        /*[HttpGet]
+		[Route("Download")]
         public IActionResult Download()
         {
             return View();
-        }
+        }*/
 		/// <summary>
 		/// 删除文件(Ruiker Task)
 		/// </summary>
@@ -81,6 +82,7 @@ namespace CC98.Share.Controllers
         /// <returns>操作结果。</returns>
         [ValidateAntiForgeryToken]
         [HttpGet]
+		[Route("Download/{id}")]
         public IActionResult Download(int id)
         {
             try

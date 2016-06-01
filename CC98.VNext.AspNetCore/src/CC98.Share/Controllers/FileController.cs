@@ -160,7 +160,16 @@ namespace CC98.Share.Controllers
                 {
                     await file.CopyToAsync(stream);
                 }
-
+                tm.Size = file.Length;
+                tm.TotalSize += tm.Size;
+                if(tm.Size>Setting.Value.UserOnceSize)
+                {
+                    return StatusCode(403);
+                }
+                if(tm.TotalSize>Setting.Value.UserTotalSize)
+                {
+                    return StatusCode(403);
+                }
                 tm.Name = s;
                 tm.UserName = ExternalSignInManager.GetUserName(User);
 				tm.IsShared = share;

@@ -5,7 +5,7 @@ using Microsoft.EntityFrameworkCore.Metadata;
 using Microsoft.EntityFrameworkCore.Migrations;
 using CC98.Share.Data;
 
-namespace CC98.Share.Migrations
+namespace cc98.share.Migrations
 {
     [DbContext(typeof(CC98ShareModel))]
     partial class CC98ShareModelModelSnapshot : ModelSnapshot
@@ -33,9 +33,11 @@ namespace CC98.Share.Migrations
 
                     b.Property<string>("Path");
 
-                    b.Property<int>("Size");
+                    b.Property<long>("Size");
 
-                    b.Property<string>("UploadTime");
+                    b.Property<long>("TotalSize");
+
+                    b.Property<DateTime>("UploadTime");
 
                     b.Property<string>("UserName")
                         .IsRequired();

@@ -80,7 +80,7 @@ namespace CC98.Share.Controllers
         ///     提供下载功能。
         /// </summary>
         /// <returns>操作结果。</returns>
-        [ValidateAntiForgeryToken]
+       // [ValidateAntiForgeryToken]
         [HttpGet]
 		[Route("Download/{id}")]
         public IActionResult Download(int id)

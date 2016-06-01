@@ -38,11 +38,12 @@ else
     <div id="person-info" style="display:inline-block;">
         <ul style="list-style:none;">
             <li class="person-li">
+				@*需要后端调用一下用户头像*@
                 <img class="img-thumbnail" width="120" height="120" src="~/images/index_pic.png" />
             </li>
             <li class="person-li">
                 <h4>@this.User.Identity.Name<br /></h4>
-                <img src="~/images/male.png" />
+                
             </li>
             <li class="person-li">
                 <br />
@@ -95,7 +96,7 @@ else
 
             <form class="form-inline" style="float:right; text-align:left;margin-left:10px">
                 <div class="form-group">
-                    <input type="email" class="form-control" id="exampleInputEmail2" placeholder="输入要搜索的文件">
+                    <input type="text" class="form-control" id="exampleInputEmail2" placeholder="输入要搜索的文件">
                 </div>
                 <button type="submit" class="btn btn-default">搜索</button>
             </form>
@@ -125,6 +126,7 @@ else
 							<button class="btn btn-link" data-toggle="modal" data-target="#deletefile" onclick="DeleteFile('@item.Id')"><a id="delete-file-name" data-item="@item.Name">删除</a></button>
 
 							<button class="btn btn-link" data-toggle="modal" href="#sharefile" onclick="ShareFile('@item.Id')"><a id="share-file-name" data-item="@item.Name">分享</a></button>
+							<button class="btn btn-link" data-toggle="modal" href="#sharefile" onclick="CancelShare('@item.Id')">取消分享</button>
                         </td>
                         <td>@item.UploadTime</td>
                         <td>@item.Size</td>
@@ -151,8 +153,8 @@ else
 
 }
 
-<!--以下是bootstrap组态，一群各种弹出框-->
-<!--批量下载，暂时不用-->
+@*以下是bootstrap组态，一群各种弹出框
+	批量下载，暂时不用*@
 <div id="download" class="modal fade in" style="width:500px;height:300px;position:absolute;margin: 10% 25%;
 background-color:#efefef;display:none;">
     <div class="modal-header">
@@ -171,7 +173,7 @@ background-color:#efefef;display:none;">
         <a href="#" class="btn" data-dismiss="modal">取消</a>
     </div>
 </div>
-<!--分享界面，需要产生独特的链接-->
+@*分享界面，需要产生独特的链接*@
 <form asp-action="ShareFile" asp-controller="File">
 	<input type="hidden" id="share-file-id-input" name="id" />
 		<div id="sharefile" class="modal fade in" style="width:450px;height:350px;position:absolute;margin: 10% 25%;
@@ -188,11 +190,11 @@ background-color:#efefef;display:none;">
 			<div class="modal-footer">
 				<span id="copysuccess" style="display:none">复制成功！</span>
 				<a href="#" class="btn btn-success">复制链接</a><!--How????-->
-				<a href="#" class="btn" data-dismiss="modal"><button type="submit">关闭</button></a>
+				<a href="#" class="btn" data-dismiss="modal"type="submit">关闭</a>
 			</div>
 		</div>
 </form>
-<!--删除界面，需要获取文件名以及对按钮操作进行绑定函数-->
+@*删除界面，需要获取文件名以及对按钮操作进行绑定函数*@
 <form asp-action="DeleteFile" asp-controller="File">
 	<input type="hidden" id="delete-file-id-input" name="id" />
 	<div id="deletefile" class="modal fade in" style="width:450px;height:200px;position:absolute;margin: 10% 25%;
@@ -207,7 +209,27 @@ background-color:#efefef;display:none;">
 		</div>
 		<div class="modal-footer">
 
-			<a href="#" class="btn btn-success"><button type="submit">确认</button></a>
+			<button type="submit">确认</button>
+			<a href="#" class="btn" data-dismiss="modal">取消</a>
+		</div>
+	</div>
+</form>
+@*取消分享，需要获取文件名以及对按钮操作进行绑定函数*@
+<form asp-action="CancelShare" asp-controller="File">
+	<input type="hidden" id="delete-file-id-input" name="id" />
+	<div id="deletefile" class="modal fade in" style="width:450px;height:200px;position:absolute;margin: 10% 25%;
+background-color:#efefef;display:none;">
+		<div class="modal-header">
+
+			<a class="close" data-dismiss="modal">x</a>
+			<h4>您选择取消分享以下文件</h4>
+		</div>
+		<div class="modal-body" style="margin-left:20px">
+			<p>$('#delete-file-name').data('item')</p>
+		</div>
+		<div class="modal-footer">
+
+			<button type="submit">确认</button>
 			<a href="#" class="btn" data-dismiss="modal">取消</a>
 		</div>
 	</div>

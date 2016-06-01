@@ -31,20 +31,20 @@
 		<div class="navbar-collapse collapse">
 			<ul class="nav navbar-nav">
 				<li>
-					<a asp-controller="Home" asp-action="Index">Home</a>
+					<a asp-controller="Home" asp-action="Index">我的share</a>
 				</li>
 				<li>
-					<a asp-controller="Home" asp-action="About">About</a>
+					<a asp-controller="Home" asp-action="About">关于share</a>
 				</li>
-				<li>
+				@*<li>
 					<a asp-controller="Home" asp-action="Contact">Contact</a>
 				</li>
 				<li>
-					<a asp-controller="File" asp-action="Download">Download</a>
-				</li>
-				<li>
-					<a asp-controller="File" asp-action="Upload">Upload</a>
-				</li>
+		<a asp-controller="File" asp-action="Download">Download</a>
+	</li>
+	<li>
+		<a asp-controller="File" asp-action="Upload">Upload</a>
+	</li>*@
 			</ul>
 			@await Html.PartialAsync("_LoginPartial")
 		</div>

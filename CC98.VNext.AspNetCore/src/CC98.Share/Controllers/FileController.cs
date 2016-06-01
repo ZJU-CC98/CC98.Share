@@ -129,7 +129,7 @@ namespace CC98.Share.Controllers
         [Authorize]
         [ValidateAntiForgeryToken]
         [HttpPost]
-        public async Task<IActionResult> Upload(IFormFile file,int value)
+        public async Task<IActionResult> Upload(IFormFile file, int value)
         {
             //首先检测是否有文件传入函数。
             if (file == null)
@@ -139,18 +139,18 @@ namespace CC98.Share.Controllers
             //随机生成一个文件名字，并将此文件插入数据库。
             var fileNameRandom = Path.GetRandomFileName();
             var tm = new ShareItem();
-			bool share;
-			if (value == 1)
-			{
-				share = true;
-			}
-			else
-			{
-				share = false;
+            bool share;
+            if (value == 1)
+            {
+                share = true;
+            }
+            else
+            {
+                share = false;
 
-			}
-			try
-			{
+            }
+            try
+            {
                 var s = GetFileName(file.ContentDisposition);
                 tm.Path = "\\" + fileNameRandom;
 
@@ -162,20 +162,20 @@ namespace CC98.Share.Controllers
                 }
                 tm.Size = file.Length;
                 tm.TotalSize += tm.Size;
-                if(tm.Size>Setting.Value.UserOnceSize)
+                if (tm.Size > Setting.Value.UserOnceSize)
                 {
                     return StatusCode(403);
                 }
-                if(tm.TotalSize>Setting.Value.UserTotalSize)
+                if (tm.TotalSize > Setting.Value.UserTotalSize)
                 {
                     return StatusCode(403);
                 }
                 tm.Name = s;
                 tm.UserName = ExternalSignInManager.GetUserName(User);
-				tm.IsShared = share;
-				Model.Items.Add(tm);
+                tm.IsShared = share;
+                Model.Items.Add(tm);
                 await Model.SaveChangesAsync();
-                return StatusCode(404);
+                return RedirectToAction("Index","Home");
             }
             catch
             {

@@ -85,7 +85,7 @@ else
         </thead>
         <tbody>
 
-            @foreach (var item in dataSource)
+            @*@foreach (var item in dataSource)
             {
             <tr>
                 <td>@item.Name</td>
@@ -93,8 +93,23 @@ else
 
                 <td>@item.Description</td>
             </tr>
-            }
+            }*@
+            @foreach (var item in dataSource)
+            {
+                <tr>
 
+                    <td><a asp-controller="Home" asp-action="Fileinfo">@item.Name</a></td>
+
+                    <td style="text-align: center">
+                        <a class="btn btn-default" asp-action="Download" asp-controller="File" asp-route-id="@item.Id">下载</a>
+                        <a class="btn btn-default" data-toggle="modal" data-target="#deletefile" onclick="DeleteFile('@item.Id')"><a id="delete-file-name" data-item="@item.Name">删除</a></a>
+
+                        <a class="btn btn-default" data-toggle="modal" href="#sharefile" onclick="ShareFile('@item.Id')"><a id="share-file-name" data-item="@item.Name">分享</a></a>
+                    </td>
+                    <td>@item.UploadTime</td>
+                    <td>@item.Size</td>
+                </tr>
+            }
 
 
         </tbody>

@@ -80,7 +80,7 @@ namespace CC98.Share.Controllers
         /// </summary>
         /// <returns>操作结果。</returns>
         [ValidateAntiForgeryToken]
-        [HttpPost]
+        [HttpGet]
         public IActionResult Download(int id)
         {
             try

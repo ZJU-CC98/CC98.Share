@@ -80,7 +80,6 @@ namespace CC98.Share.Controllers
         ///     提供下载功能。
         /// </summary>
         /// <returns>操作结果。</returns>
-       // [ValidateAntiForgeryToken]
         [HttpGet]
 		[Route("Download/{id}")]
         public IActionResult Download(int id)
@@ -107,6 +106,37 @@ namespace CC98.Share.Controllers
             }
         }
 
+        /// <summary>
+        ///     提供删除功能。
+        /// </summary>
+        /// <returns>操作结果。</returns>
+        [ValidateAntiForgeryToken]
+        [HttpGet]
+        [Route("Delete/{id}")]
+        public async Task<IActionResult> Delete(int id)
+        {
+            try
+            {
+                //将文件在数据库中的标识传入函数。
+                //并在数据库中找到此文件，删除
+                var output = from i in Model.Items where i.Id == id select i;
+                var result = output.SingleOrDefault();
+                if (result != null && result.UserName == this.User.Identity.Name)
+                {
+                    Model.Items.Remove(result);
+                    await Model.SaveChangesAsync();
+                    return RedirectToAction("Index", "Home");
+                }
+                else
+                {
+                    return StatusCode(403);
+                }
+            }
+            catch
+            {
+                return StatusCode(404);
+            }
+        }
         /// <summary>
         ///     获取ContentDisposition中的文件名称。
         /// </summary>

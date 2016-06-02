@@ -48,11 +48,12 @@ namespace CC98.Share.Controllers
         ///     显示下载界面。
         /// </summary>
         /// <returns>操作结果。</returns>
-        [HttpGet]
+        /*[HttpGet]
+		[Route("Download")]
         public IActionResult Download()
         {
             return View();
-        }
+        }*/
 		/// <summary>
 		/// 删除文件(Ruiker Task)
 		/// </summary>
@@ -79,8 +80,8 @@ namespace CC98.Share.Controllers
         ///     提供下载功能。
         /// </summary>
         /// <returns>操作结果。</returns>
-        [ValidateAntiForgeryToken]
-        [HttpPost]
+        [HttpGet]
+		[Route("Download/{id}")]
         public IActionResult Download(int id)
         {
             try
@@ -106,6 +107,37 @@ namespace CC98.Share.Controllers
         }
 
         /// <summary>
+        ///     提供删除功能。
+        /// </summary>
+        /// <returns>操作结果。</returns>
+        [ValidateAntiForgeryToken]
+        [HttpGet]
+        [Route("Delete/{id}")]
+        public async Task<IActionResult> Delete(int id)
+        {
+            try
+            {
+                //将文件在数据库中的标识传入函数。
+                //并在数据库中找到此文件，删除
+                var output = from i in Model.Items where i.Id == id select i;
+                var result = output.SingleOrDefault();
+                if (result != null && result.UserName == this.User.Identity.Name)
+                {
+                    Model.Items.Remove(result);
+                    await Model.SaveChangesAsync();
+                    return RedirectToAction("Index", "Home");
+                }
+                else
+                {
+                    return StatusCode(403);
+                }
+            }
+            catch
+            {
+                return StatusCode(404);
+            }
+        }
+        /// <summary>
         ///     获取ContentDisposition中的文件名称。
         /// </summary>
         /// <returns>操作结果。</returns>
@@ -129,7 +161,7 @@ namespace CC98.Share.Controllers
         [Authorize]
         [ValidateAntiForgeryToken]
         [HttpPost]
-        public async Task<IActionResult> Upload(IFormFile file,int value)
+        public async Task<IActionResult> Upload(IFormFile file, int value)
         {
             //首先检测是否有文件传入函数。
             if (file == null)
@@ -139,18 +171,18 @@ namespace CC98.Share.Controllers
             //随机生成一个文件名字，并将此文件插入数据库。
             var fileNameRandom = Path.GetRandomFileName();
             var tm = new ShareItem();
-			bool share;
-			if (value == 1)
-			{
-				share = true;
-			}
-			else
-			{
-				share = false;
+            bool share;
+            if (value == 1)
+            {
+                share = true;
+            }
+            else
+            {
+                share = false;
 
-			}
-			try
-			{
+            }
+            try
+            {
                 var s = GetFileName(file.ContentDisposition);
                 tm.Path = "\\" + fileNameRandom;
 
@@ -162,20 +194,20 @@ namespace CC98.Share.Controllers
                 }
                 tm.Size = file.Length;
                 tm.TotalSize += tm.Size;
-                if(tm.Size>Setting.Value.UserOnceSize)
+                if (tm.Size > Setting.Value.UserOnceSize)
                 {
                     return StatusCode(403);
                 }
-                if(tm.TotalSize>Setting.Value.UserTotalSize)
+                if (tm.TotalSize > Setting.Value.UserTotalSize)
                 {
                     return StatusCode(403);
                 }
                 tm.Name = s;
                 tm.UserName = ExternalSignInManager.GetUserName(User);
-				tm.IsShared = share;
-				Model.Items.Add(tm);
+                tm.IsShared = share;
+                Model.Items.Add(tm);
                 await Model.SaveChangesAsync();
-                return StatusCode(404);
+                return RedirectToAction("Index","Home");
             }
             catch
             {

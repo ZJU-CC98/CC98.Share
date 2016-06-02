@@ -134,7 +134,7 @@ else
 </html>
 }
 
-<form asp-action="Search" asp-controller="SearchAll" method="get">
+<form asp-action="Search" asp-controller="SearchAll" class="form-inline" method="get">
     <input type="text" asp-for="Words" class="form-control" placeholder="请输入内容" />
     <select asp-for="Mode" asp-items="list" class="form-control"></select>
     <select asp-for="Acc" asp-items="list1" class="form-control"></select>

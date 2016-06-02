@@ -40,6 +40,16 @@
 			  asp-fallback-test-class="sr-only" asp-fallback-test-property="position" asp-fallback-test-value="absolute"/>
 		<link rel="stylesheet" href="~/css/site.min.css" asp-append-version="true"/>
 	</environment>
+	<style type="text/css">
+		.search-form {
+			height: 48px;
+			background-color: #ccc;
+			border-radius: 3px;
+			text-size-adjust:150%;
+			border:0px;
+		}
+	</style>
+
 </head>
 <body>
 <div class="navbar navbar-inverse navbar-fixed-top">
@@ -53,32 +63,32 @@
 			</button>
 			<a asp-controller="Home" asp-action="Index" class="navbar-brand">CC98.Share</a>
 		</div>
-		<div class="navbar-collapse collapse">
+		<div class="navbar-collapse">
 			<ul class="nav navbar-nav">
 				<li>
 					<a asp-controller="Home" asp-action="Index">我的share</a>
 				</li>
-			    <li>
-			        <a asp-controller="Home" asp-action="About">关于share</a>
-			    </li>
-			    <li>
-                    <form asp-action="Search" asp-controller="SearchAll" class="form-inline" method="get" >
-                        <input type="text" asp-for="Words" class="form-control " placeholder="请输入内容" />
-                        <select asp-for="Mode" asp-items="list" class="form-control "></select>
-                        <select asp-for="Acc" asp-items="list1" class="form-control "></select>
+				<li>
+					<a asp-controller="Home" asp-action="About">关于share</a>
+				</li>
+				<li>
+				   <form asp-action="Search" asp-controller="SearchAll"  method="get" style="padding-top:10px">
+					<input type="text" asp-for="Words" class="search-form" placeholder="请输入内容" style="height:28px"/>
+					<select asp-for="Mode" asp-items="list" class="search-form" style="height:28px"></select>
+					<select asp-for="Acc" asp-items="list1" class="search-form" style="height:28px"></select>
 
-                        <button type="submit" class="btn btn-default btn-primary">搜索</button>
-                    </form>
-			    </li>
+					<button type="submit" class="btn btn-sm btn-primary ">搜索</button>
+				</form>
+				</li>
 				@*<li>
 					<a asp-controller="Home" asp-action="Contact">Contact</a>
 				</li>
 				<li>
 		<a asp-controller="File" asp-action="Download">Download</a>
-	</li>
+	</li*@
 	<li>
-		<a asp-controller="File" asp-action="Upload">Upload</a>
-	</li>*@
+		<a asp-controller="File" asp-action="Upload">上传文件</a>
+	</li>
 			</ul>
 			@await Html.PartialAsync("_LoginPartial")
 		</div>

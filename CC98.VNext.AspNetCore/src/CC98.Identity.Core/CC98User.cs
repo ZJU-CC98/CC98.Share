@@ -24,5 +24,10 @@
         ///     获取或设置用户角色。
         /// </summary>
         public string[] Roles { get; set; }
+
+        /// <summary>
+        /// 获取或设置用户的头像地址。
+        /// </summary>
+        public string PortraitUrl { get; set; }
     }
 }

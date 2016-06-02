@@ -42,7 +42,8 @@ namespace CC98.Identity
                 new Claim(ClaimTypes.NameIdentifier, userInfo.V2Id.ToString("D", CultureInfo.InvariantCulture),
                     ClaimValueTypes.Integer),
                 new Claim(CC98UserClaimTypes.OldId, userInfo.V1Id.ToString("D", CultureInfo.InvariantCulture),
-                    ClaimValueTypes.Integer)
+                    ClaimValueTypes.Integer),
+                new Claim(CC98UserClaimTypes.PortraitUri, userInfo.PortraitUrl)
             };
 
             // 角色
@@ -68,7 +69,7 @@ namespace CC98.Identity
         /// </exception>
         /// <seealso cref="ToIdentity" />
         public static ClaimsPrincipal ToPrincipal(this CC98User userInfo, string authenticationType)
-            => new ClaimsPrincipal(new[] {userInfo.ToIdentity(authenticationType)});
+            => new ClaimsPrincipal(new[] { userInfo.ToIdentity(authenticationType) });
 
         /// <summary>
         ///     将 <see cref="ClaimsIdentity" /> 对象转换为 <see cref="CC98User" /> 对象。
@@ -89,6 +90,7 @@ namespace CC98.Identity
                 Name = identity.Name,
                 V1Id = identity.GetOldId(),
                 V2Id = identity.GetId(),
+                PortraitUrl = identity.GetPortraitUri(),
                 Roles = identity.GetRoles().ToArray()
             };
         }

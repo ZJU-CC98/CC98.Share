@@ -14,5 +14,10 @@
         ///     访问令牌标识。
         /// </summary>
         public const string AccessToken = "http://schemas.cc98.org/ws/2015/01/identity/claims/accesstoken";
+
+        /// <summary>
+        /// 用户头像标识。
+        /// </summary>
+        public const string PortraitUri = "http://schemas.cc98.org/ws/2014/06/identity/claims/portraitUri";
     }
 }

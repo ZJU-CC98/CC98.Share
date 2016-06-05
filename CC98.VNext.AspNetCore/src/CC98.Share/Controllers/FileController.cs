@@ -126,12 +126,74 @@ namespace CC98.Share.Controllers
             {
                 return StatusCode(404);
             }
-        }
-        /// <summary>
-        ///     获取ContentDisposition中的文件名称。
-        /// </summary>
-        /// <returns>操作结果。</returns>
-        public string GetFileName(string contentDisposition)
+		}  
+		/// <summary>
+		///     提供分享功能。
+		/// </summary>
+		/// <returns>操作结果。</returns>
+		//[ValidateAntiForgeryToken]
+		[HttpGet]
+		[Route("Share/{id}")]
+		public async Task<IActionResult> Share(int id)
+		{
+			try
+			{
+				//将文件在数据库中的标识传入函数。
+				//并在数据库中找到此文件，改为允许分享
+				var output = from i in Model.Items where i.Id == id select i;
+				var result = output.SingleOrDefault();
+				if (result != null && result.UserName == this.User.Identity.Name)
+				{
+					result.IsShared = true;
+					await Model.SaveChangesAsync();
+					return RedirectToAction("Index", "Home");
+				}
+				else
+				{
+					return StatusCode(403);
+				}
+			}
+			catch
+			{
+				return StatusCode(404);
+			}
+		}
+		/// <summary>
+		///     提供取消分享功能。
+		/// </summary>
+		/// <returns>操作结果。</returns>
+		//[ValidateAntiForgeryToken]
+		[HttpGet]
+		[Route("CancelShare/{id}")]
+		public async Task<IActionResult> CancelShare(int id)
+		{
+			try
+			{
+				//将文件在数据库中的标识传入函数。
+				//并在数据库中找到此文件，改为允许分享
+				var output = from i in Model.Items where i.Id == id select i;
+				var result = output.SingleOrDefault();
+				if (result != null && result.UserName == this.User.Identity.Name)
+				{
+					result.IsShared = false;
+					await Model.SaveChangesAsync();
+					return RedirectToAction("Index", "Home");
+				}
+				else
+				{
+					return StatusCode(403);
+				}
+			}
+			catch
+			{
+				return StatusCode(404);
+			}
+		}
+		/// <summary>
+		///     获取ContentDisposition中的文件名称。
+		/// </summary>
+		/// <returns>操作结果。</returns>
+		public string GetFileName(string contentDisposition)
         {
             //获取文件名称的起始位置。
             var startIndex = contentDisposition.IndexOf("filename=\"", StringComparison.OrdinalIgnoreCase) + 10;

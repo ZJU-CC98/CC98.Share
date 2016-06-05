@@ -130,7 +130,7 @@ else
                             <a class="btn btn-link" asp-action="Download" asp-controller="File" asp-route-id="@item.Id">下载</a>
 							<button class="btn btn-link" data-toggle="modal" herf="#deletefile" onclick="DeleteFile('@item.Id'，'@item.Name')">删除</button>
 							@*需要判断文件状态选择显示哪个功能*@
-							<button class="btn btn-link" data-toggle="modal" href="#sharefile" onclick="ShareFile('@item.Id','@item.Name')">分享</button>
+							<button class="btn btn-link" data-toggle="modal" href="#share" onclick="Share('@item.Id','@item.Name')">分享</button>
 							<button class="btn btn-link" data-toggle="modal" href="#cancelshare" onclick="CancelShare('@item.Id','@item.Name')">取消分享</button>
                         </td>
                         <td>@item.UploadTime</td>

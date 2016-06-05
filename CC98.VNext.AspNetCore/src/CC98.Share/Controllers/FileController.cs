@@ -56,15 +56,7 @@ namespace CC98.Share.Controllers
         }*/
 		
 
-		/// <summary>
-		/// 分享文件(Ruiker Task)
-		/// </summary>
-		/// <param name="id"></param>
-		/// <returns></returns>
-		public IActionResult ShareFile(int id)
-		{
-			return View();
-		}
+		
 
         /// <summary>
         ///     提供下载功能。
@@ -101,8 +93,8 @@ namespace CC98.Share.Controllers
         /// </summary>
         /// <returns>操作结果。</returns>
         //[ValidateAntiForgeryToken]
-        [HttpGet]
-        [Route("Delete/{id}")]
+        [HttpPost]
+        [Route("DeleteFile/{id}")]
         public async Task<IActionResult> DeleteFile(int id)
         {
             try
@@ -133,8 +125,8 @@ namespace CC98.Share.Controllers
 		/// <returns>操作结果。</returns>
 		//[ValidateAntiForgeryToken]
 		[HttpGet]
-		[Route("Share/{id}")]
-		public async Task<IActionResult> Share(int id)
+		[Route("ShareFile/{id}")]
+		public async Task<IActionResult> ShareFile(int id)
 		{
 			try
 			{

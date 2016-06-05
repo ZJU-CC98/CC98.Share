@@ -128,10 +128,10 @@ else
 
                         <td style="text-align: center">
                             <a class="btn btn-link" asp-action="Download" asp-controller="File" asp-route-id="@item.Id">下载</a>
-							<button class="btn btn-link" data-toggle="modal" herf="#deletefile" onclick="DeleteFile('@item.Id'，'@item.Name')">删除</button>
+							<button class="btn btn-link" data-toggle="modal" data-target="#deletefile" data-id="@item.Id" data-name="@item.Name" onclick="DeleteFile(this)">删除</button>
 							@*需要判断文件状态选择显示哪个功能*@
-							<button class="btn btn-link" data-toggle="modal" href="#share" onclick="Share('@item.Id','@item.Name')">分享</button>
-							<button class="btn btn-link" data-toggle="modal" href="#cancelshare" onclick="CancelShare('@item.Id','@item.Name')">取消分享</button>
+							<button class="btn btn-link" data-toggle="modal" href="#sharefile"  data-id="@item.Id" data-name="@item.Name" onclick="ShareFile(this)">分享</button>
+							<button class="btn btn-link" data-toggle="modal" href="#cancelshare"  data-id="@item.Id" data-name="@item.Name" onclick="CancelShare(this)">取消分享</button>
                         </td>
                         <td>@item.UploadTime</td>
                         <td>@item.Size</td>
@@ -205,10 +205,8 @@ background-color:#efefef;display:none;">
 	<div id="deletefile" class="modal fade in" style="width:450px;height:200px;position:absolute;margin: 10% 25%;
 background-color:#efefef;display:none;">
 		<div class="modal-header">
-			<a class="close" data-dismiss="modal"></a>
-			<h3>删除文件</h3>
-			<!--<a class="close" data-dismiss="modal">x</a>
-			<h4>永久删除以下文件</h4><p id="delete-file-name-in"></p>-->
+			<a class="close" data-dismiss="modal">x</a>
+			<h4>永久删除以下文件</h4><p id="delete-file-name-in"></p>
 		</div>
 		<div class="modal-body" style="margin-left:20px">
 			
@@ -241,15 +239,21 @@ background-color:#efefef;display:none;">
 	</div>
 </form>
 <script type="text/javascript">
-	function DeleteFile(id,FileName)
+	function DeleteFile(obj)
 	{
-		$('#delete-file-id-input').val(id);
-		$('#delete-file-name-in').text(FileName);
+		$('#delete-file-id-input').val($(obj).data('id'));
+		$('#delete-file-name-in').text($(obj).data('name'));
 	}
 
-	function ShareFile(id,FileName)
+	function ShareFile(obj)
 	{
-		$('#share-file-id-input').val(id);
-		$('#share-file-name-in').text(FileName);
+		$('#share-file-id-input').val($(obj).data('id'));
+		$('#share-file-name-in').text($(obj).data('name'));
+	}
+
+	function CancelShare(obj)
+	{
+		$('#cancel-share-file-id-input').val($(obj).data('id'));
+		$('#cancel-share-file-name-in').text($(obj).data('name'));
 	}
 </script>

@@ -94,7 +94,7 @@ namespace CC98.Share.Controllers
         /// <returns>操作结果。</returns>
         //[ValidateAntiForgeryToken]
         [HttpPost]
-        [Route("DeleteFile/{id}")]
+     
         public async Task<IActionResult> DeleteFile(int id)
         {
             try
@@ -125,7 +125,7 @@ namespace CC98.Share.Controllers
 		/// <returns>操作结果。</returns>
 		//[ValidateAntiForgeryToken]
 		[HttpGet]
-		[Route("ShareFile/{id}")]
+
 		public async Task<IActionResult> ShareFile(int id)
 		{
 			try
@@ -156,7 +156,6 @@ namespace CC98.Share.Controllers
 		/// <returns>操作结果。</returns>
 		//[ValidateAntiForgeryToken]
 		[HttpGet]
-		[Route("CancelShare/{id}")]
 		public async Task<IActionResult> CancelShare(int id)
 		{
 			try

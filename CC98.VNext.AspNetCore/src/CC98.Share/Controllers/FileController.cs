@@ -54,16 +54,6 @@ namespace CC98.Share.Controllers
         {
             return View();
         }*/
-		/// <summary>
-		/// 删除文件(Ruiker Task)
-		/// </summary>
-		/// <param name="id"></param>
-		/// <returns></returns>
-		public IActionResult DeleteFile(int id)
-		{
-			return View();
-		}
-
 		
 
 		/// <summary>
@@ -110,10 +100,10 @@ namespace CC98.Share.Controllers
         ///     提供删除功能。
         /// </summary>
         /// <returns>操作结果。</returns>
-        [ValidateAntiForgeryToken]
+        //[ValidateAntiForgeryToken]
         [HttpGet]
         [Route("Delete/{id}")]
-        public async Task<IActionResult> Delete(int id)
+        public async Task<IActionResult> DeleteFile(int id)
         {
             try
             {

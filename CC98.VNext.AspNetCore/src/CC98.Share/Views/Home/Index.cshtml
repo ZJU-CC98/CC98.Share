@@ -128,10 +128,10 @@ else
 
                         <td style="text-align: center">
                             <a class="btn btn-link" asp-action="Download" asp-controller="File" asp-route-id="@item.Id">下载</a>
-							<button class="btn btn-link" data-toggle="modal" data-target="#deletefile" onclick="DeleteFile('@item.Id')"><a id="delete-file-name" data-item="@item.Name">删除</a></button>
+							<button class="btn btn-link" data-toggle="modal" herf="#deletefile" onclick="DeleteFile('@item.Id'，'@item.Name')">删除</button>
 							@*需要判断文件状态选择显示哪个功能*@
-							<button class="btn btn-link" data-toggle="modal" href="#sharefile" onclick="ShareFile('@item.Id')"><a id="share-file-name" data-item="@item.Name">分享</a></button>
-							<button class="btn btn-link" data-toggle="modal" href="#cancelshare" onclick="CancelShare('@item.Id')">取消分享</button>
+							<button class="btn btn-link" data-toggle="modal" href="#sharefile" onclick="ShareFile('@item.Id','@item.Name')">分享</button>
+							<button class="btn btn-link" data-toggle="modal" href="#cancelshare" onclick="CancelShare('@item.Id','@item.Name')">取消分享</button>
                         </td>
                         <td>@item.UploadTime</td>
                         <td>@item.Size</td>
@@ -185,7 +185,7 @@ background-color:#efefef;display:none;">
 background-color:#efefef;display:none;">
 			<div class="modal-header">
 				<a class="close" data-dismiss="modal"></a>
-				<h3>分享文件<small></small>$('#share-file-name').data('item')</h3>
+				<h3>分享文件<p id="share-file-name-in"></p></h3>
 			</div>
 			<div class="modal-body" style="margin-left:20px">
 				<h5>链接已创建</h5>
@@ -205,12 +205,13 @@ background-color:#efefef;display:none;">
 	<div id="deletefile" class="modal fade in" style="width:450px;height:200px;position:absolute;margin: 10% 25%;
 background-color:#efefef;display:none;">
 		<div class="modal-header">
-
-			<a class="close" data-dismiss="modal">x</a>
-			<h4>永久删除以下文件</h4>
+			<a class="close" data-dismiss="modal"></a>
+			<h3>删除文件</h3>
+			<!--<a class="close" data-dismiss="modal">x</a>
+			<h4>永久删除以下文件</h4><p id="delete-file-name-in"></p>-->
 		</div>
 		<div class="modal-body" style="margin-left:20px">
-			<p>$('#delete-file-name').data('item')</p>
+			
 		</div>
 		<div class="modal-footer">
 
@@ -230,7 +231,7 @@ background-color:#efefef;display:none;">
 			<h4>您选择取消分享以下文件</h4>
 		</div>
 		<div class="modal-body" style="margin-left:20px">
-			<p>$('#delete-file-name').data('item')</p>
+			<p id="cancel-share-file-name"></p>
 		</div>
 		<div class="modal-footer">
 
@@ -240,13 +241,15 @@ background-color:#efefef;display:none;">
 	</div>
 </form>
 <script type="text/javascript">
-	function DeleteFile(id)
+	function DeleteFile(id,FileName)
 	{
 		$('#delete-file-id-input').val(id);
+		$('#delete-file-name-in').text(FileName);
 	}
 
-	function ShareFile(id)
+	function ShareFile(id,FileName)
 	{
 		$('#share-file-id-input').val(id);
+		$('#share-file-name-in').text(FileName);
 	}
 </script>

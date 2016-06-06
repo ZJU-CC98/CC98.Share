@@ -51,7 +51,7 @@ namespace CC98.Identity
                 throw new ArgumentNullException(nameof(identity));
             }
 
-            return identity.FindFirst(CC98UserClaimTypes.PortraitUri).Value;
+            return identity.FindFirst(CC98UserClaimTypes.PortraitUri)?.Value;
         }
 
         /// <summary>
@@ -96,7 +96,7 @@ namespace CC98.Identity
                 throw new ArgumentNullException(nameof(principal));
             }
 
-            return principal.FindFirst(CC98UserClaimTypes.PortraitUri).Value;
+            return principal.FindFirst(CC98UserClaimTypes.PortraitUri)?.Value;
         }
 
         /// <summary>

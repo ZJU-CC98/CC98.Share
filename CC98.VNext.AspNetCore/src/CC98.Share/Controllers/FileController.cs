@@ -104,13 +104,13 @@ namespace CC98.Share.Controllers
             }
         }
 
-        /// <summary>
-        ///     提供分享功能。
-        /// </summary>
-        /// <returns>操作结果。</returns>
-        //[ValidateAntiForgeryToken]
-        [HttpGet]
-        public async Task<IActionResult> ShareFile(int id)
+		/// <summary>
+		///     提供分享功能。
+		/// </summary>
+		/// <returns>操作结果。</returns>
+		//[ValidateAntiForgeryToken]
+		[HttpPost]
+		public async Task<IActionResult> ShareFile(int id)
         {
             try
             {
@@ -132,13 +132,13 @@ namespace CC98.Share.Controllers
             }
         }
 
-        /// <summary>
-        ///     提供取消分享功能。
-        /// </summary>
-        /// <returns>操作结果。</returns>
-        //[ValidateAntiForgeryToken]
-        [HttpGet]
-        public async Task<IActionResult> CancelShare(int id)
+		/// <summary>
+		///     提供取消分享功能。
+		/// </summary>
+		/// <returns>操作结果。</returns>
+		//[ValidateAntiForgeryToken]
+		[HttpPost]
+		public async Task<IActionResult> CancelShare(int id)
         {
             try
             {

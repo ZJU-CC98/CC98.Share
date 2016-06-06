@@ -181,21 +181,22 @@ background-color:#efefef;display:none;">
 @*分享界面，需要产生独特的链接*@
 <form asp-action="ShareFile" asp-controller="File">
 	<input type="hidden" id="share-file-id-input" name="id" />
-		<div id="sharefile" class="modal fade in" style="width:450px;height:350px;position:absolute;margin: 10% 25%;
+		<div id="sharefile" class="modal fade in" style="width:450px;height:200px;position:absolute;margin: 10% 25%;
 background-color:#efefef;display:none;">
 			<div class="modal-header">
 				<a class="close" data-dismiss="modal"></a>
-				<h3>分享文件<p id="share-file-name-in"></p></h3>
+				<h3>分享文件</h3>
+				<p class="lead" id="share-file-name-in"></p>
 			</div>
-			<div class="modal-body" style="margin-left:20px">
-				<h5>链接已创建</h5>
-				<input type="text" class="form-control" value="http://pan.baidu.com/s/1hrkN9Ta" />
+			@*<div class="modal-body" style="margin-left:20px">
+		<h5>您选择分享以下文件</h5>
 
-			</div>
+
+	</div>*@
 			<div class="modal-footer">
 				<span id="copysuccess" style="display:none">复制成功！</span>
-				<a href="#" class="btn btn-success">复制链接</a><!--How????-->
-				<a href="#" class="btn" data-dismiss="modal"type="submit">关闭</a>
+				<a href="#" class="btn btn-success">确认</a><!--How????-->
+				<a href="#" class="btn" data-dismiss="modal"type="submit">取消</a>
 			</div>
 		</div>
 </form>
@@ -256,7 +257,7 @@ background-color:#efefef;display:none;">
 		$('#cancel-share-file-id-input').val($(obj).data('id'));
 		$('#cancel-share-file-name-in').text($(obj).data('name'));
 	}
-	function JudgeFile() {
+	function JudgeFile() {@*用于上传文件时判断是否已选择文件，若没有选择，则无法上传*@
 		if ($('#lefile').val() == "") {
 			$('#uploadFile').attr('disabled', 'disabled');
 

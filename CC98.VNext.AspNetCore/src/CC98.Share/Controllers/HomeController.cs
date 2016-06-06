@@ -90,6 +90,12 @@ namespace CC98.Share.Controllers
 
 			return View();
 		}
+		public IActionResult Fileinfo()
+		{
+			ViewData["Message"] = "开发中";
+
+			return View();
+		}
 
 		/// <summary>
 		///     当网站发生错误时显示的页面。

@@ -83,14 +83,14 @@ else
         <div style="display:inline;text-align:right;margin-top:10px">
 
             <form class="form-inline" style="float:left;text-align:left;" asp-action="Upload" asp-controller="File" asp-antiforgery="true" enctype="multipart/form-data">
-                <input id="lefile" type="file" name="file" style="display:none; float:left;text-align:left;">
+                <input id="lefile" type="file" name="file" style="display:none; float:left;text-align:left;" onchange="JudgeFile()">
                 <div class="input-append">
 
                     <a onclick="$('input[id=lefile]').click();">
                         <input id="photoCover" class="btn btn-default" type="text" value="点此选择文件" style="text-align:left">
                         
 
-                    </a><button type="submit" class="btn btn-default"> 上传文件 </button>
+                    </a><button id="uploadFile" type="submit" class="btn btn-default" disabled="disabled"> 上传文件 </button>
                 </div>
             </form>
             <script type="text/javascript">
@@ -255,5 +255,16 @@ background-color:#efefef;display:none;">
 	{
 		$('#cancel-share-file-id-input').val($(obj).data('id'));
 		$('#cancel-share-file-name-in').text($(obj).data('name'));
+	}
+	function JudgeFile() {
+		if ($('#lefile').val() == "") {
+			$('#uploadFile').attr('disabled', 'disabled');
+
+		}
+		else {
+			$('#uploadFile').removeAttr('disabled');
+			$('#photoCover').val($('#lefile').val());
+		}
+
 	}
 </script>

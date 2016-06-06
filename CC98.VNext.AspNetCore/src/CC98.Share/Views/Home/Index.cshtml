@@ -1,5 +1,6 @@
 ﻿@using CC98.Share.Data
 @using Sakura.AspNetCore
+@using CC98.Identity
 @model CC98.Share.ViewModels.SearchAll.SearchModeViewModel
 @{
     Layout = "_Layout";
@@ -42,7 +43,8 @@ else
         <ul style="list-style: none;">
             <li class="person-li">
                 @*需要后端调用一下用户头像*@
-                <img class="img-thumbnail" width="120" height="120" src="~/images/index_pic.png"/>
+                <img class="img-thumbnail" width="120" height="120" id="UserPhoto" src="@User.GetPortraitUri()"/>
+				
             </li>
             <li class="person-li">
                 <h4>
@@ -67,7 +69,7 @@ else
             </li>
             <li class="person-li">
                 <br/>
-                <p>???</p>
+                <p>问樱桃</p>
                 可用容量
             </li>
 
@@ -83,7 +85,7 @@ else
         <div style="display: inline; margin-top: 10px; text-align: right;">
 
             <form class="form-inline" style="float: left; text-align: left;" asp-action="Upload" asp-controller="File" asp-antiforgery="true" enctype="multipart/form-data">
-                <input id="lefile" type="file" name="file" style="display: none; float: left; text-align: left;" onchange="JudgeFile()">
+                <input id="lefile" type="file" name="file" style="display: none; float: left; text-align: left;" onchange="JudgeFile()" multiple="multiple">
                 <div class="input-append">
 
                     <a onclick="$('input[id=lefile]').click();">

@@ -3,7 +3,6 @@ using CC98.Share.Data;
 using CC98.Share.ViewModels.SearchAll;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc;
-using Sakura.AspNetCore;
 
 // For more information on enabling MVC for empty projects, visit http://go.microsoft.com/fwlink/?LinkID=397860
 
@@ -171,30 +170,32 @@ namespace CC98.Share.Controllers
                 {
                     case Valuation.UserName:
                         result = from i in UserDb.Items
-                            orderby i.Id
-                            where i.UserName == search.Words && (i.IsShared == true ||i.UserName==this.User.Identity.Name)
+                                 orderby i.Id
+                                 where i.UserName == search.Words && (i.IsShared || i.UserName == User.Identity.Name)
                                  select i;
                         break;
 
 
                     case Valuation.FileName:
                         result = from i in UserDb.Items
-                            orderby i.Id
-                            where i.Name == search.Words && (i.IsShared == true || i.UserName == this.User.Identity.Name)
+                                 orderby i.Id
+                                 where i.Name == search.Words && (i.IsShared || i.UserName == User.Identity.Name)
                                  select i;
                         break;
 
                     case Valuation.Discription:
                         result = from i in UserDb.Items
-                            orderby i.Id
-                            where i.Description == search.Words && (i.IsShared == true || i.UserName == this.User.Identity.Name)
+                                 orderby i.Id
+                                 where i.Description == search.Words && (i.IsShared || i.UserName == User.Identity.Name)
                                  select i;
                         break;
 
                     case Valuation.FileNameAndDis:
                         result = from i in UserDb.Items
-                            orderby i.Id
-                            where i.Description == search.Words && i.Name == search.Words && (i.IsShared == true || i.UserName == this.User.Identity.Name)
+                                 orderby i.Id
+                                 where
+                                 i.Description == search.Words && i.Name == search.Words &&
+                                 (i.IsShared || i.UserName == User.Identity.Name)
                                  select i;
                         break;
 
@@ -232,31 +233,35 @@ namespace CC98.Share.Controllers
                 {
                     case Valuation.UserName:
                         result = from i in UserDb.Items
-                            orderby i.Id
-                            where i.UserName.Contains(search.Words) && (i.IsShared == true || i.UserName == this.User.Identity.Name)
+                                 orderby i.Id
+                                 where
+                                 i.UserName.Contains(search.Words) && (i.IsShared || i.UserName == User.Identity.Name)
                                  select i;
                         break;
 
 
                     case Valuation.FileName:
                         result = from i in UserDb.Items
-                            orderby i.Id
-                            where i.Name.Contains(search.Words) && (i.IsShared == true || i.UserName == this.User.Identity.Name)
+                                 orderby i.Id
+                                 where i.Name.Contains(search.Words) && (i.IsShared || i.UserName == User.Identity.Name)
                                  select i;
                         break;
 
                     case Valuation.Discription:
                         result = from i in UserDb.Items
-                            orderby i.Id
-                            where i.Description.Contains(search.Words) && (i.IsShared == true || i.UserName == this.User.Identity.Name)
+                                 orderby i.Id
+                                 where
+                                 i.Description.Contains(search.Words) &&
+                                 (i.IsShared || i.UserName == User.Identity.Name)
                                  select i;
                         break;
 
                     case Valuation.FileNameAndDis:
                         result = from i in UserDb.Items
-                            orderby i.Id
-                            where
-                                i.Description.Contains(search.Words) && i.Name.Contains(search.Words) && (i.IsShared == true || i.UserName == this.User.Identity.Name)
+                                 orderby i.Id
+                                 where
+                                 i.Description.Contains(search.Words) && i.Name.Contains(search.Words) &&
+                                 (i.IsShared || i.UserName == User.Identity.Name)
                                  select i;
                         break;
 

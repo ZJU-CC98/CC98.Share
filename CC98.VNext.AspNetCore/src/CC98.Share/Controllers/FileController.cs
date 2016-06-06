@@ -17,7 +17,8 @@ namespace CC98.Share.Controllers
     /// </summary>
     public class FileController : Controller
     {
-        public FileController(IHostingEnvironment environment, CC98ShareModel model, ExternalSignInManager externalSignInManager, IOptions<Setting> setting)
+        public FileController(IHostingEnvironment environment, CC98ShareModel model,
+            ExternalSignInManager externalSignInManager, IOptions<Setting> setting)
         {
             Environment = environment;
             Model = model;
@@ -48,22 +49,12 @@ namespace CC98.Share.Controllers
         ///     显示下载界面。
         /// </summary>
         /// <returns>操作结果。</returns>
-        /*[HttpGet]
-		[Route("Download")]
-        public IActionResult Download()
-        {
-            return View();
-        }*/
-		
-
-		
-
         /// <summary>
         ///     提供下载功能。
         /// </summary>
         /// <returns>操作结果。</returns>
         [HttpGet]
-		[Route("Download/{id}")]
+        [Route("Download/{id}")]
         public IActionResult Download(int id)
         {
             try
@@ -72,15 +63,12 @@ namespace CC98.Share.Controllers
                 //并在数据库中找到此文件，返回给用户
                 var output = from i in Model.Items where i.Id == id select i;
                 var result = output.SingleOrDefault();
-                if (result != null&&result.IsShared||result != null&&result.UserName==this.User.Identity.Name)
+                if (result != null && result.IsShared || result != null && result.UserName == User.Identity.Name)
                 {
                     var addressName = Setting.Value.StoreFolder + result.Path;
                     return PhysicalFile(addressName, "application/octet-stream", result.Name);
                 }
-				else
-				{
-					return StatusCode(403);
-				}
+                return StatusCode(403);
             }
             catch
             {
@@ -94,7 +82,6 @@ namespace CC98.Share.Controllers
         /// <returns>操作结果。</returns>
         //[ValidateAntiForgeryToken]
         [HttpPost]
-     
         public async Task<IActionResult> DeleteFile(int id)
         {
             try
@@ -103,88 +90,81 @@ namespace CC98.Share.Controllers
                 //并在数据库中找到此文件，删除
                 var output = from i in Model.Items where i.Id == id select i;
                 var result = output.SingleOrDefault();
-                if (result != null && result.UserName == this.User.Identity.Name)
+                if (result != null && result.UserName == User.Identity.Name)
                 {
                     Model.Items.Remove(result);
                     await Model.SaveChangesAsync();
                     return RedirectToAction("Index", "Home");
                 }
-                else
-                {
-                    return StatusCode(403);
-                }
+                return StatusCode(403);
             }
             catch
             {
                 return StatusCode(404);
             }
-		}  
-		/// <summary>
-		///     提供分享功能。
-		/// </summary>
-		/// <returns>操作结果。</returns>
-		//[ValidateAntiForgeryToken]
-		[HttpGet]
+        }
 
-		public async Task<IActionResult> ShareFile(int id)
-		{
-			try
-			{
-				//将文件在数据库中的标识传入函数。
-				//并在数据库中找到此文件，改为允许分享
-				var output = from i in Model.Items where i.Id == id select i;
-				var result = output.SingleOrDefault();
-				if (result != null && result.UserName == this.User.Identity.Name)
-				{
-					result.IsShared = true;
-					await Model.SaveChangesAsync();
-					return RedirectToAction("Index", "Home");
-				}
-				else
-				{
-					return StatusCode(403);
-				}
-			}
-			catch
-			{
-				return StatusCode(404);
-			}
-		}
-		/// <summary>
-		///     提供取消分享功能。
-		/// </summary>
-		/// <returns>操作结果。</returns>
-		//[ValidateAntiForgeryToken]
-		[HttpGet]
-		public async Task<IActionResult> CancelShare(int id)
-		{
-			try
-			{
-				//将文件在数据库中的标识传入函数。
-				//并在数据库中找到此文件，改为允许分享
-				var output = from i in Model.Items where i.Id == id select i;
-				var result = output.SingleOrDefault();
-				if (result != null && result.UserName == this.User.Identity.Name)
-				{
-					result.IsShared = false;
-					await Model.SaveChangesAsync();
-					return RedirectToAction("Index", "Home");
-				}
-				else
-				{
-					return StatusCode(403);
-				}
-			}
-			catch
-			{
-				return StatusCode(404);
-			}
-		}
-		/// <summary>
-		///     获取ContentDisposition中的文件名称。
-		/// </summary>
-		/// <returns>操作结果。</returns>
-		public string GetFileName(string contentDisposition)
+        /// <summary>
+        ///     提供分享功能。
+        /// </summary>
+        /// <returns>操作结果。</returns>
+        //[ValidateAntiForgeryToken]
+        [HttpGet]
+        public async Task<IActionResult> ShareFile(int id)
+        {
+            try
+            {
+                //将文件在数据库中的标识传入函数。
+                //并在数据库中找到此文件，改为允许分享
+                var output = from i in Model.Items where i.Id == id select i;
+                var result = output.SingleOrDefault();
+                if (result != null && result.UserName == User.Identity.Name)
+                {
+                    result.IsShared = true;
+                    await Model.SaveChangesAsync();
+                    return RedirectToAction("Index", "Home");
+                }
+                return StatusCode(403);
+            }
+            catch
+            {
+                return StatusCode(404);
+            }
+        }
+
+        /// <summary>
+        ///     提供取消分享功能。
+        /// </summary>
+        /// <returns>操作结果。</returns>
+        //[ValidateAntiForgeryToken]
+        [HttpGet]
+        public async Task<IActionResult> CancelShare(int id)
+        {
+            try
+            {
+                //将文件在数据库中的标识传入函数。
+                //并在数据库中找到此文件，改为允许分享
+                var output = from i in Model.Items where i.Id == id select i;
+                var result = output.SingleOrDefault();
+                if (result != null && result.UserName == User.Identity.Name)
+                {
+                    result.IsShared = false;
+                    await Model.SaveChangesAsync();
+                    return RedirectToAction("Index", "Home");
+                }
+                return StatusCode(403);
+            }
+            catch
+            {
+                return StatusCode(404);
+            }
+        }
+
+        /// <summary>
+        ///     获取ContentDisposition中的文件名称。
+        /// </summary>
+        /// <returns>操作结果。</returns>
+        public string GetFileName(string contentDisposition)
         {
             //获取文件名称的起始位置。
             var startIndex = contentDisposition.IndexOf("filename=\"", StringComparison.OrdinalIgnoreCase) + 10;
@@ -222,7 +202,6 @@ namespace CC98.Share.Controllers
             else
             {
                 share = false;
-
             }
             try
             {
@@ -250,7 +229,7 @@ namespace CC98.Share.Controllers
                 tm.IsShared = share;
                 Model.Items.Add(tm);
                 await Model.SaveChangesAsync();
-                return RedirectToAction("Index","Home");
+                return RedirectToAction("Index", "Home");
             }
             catch
             {

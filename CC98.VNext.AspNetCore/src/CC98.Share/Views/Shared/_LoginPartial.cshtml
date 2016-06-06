@@ -1,4 +1,5 @@
-﻿@inject CC98.Identity.ExternalSignInManager ExternalSignInManager
+﻿@using CC98.Identity
+@inject ExternalSignInManager ExternalSignInManager
 
 
 @if (ExternalSignInManager.IsSignedIn(User))

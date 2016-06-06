@@ -1,9 +1,9 @@
 ﻿using System;
+using CC98.Share.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
 using Microsoft.EntityFrameworkCore.Migrations;
-using CC98.Share.Data;
 
 namespace cc98.share.Migrations
 {

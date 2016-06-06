@@ -9,22 +9,20 @@ namespace CC98.Share.Data
     public class CC98ShareModel : DbContext
     {
         /// <summary>
-        /// 创建一个新的数据库模型对象。
+        ///     创建一个新的数据库模型对象。
         /// </summary>
         public CC98ShareModel()
         {
-
         }
 
 
         /// <summary>
-        /// 创建一个新的数据库模型对象。
+        ///     创建一个新的数据库模型对象。
         /// </summary>
         /// <param name="options">数据库上下文选项。</param>
         public CC98ShareModel(DbContextOptions options)
             : base(options)
         {
-
         }
 
         /// <summary>

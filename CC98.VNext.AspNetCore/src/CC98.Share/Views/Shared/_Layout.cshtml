@@ -1,86 +1,84 @@
-﻿@using System.Collections.Generic
-@using CC98.Share.ViewModels.SearchAll
-@using CC98.Share
+﻿@using CC98.Share
 @using CC98.Share.Data
-@using Microsoft.AspNetCore.Mvc.Rendering
+@using CC98.Share.ViewModels.SearchAll
 @using Sakura.AspNetCore
-@model SearchModeViewModel
+@model CC98.Share.ViewModels.SearchAll.SearchModeViewModel
 @{
 
 
     var list = new List<SelectListItem>();
 
-    list.Add(new SelectListItem { Text = "发布者", Value = nameof(Valuation.UserName), Selected = false });
-    list.Add(new SelectListItem { Text = "文件名", Value = nameof(Valuation.FileName), Selected = false });
-    list.Add(new SelectListItem { Text = "描述", Value = nameof(Valuation.Discription), Selected = false });
-    list.Add(new SelectListItem { Text = "文件名及描述", Value = nameof(Valuation.FileNameAndDis), Selected = false });
-    var data = (ShareItem[])ViewData["List"];
+    list.Add(new SelectListItem {Text = "发布者", Value = nameof(Valuation.UserName), Selected = false});
+    list.Add(new SelectListItem {Text = "文件名", Value = nameof(Valuation.FileName), Selected = false});
+    list.Add(new SelectListItem {Text = "描述", Value = nameof(Valuation.Discription), Selected = false});
+    list.Add(new SelectListItem {Text = "文件名及描述", Value = nameof(Valuation.FileNameAndDis), Selected = false});
+    var data = (ShareItem[]) ViewData["List"];
     var list1 = new List<SelectListItem>();
-    var dataSource = (IPagedList<ShareItem>)ViewData["datasource"];
-    list1.Add(new SelectListItem { Text = "精确匹配", Value = nameof(Accuracy.Accurate), Selected = false });
-    list1.Add(new SelectListItem { Text = "部分匹配", Value = nameof(Accuracy.Vague), Selected = false });
+    var dataSource = (IPagedList<ShareItem>) ViewData["datasource"];
+    list1.Add(new SelectListItem {Text = "精确匹配", Value = nameof(Accuracy.Accurate), Selected = false});
+    list1.Add(new SelectListItem {Text = "部分匹配", Value = nameof(Accuracy.Vague), Selected = false});
 
     var transdata = ViewBag.onePageOfProducts;
-    var transsearch = (SearchModeViewModel)ViewData["SEARCH"];
+    var transsearch = (SearchModeViewModel) ViewData["SEARCH"];
 }
 <!DOCTYPE html>
 <html>
 <head>
-	<meta charset="utf-8"/>
-	<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-	<title>@ViewData["Title"] - CC98.Share</title>
+    <meta charset="utf-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <title>@ViewData["Title"] - CC98.Share</title>
 
-	<environment names="Development">
-		<link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.css"/>
-		<link rel="stylesheet" href="~/css/site.css"/>
-	</environment>
-	<environment names="Staging,Production">
-		<link rel="stylesheet" href="https://ajax.aspnetcdn.com/ajax/bootstrap/3.3.5/css/bootstrap.min.css"
-			  asp-fallback-href="~/lib/bootstrap/dist/css/bootstrap.min.css"
-			  asp-fallback-test-class="sr-only" asp-fallback-test-property="position" asp-fallback-test-value="absolute"/>
-		<link rel="stylesheet" href="~/css/site.min.css" asp-append-version="true"/>
-	</environment>
-	<style type="text/css">
-		.search-form {
-			height: 48px;
-			background-color: #ccc;
-			border-radius: 3px;
-			text-size-adjust:150%;
-			border:0px;
-		}
-	</style>
+    <environment names="Development">
+        <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.css"/>
+        <link rel="stylesheet" href="~/css/site.css"/>
+    </environment>
+    <environment names="Staging,Production">
+        <link rel="stylesheet" href="https://ajax.aspnetcdn.com/ajax/bootstrap/3.3.5/css/bootstrap.min.css"
+              asp-fallback-href="~/lib/bootstrap/dist/css/bootstrap.min.css"
+              asp-fallback-test-class="sr-only" asp-fallback-test-property="position" asp-fallback-test-value="absolute"/>
+        <link rel="stylesheet" href="~/css/site.min.css" asp-append-version="true"/>
+    </environment>
+    <style type="text/css">
+        .search-form {
+            background-color: #ccc;
+            border: 0px;
+            border-radius: 3px;
+            height: 48px;
+            text-size-adjust: 150%;
+        }
+    </style>
 
 </head>
 <body>
 <div class="navbar navbar-inverse navbar-fixed-top">
-	<div class="container">
-		<div class="navbar-header">
-			<button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
-				<span class="sr-only">Toggle navigation</span>
-				<span class="icon-bar"></span>
-				<span class="icon-bar"></span>
-				<span class="icon-bar"></span>
-			</button>
-			<a asp-controller="Home" asp-action="Index" class="navbar-brand">CC98.Share</a>
-		</div>
-		<div class="navbar-collapse">
-			<ul class="nav navbar-nav">
-				<li>
-					<a asp-controller="Home" asp-action="Index">我的share</a>
-				</li>
-				<li>
-					<a asp-controller="Home" asp-action="About">关于share</a>
-				</li>
-				<li>
-				   <form asp-action="Search" asp-controller="SearchAll"  method="get" style="padding-top:10px">
-					<input type="text" asp-for="Words" class="search-form" placeholder="请输入内容" style="height:28px"/>
-					<select asp-for="Mode" asp-items="list" class="search-form" style="height:28px"></select>
-					<select asp-for="Acc" asp-items="list1" class="search-form" style="height:28px"></select>
+    <div class="container">
+        <div class="navbar-header">
+            <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+            <a asp-controller="Home" asp-action="Index" class="navbar-brand">CC98.Share</a>
+        </div>
+        <div class="navbar-collapse">
+            <ul class="nav navbar-nav">
+                <li>
+                    <a asp-controller="Home" asp-action="Index">我的share</a>
+                </li>
+                <li>
+                    <a asp-controller="Home" asp-action="About">关于share</a>
+                </li>
+                <li>
+                    <form asp-action="Search" asp-controller="SearchAll" method="get" style="padding-top: 10px">
+                        <input type="text" asp-for="Words" class="search-form" placeholder="请输入内容" style="height: 28px"/>
+                        <select asp-for="Mode" asp-items="list" class="search-form" style="height: 28px"></select>
+                        <select asp-for="Acc" asp-items="list1" class="search-form" style="height: 28px"></select>
 
-					<button type="submit" class="btn btn-sm btn-primary ">搜索</button>
-				</form>
-				</li>
-				@*<li>
+                        <button type="submit" class="btn btn-sm btn-primary ">搜索</button>
+                    </form>
+                </li>
+                @*<li>
 					<a asp-controller="Home" asp-action="Contact">Contact</a>
 				</li>
 				<li>
@@ -89,38 +87,42 @@
 	<li>
 		<a asp-controller="File" asp-action="Upload">上传文件</a>
 	</li>*@
-			</ul>
-			@await Html.PartialAsync("_LoginPartial")
-		</div>
-	</div>
+            </ul>
+            @await Html.PartialAsync("_LoginPartial")
+        </div>
+    </div>
 </div>
 <div class="container body-content">
-	@RenderBody()
-	<hr/>
-	<footer>
-		<p class="text-center">&copy; 2016 - CC98.Share</p>
-	</footer>
+    @RenderBody()
+    <hr/>
+    <footer>
+        <p class="text-center">&copy; 2016 - CC98.Share</p>
+    </footer>
 </div>
 
 <environment names="Development">
-	<script src="~/lib/jquery/dist/jquery.js"></script>
-	<script src="~/lib/bootstrap/dist/js/bootstrap.js"></script>
-	<script src="~/js/site.js" asp-append-version="true"></script>
+    <script src="~/lib/jquery/dist/jquery.js"></script>
+    <script src="~/lib/bootstrap/dist/js/bootstrap.js"></script>
+    <script src="~/js/site.js" asp-append-version="true"></script>
 </environment>
 <environment names="Staging,Production">
-	<script src="https://ajax.aspnetcdn.com/ajax/jquery/jquery-2.1.4.min.js"
-			asp-fallback-src="~/lib/jquery/dist/jquery.min.js"
-			asp-fallback-test="window.jQuery">
-			
-	</script>
-	<script src="https://ajax.aspnetcdn.com/ajax/bootstrap/3.3.5/bootstrap.min.js"
-			asp-fallback-src="~/lib/bootstrap/dist/js/bootstrap.min.js"
-			asp-fallback-test="window.jQuery && window.jQuery.fn && window.jQuery.fn.modal">
-			
-	</script>
-	<script src="~/js/site.min.js" asp-append-version="true"></script>
+    <script src="https://ajax.aspnetcdn.com/ajax/jquery/jquery-2.1.4.min.js"
+            asp-fallback-src="~/lib/jquery/dist/jquery.min.js"
+            asp-fallback-test="window.jQuery">
+
+
+    
+    </script>
+    <script src="https://ajax.aspnetcdn.com/ajax/bootstrap/3.3.5/bootstrap.min.js"
+            asp-fallback-src="~/lib/bootstrap/dist/js/bootstrap.min.js"
+            asp-fallback-test="window.jQuery && window.jQuery.fn && window.jQuery.fn.modal">
+
+
+    
+    </script>
+    <script src="~/js/site.min.js" asp-append-version="true"></script>
 </environment>
 
-@RenderSection("scripts", required: false)
+@RenderSection("scripts", false)
 </body>
 </html>

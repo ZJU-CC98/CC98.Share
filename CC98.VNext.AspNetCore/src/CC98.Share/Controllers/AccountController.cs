@@ -20,7 +20,7 @@ namespace CC98.Share.Controllers
             ExternalSignInManager = externalSignInManager;
             MessageAccessor = messageAccessor;
         }
-        
+
         /// <summary>
         ///     提供外部身份验证信息检索的相关功能。
         /// </summary>

@@ -19,6 +19,12 @@
         border-radius: 3px;
         height: 20px;
     }
+	.btn-sm1 {
+		padding: 5px 10px;
+		  line-height: 1.5;
+		  border-radius: 3px;
+		  font-size:14px;
+	}
 </style>
 
 @if (User.Identity.IsAuthenticated == false)
@@ -91,7 +97,6 @@ else
                     <a onclick="$('input[id=lefile]').click();">
                         <input id="photoCover" class="btn btn-default" type="text" value="点此选择文件" style="text-align: left">
 
-
                     </a><button id="uploadFile" type="submit" class="btn btn-default" disabled="disabled"> 上传文件 </button>
                 </div>
             </form>
@@ -131,12 +136,12 @@ else
                         <a asp-controller="Home" asp-action="Fileinfo">@item.Name</a>
                     </td>
 
-                    <td style="text-align: center">
-                        <a class="btn btn-link" asp-action="Download" asp-controller="File" asp-route-id="@item.Id">下载</a>
-                        <a class="btn btn-link" data-toggle="modal" data-target="#deletefile" data-id="@item.Id" data-name="@item.Name" onclick="DeleteFile(this)">删除</a>
+                    <td style="text-align: center;">
+                        <a class="btn-sm1" asp-action="Download" asp-controller="File" asp-route-id="@item.Id">下载</a>
+                        <a class="btn-sm1" data-toggle="modal" data-target="#deletefile" data-id="@item.Id" data-name="@item.Name" onclick="DeleteFile(this)">删除</a>
                         @*需要判断文件状态选择显示哪个功能*@
-                        <a class="btn btn-link" data-toggle="modal" href="#sharefile" data-id="@item.Id" data-name="@item.Name" onclick="ShareFile(this)">分享</a>
-                        <a class="btn btn-link" data-toggle="modal" href="#cancelshare" data-id="@item.Id" data-name="@item.Name" onclick="CancelShare(this)">取消分享</a>
+                        <a class="btn-sm1" data-toggle="modal" href="#sharefile" data-id="@item.Id" data-name="@item.Name" onclick="ShareFile(this)">分享</a>
+                        <a class="btn-sm1" data-toggle="modal" href="#cancelshare" data-id="@item.Id" data-name="@item.Name" onclick="CancelShare(this)">取消分享</a>
                     </td>
                     <td>@item.UploadTime</td>
                     <td>@item.Size</td>

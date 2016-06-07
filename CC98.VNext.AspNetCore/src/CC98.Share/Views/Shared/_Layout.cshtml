@@ -1,8 +1,10 @@
-﻿@using CC98.Share
+﻿@using System.Collections.Generic
+@using CC98.Share
 @using CC98.Share.Data
 @using CC98.Share.ViewModels.SearchAll
+@using Microsoft.AspNetCore.Mvc.Rendering
 @using Sakura.AspNetCore
-@model CC98.Share.ViewModels.SearchAll.SearchModeViewModel
+@*@model CC98.Share.ViewModels.SearchAll.SearchModeViewModel
 @{
 
 
@@ -25,7 +27,8 @@
 
     var transdata = ViewBag.onePageOfProducts;
     var transsearch = (SearchModeViewModel)ViewData["SEARCH"];
-}
+}*@
+
 <!DOCTYPE html>
 <html>
 <head>
@@ -75,13 +78,14 @@
                         <a asp-controller="Home" asp-action="About">关于share</a>
                     </li>
                     <li>
-                        <form asp-action="Search" asp-controller="SearchAll" method="get" style="padding-top: 10px">
+                        @*<form asp-action="Search" asp-controller="SearchAll" method="get" style="padding-top: 10px">
                             <input type="text" asp-for="Words" class="search-form" placeholder="请输入内容" style="height: 28px" />
                             <select asp-for="Mode" asp-items="list" class="search-form" style="height: 28px"></select>
                             <select asp-for="Acc" asp-items="list1" class="search-form" style="height: 28px"></select>
 
                             <button type="submit" class="btn btn-sm btn-primary ">搜索</button>
-                        </form>
+                        </form>*@
+                        @await Html.PartialAsync("_SearchPartial")
                     </li>
                     @*<li>
                                         <a asp-controller="Home" asp-action="Contact">Contact</a>

@@ -10,6 +10,7 @@ using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Options;
+using Sakura.AspNetCore;
 
 namespace CC98.Share.Controllers
 {
@@ -185,16 +186,16 @@ namespace CC98.Share.Controllers
         [Authorize]
         [ValidateAntiForgeryToken]
         [HttpPost]
-        public async Task<IActionResult> Upload(UploadViewModel inputModel)
+        public async Task<IActionResult> Upload(UploadViewModel inputModel,[FromServices]IOperationMessageAccessor accessor,int page = 1)
         {
-            //首先检测是否有文件传入函数。
-           // if (inputModel.files == null)
-           // {
-          //      return StatusCode(400);
-           // }
+           // 首先检测是否有文件传入函数。
+            if (inputModel.Files == null)
+            {
+                return StatusCode(400);
+            }
             //随机生成一个文件名字，并将此文件插入数据库。
             bool share;
-            int value = inputModel.value;
+            int value = inputModel.Value;
             if (value == 1)
             {
                 share = true;
@@ -203,9 +204,9 @@ namespace CC98.Share.Controllers
             {
                 share = false;
             }
-           // try
-           // {
-                foreach(var file in inputModel.files)
+            try
+            {
+                foreach(var file in inputModel.Files)
                 {
                     var fileNameRandom = Path.GetRandomFileName();
                     var tm = new ShareItem();
@@ -222,11 +223,15 @@ namespace CC98.Share.Controllers
                     tm.TotalSize += tm.Size;
                     if (tm.Size > Setting.Value.UserOnceSize)
                     {
-                        return StatusCode(403);
+                        var level = OperationMessageLevel.Error;
+                        accessor.Messages.Add(level, "错误","上传文件大小超过单次上传上限");
+                        return RedirectToAction("Index", "Home");
                     }
                     if (tm.TotalSize > Setting.Value.UserTotalSize)
                     {
-                        return StatusCode(403);
+                        var level = OperationMessageLevel.Error;
+                        accessor.Messages.Add(level, "错误", "上传文件总大小超过网盘容量");
+                        return RedirectToAction("Index", "Home");
                     }
                     tm.Name = s;
                     tm.UserName = ExternalSignInManager.GetUserName(User);
@@ -235,11 +240,11 @@ namespace CC98.Share.Controllers
                     await Model.SaveChangesAsync();
                 }
                 return RedirectToAction("Index", "Home");
-           // }
-           // catch
-           // {
+            }
+            catch
+            {
                 return StatusCode(404);
-          //  }
+            }
         }
     }
 }

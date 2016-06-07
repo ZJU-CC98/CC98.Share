@@ -8,7 +8,7 @@ namespace CC98.Share.ViewModels.FileController
 {
     public class UploadViewModel
     {
-        public IFormFile[] files;
-        public int value;
+        public IFormFile[] Files { get; set; }
+        public int Value { get; set; }
     }
 }

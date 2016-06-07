@@ -4,6 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using CC98.Identity;
 using CC98.Share.Data;
+using CC98.Share.ViewModels.FileController;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
@@ -184,17 +185,16 @@ namespace CC98.Share.Controllers
         [Authorize]
         [ValidateAntiForgeryToken]
         [HttpPost]
-        public async Task<IActionResult> Upload(IFormFile file, int value)
+        public async Task<IActionResult> Upload(UploadViewModel inputModel)
         {
             //首先检测是否有文件传入函数。
-            if (file == null)
-            {
-                return StatusCode(400);
-            }
+           // if (inputModel.files == null)
+           // {
+          //      return StatusCode(400);
+           // }
             //随机生成一个文件名字，并将此文件插入数据库。
-            var fileNameRandom = Path.GetRandomFileName();
-            var tm = new ShareItem();
             bool share;
+            int value = inputModel.value;
             if (value == 1)
             {
                 share = true;
@@ -203,38 +203,43 @@ namespace CC98.Share.Controllers
             {
                 share = false;
             }
-            try
-            {
-                var s = GetFileName(file.ContentDisposition);
-                tm.Path = "\\" + fileNameRandom;
+           // try
+           // {
+                foreach(var file in inputModel.files)
+                {
+                    var fileNameRandom = Path.GetRandomFileName();
+                    var tm = new ShareItem();
+                    var s = GetFileName(file.ContentDisposition);
+                    tm.Path = "\\" + fileNameRandom;
 
-                var saveFileName = Setting.Value.StoreFolder + "\\" + fileNameRandom;
+                    var saveFileName = Setting.Value.StoreFolder + "\\" + fileNameRandom;
 
-                using (var stream = System.IO.File.OpenWrite(saveFileName))
-                {
-                    await file.CopyToAsync(stream);
+                    using (var stream = System.IO.File.OpenWrite(saveFileName))
+                    {
+                        await file.CopyToAsync(stream);
+                    }
+                    tm.Size = file.Length;
+                    tm.TotalSize += tm.Size;
+                    if (tm.Size > Setting.Value.UserOnceSize)
+                    {
+                        return StatusCode(403);
+                    }
+                    if (tm.TotalSize > Setting.Value.UserTotalSize)
+                    {
+                        return StatusCode(403);
+                    }
+                    tm.Name = s;
+                    tm.UserName = ExternalSignInManager.GetUserName(User);
+                    tm.IsShared = share;
+                    Model.Items.Add(tm);
+                    await Model.SaveChangesAsync();
                 }
-                tm.Size = file.Length;
-                tm.TotalSize += tm.Size;
-                if (tm.Size > Setting.Value.UserOnceSize)
-                {
-                    return StatusCode(403);
-                }
-                if (tm.TotalSize > Setting.Value.UserTotalSize)
-                {
-                    return StatusCode(403);
-                }
-                tm.Name = s;
-                tm.UserName = ExternalSignInManager.GetUserName(User);
-                tm.IsShared = share;
-                Model.Items.Add(tm);
-                await Model.SaveChangesAsync();
                 return RedirectToAction("Index", "Home");
-            }
-            catch
-            {
+           // }
+           // catch
+           // {
                 return StatusCode(404);
-            }
+          //  }
         }
     }
 }

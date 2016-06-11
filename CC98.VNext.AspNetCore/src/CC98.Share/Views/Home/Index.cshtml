@@ -74,9 +74,35 @@ else
                 网盘容量
             </li>
             <li class="person-li">
-                <br/>
-                <p>问樱桃</p>
+                <br/>@{
+					var filesize1 = (double)filesize;
+					filesize1 = 2199023255552 - filesize1;
+					var unit1 = "B";
+					if (filesize1 > 1099511627776)
+					{
+						filesize1 = filesize1 / 1099511627776;
+						unit1 = "TB";
+					}
+					if (filesize1 > 1073741824)
+					{
+						filesize1 = filesize1 / 1073741824;
+						unit1 = "GB";
+					}
+					if (filesize1 > 1048576)
+					{
+						filesize1 = filesize1 / 1048576;
+						unit1 = "MB";
+					}
+					if (filesize1 > 1024)
+					{
+						filesize1 = filesize1 / 1024;
+						unit1 = "KB";
+					}
+					var totalsize = filesize1.ToString(".##") + unit1;
+				}
+                <p>@totalsize</p>
                 可用容量
+				
             </li>
 
         </ul>

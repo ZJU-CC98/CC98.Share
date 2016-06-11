@@ -236,6 +236,7 @@ namespace CC98.Share.Controllers
                     tm.Name = s;
                     tm.UserName = ExternalSignInManager.GetUserName(User);
                     tm.IsShared = share;
+					tm.UploadTime = DateTime.Now;
                     Model.Items.Add(tm);
                     await Model.SaveChangesAsync();
                 }

@@ -100,7 +100,7 @@ else
                     </a><button id="uploadFile" type="submit" class="btn btn-default" disabled="disabled"> 上传文件 </button>
                 </div>
             </form>*@
-            @await Html.PartialAsync("_UploadPartial");
+            @await Html.PartialAsync("_UploadPartial")
             <script type="text/javascript">
                 $('input[id=lefile]')
                     .change(function() {
@@ -130,24 +130,49 @@ else
 
 
             @foreach (var item in dataShow)
-            {
-                <tr>
+			{
+				var size = (double)@item.Size;
+				var unit = "B";
+				if (size > 1073741824)
+				{
+					size = size * 1.00 / 1073741824;
+					unit = "G";
+				}
+				if (size > 1048576)
+				{
+					size = size / 1048576;
+					unit = "MB";
+				}
+				if (size > 1024)
+				{
+					size = size / 1024;
+					unit = "KB";
+				}
+				var FinalSize = size.ToString(".##") + unit;
 
-                    <td>
-                        <a asp-controller="Home" asp-action="Fileinfo">@item.Name</a>
-                    </td>
+				<tr>
 
-                    <td style="text-align: center;">
-                        <a class="btn-sm1" asp-action="Download" asp-controller="File" asp-route-id="@item.Id">下载</a>
+
+					<td>
+
+						<a asp-controller="File" asp-action="Download" asp-route-id="@item.Id">@item.Name</a>
+
+					</td>
+
+
+					<td style="text-align: center;">
+
+						<a class="btn-sm1" asp-action="Download" asp-controller="File" asp-route-id="@item.Id">下载</a>
                         <a class="btn-sm1" data-toggle="modal" data-target="#deletefile" data-id="@item.Id" data-name="@item.Name" onclick="DeleteFile(this)">删除</a>
                         @*需要判断文件状态选择显示哪个功能*@
                         <a class="btn-sm1" data-toggle="modal" href="#sharefile" data-id="@item.Id" data-name="@item.Name" onclick="ShareFile(this)">分享</a>
                         <a class="btn-sm1" data-toggle="modal" href="#cancelshare" data-id="@item.Id" data-name="@item.Name" onclick="CancelShare(this)">取消分享</a>
                     </td>
                     <td>@item.UploadTime</td>
-                    <td>@item.Size</td>
+					
+                    <td id="SizeOfItem" >@FinalSize</td>
                 </tr>
-            }
+			}
 
 
             </tbody>
@@ -155,25 +180,7 @@ else
         <div class="pagination-index" style="float: right">
             <ul class="pagination">
                 <pager source="@pagersource"/>
-                <!--
-                <li>
-                    <a href="#">&laquo;</a>
-                </li>
-                <li>
-                    <a href="#">1</a>
-                </li>
-                <li>
-                    <a href="#">2</a>
-                </li>
-                <li>
-                    <a href="#">3</a>
-                </li>
-                <li>
-                    <a href="#">4</a>
-                </li>
-                <li>
-                    <a href="#">&raquo;</a>
-                </li>-->
+                
             </ul>
         </div>
     </div>
@@ -203,11 +210,12 @@ else
 @*分享界面，需要产生独特的链接*@
 <form asp-action="ShareFile" asp-controller="File">
     <input type="hidden" id="share-file-id-input" name="id"/>
-    <div id="sharefile" class="modal fade in" style="background-color: #efefef; display: none; height: 200px; margin: 10% 25%; position: absolute; width: 450px;">
+    <div id="sharefile" class="modal fade in" style="background-color: #fff; display: none; margin-top: 10%; margin-left:25%; position: fixed; width: 450px; height:250px">
         <div class="modal-header">
-            <a class="close" data-dismiss="modal"></a>
-            <h3>分享文件</h3>
-            <p class="lead" id="share-file-name-in"></p>
+            <a class="close" data-dismiss="modal">x</a>
+            <h4>分享文件</h4>
+			<br />
+            <p id="share-file-name-in"></p>
         </div>
         @*<div class="modal-body" style="margin-left:20px">
 		<h5>您选择分享以下文件</h5>
@@ -216,19 +224,23 @@ else
 	</div>*@
         <div class="modal-footer">
             <span id="copysuccess" style="display: none">复制成功！</span>
-            <a href="#" class="btn btn-success">确认</a><!--How????-->
-            <a href="#" class="btn" data-dismiss="modal"type="submit">取消</a>
+            <a href="#" class="btn btn-success"type="submit">确认</a><!--How????-->
+            <a href="#" class="btn" data-dismiss="modal">取消</a>
         </div>
     </div>
 </form>
 @*删除界面，需要获取文件名以及对按钮操作进行绑定函数*@
 <form asp-action="DeleteFile" asp-controller="File">
     <input type="hidden" id="delete-file-id-input" name="id"/>
-    <div id="deletefile" class="modal fade in" style="background-color: #efefef; display: none; height: 200px; margin: 10% 25%; position: absolute; width: 450px;">
+    <div id="deletefile" class="modal fade in" style="background-color: #fff; display: none; margin-top: 10%; margin-left:25%; position: fixed; width: 450px; height:250px">
         <div class="modal-header">
             <a class="close" data-dismiss="modal">x</a>
             <h4>永久删除以下文件</h4>
+
+			<br />
             <p id="delete-file-name-in"></p>
+
+
         </div>
         <div class="modal-body" style="margin-left: 20px">
 
@@ -243,7 +255,7 @@ else
 @*取消分享，需要获取文件名以及对按钮操作进行绑定函数*@
 <form asp-action="CancelShare" asp-controller="File">
     <input type="hidden" id="delete-file-id-input" name="id"/>
-    <div id="cancelshare" class="modal fade in" style="background-color: #efefef; display: none; height: 200px; margin: 10% 25%; position: absolute; width: 450px;">
+    <div id="cancelshare" class="modal fade in" style="background-color: #fff; display: none; margin-top: 10%; margin-left:25%; position: fixed; width: 450px; height:250px">
         <div class="modal-header">
 
             <a class="close" data-dismiss="modal">x</a>
@@ -285,4 +297,5 @@ else
         }
 
     }
+	
 </script>

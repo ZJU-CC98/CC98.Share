@@ -172,9 +172,10 @@ namespace CC98.Share
                 ClientSecret = Configuration["Authentication:CC98:ClientSecret"]
             });
 
-            // 允许网站直接返回静态文件（样式表，脚本等）的内容      
+            // 允许网站直接返回网站内静态文件（样式表，脚本等）的内容      
             app.UseStaticFiles();
 
+			// 配置上传文件的物理存储区
             var option = new StaticFileOptions
             {
                 RequestPath = new PathString(Configuration["FileSetting:WebFolder"]),

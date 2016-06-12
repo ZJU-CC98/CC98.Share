@@ -1,0 +1,9 @@
+﻿@model IEnumerable<MedalCategory>
+@{
+	var activeCategoryId = (int?)ViewBag.ActiveCategoryId;
+
+	var categoryList = new SelectList(Model, nameof(MedalCategory.Id), nameof(MedalCategory.Name));
+}
+
+<select class="form-control" name="@ViewBag.ModelName" asp-items="categoryList" asp-option-label="不属于任何分类">
+</select>

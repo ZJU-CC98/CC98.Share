@@ -210,7 +210,6 @@ namespace CC98.Share.Controllers
                 {
                     var fileNameRandom = Path.GetRandomFileName();
                     var tm = new ShareItem();
-                    var s = GetFileName(file.ContentDisposition);
                     tm.Path = "\\" + fileNameRandom;
 
                     var saveFileName = Setting.Value.StoreFolder + "\\" + fileNameRandom;
@@ -233,7 +232,7 @@ namespace CC98.Share.Controllers
                         accessor.Messages.Add(level, "错误", "上传文件总大小超过网盘容量");
                         return RedirectToAction("Index", "Home");
                     }
-                    tm.Name = s;
+                    tm.Name = Path.GetFileName(file.FileName);
                     tm.UserName = ExternalSignInManager.GetUserName(User);
                     tm.IsShared = share;
 					tm.UploadTime = DateTime.Now;

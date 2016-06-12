@@ -23,8 +23,8 @@
     var transdata = ViewBag.onePageOfProducts;
     var transsearch = (SearchModeViewModel)ViewData["SEARCH"];
 }
-<form asp-action="Search" asp-controller="SearchAll" method="get" style="padding-top: 10px; margin-left:10px">
-    <input type="text" asp-for="Words" class="search-form" placeholder="请输入内容" style="height: 28px" />
+<form asp-action="Search" asp-controller="SearchAll" method="get" style="padding-top: 10px; margin-left:10px;">
+    <input type="text" asp-for="Words" class="search-form" placeholder="请输入内容" style="height: 28px; padding-left:5px" />
     <select asp-for="Mode" asp-items="list" class="search-form" style="height: 28px;margin-left:5px"></select>
     <select asp-for="Acc" asp-items="list1" class="search-form" style="height: 28px;margin-left:5px"></select>
 

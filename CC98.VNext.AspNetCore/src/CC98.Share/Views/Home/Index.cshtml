@@ -100,8 +100,8 @@ else
 			<button type="submit" class="btn btn-default">搜索</button>
 		</form>
 	</div>
-	<div style="display:block; clear:both; border-top: 1px solid #eee;"></div>
-	<table class="table table-striped" style="margin-top: 20px">
+	<div style="display:block; clear:both; height:5px"></div>
+	<table class="table table-striped" style="border-bottom:3px solid #ddd">
 
 		<thead style="border:2px solid #eee">
 			<tr>
@@ -180,6 +180,14 @@ else
 @*分享界面，需要产生独特的链接*@
 <form asp-action="ShareFile" asp-controller="File">
     <input type="hidden" id="share-file-id-input" name="id"/>
+    <div id="sharefile" class="modal fade in" style="background-color: #fefefe; display: none; margin-top: 10%; margin-left:25%; position: fixed; width: 450px; height:250px">
+        <div class="modal-header">
+            <a class="close" data-dismiss="modal">x</a>
+            <h4>分享文件</h4>            
+        </div>
+		<div class="modal-body" style="margin-left: 20px">
+			<p id="share-file-name-in"></p>
+		</div>
 	<div id="sharefile" class="modal fade in" style="background-color: #fff; display: none; margin-top: 10%; margin-left: 25%; position: fixed; width: 450px; height: 250px">
 		<div class="modal-header">
 
@@ -207,6 +215,9 @@ else
         <div class="modal-footer">
             <span id="copysuccess" style="display: none">复制成功！</span>
             <a href="#" class="btn btn-success"type="submit">确认</a><!--How????-->
+            <a href="#" class="btn btn-default" data-dismiss="modal">取消</a>
+        </div>
+    </div>
             <a href="#" class="btn" data-dismiss="modal">取消</a>
         </div>*@
 	</div>
@@ -214,43 +225,37 @@ else
 @*删除界面，需要获取文件名以及对按钮操作进行绑定函数*@
 <form asp-action="DeleteFile" asp-controller="File">
     <input type="hidden" id="delete-file-id-input" name="id"/>
-    <div id="deletefile" class="modal fade in" style="background-color: #fff; display: none; margin-top: 10%; margin-left:25%; position: fixed; width: 450px; height:250px">
+    <div id="deletefile" class="modal fade in" style="background-color: #fefefe; display: none; margin-top: 10%; margin-left:25%; position: fixed; width: 450px; height:250px">
         <div class="modal-header">
             <a class="close" data-dismiss="modal">x</a>
             <h4>永久删除以下文件</h4>
-
-			<br />
-            <p id="delete-file-name-in"></p>
-
-
         </div>
         <div class="modal-body" style="margin-left: 20px">
-
+			<p id="delete-file-name-in"></p>
         </div>
         <div class="modal-footer">
 
-            <button type="submit">确认</button>
-            <a href="#" class="btn" data-dismiss="modal">取消</a>
+            <button class="btn btn-danger"type="submit">确认</button>
+            <a href="#" class="btn btn-default" data-dismiss="modal">取消</a>
         </div>
     </div>
 </form>
 @*取消分享，需要获取文件名以及对按钮操作进行绑定函数*@
 <form asp-action="CancelShare" asp-controller="File">
-    <input type="hidden" id="cancel-share-file-id-input" name="id"/>
-    <div id="cancelshare" class="modal fade in" style="background-color: #fff; display: none; margin-top: 10%; margin-left:25%; position: fixed; width: 450px; height:250px">
+    <input type="hidden" id="delete-file-id-input" name="id"/>
+    <div id="cancelshare" class="modal fade in" style="background-color: #fefefe; display: none; margin-top: 10%; margin-left:25%; position: fixed; width: 450px; height:250px">
         <div class="modal-header">
 
             <a class="close" data-dismiss="modal">x</a>
-	        <h4>您选择取消分享以下文件</h4>
-	        <br/>
-			<p id="cancel-share-file-name-in"></p>
+            <h4>您选择取消分享以下文件</h4>
         </div>
         <div class="modal-body" style="margin-left: 20px">
+            <p id="cancel-share-file-name-in"></p>
         </div>
         <div class="modal-footer">
 
-            <button type="submit">确认</button>
-            <a href="#" class="btn" data-dismiss="modal">取消</a>
+            <button class="btn btn-warning"type="submit">确认</button>
+            <a href="#" class="btn btn-default" data-dismiss="modal">取消</a>
         </div>
     </div>
 </form>

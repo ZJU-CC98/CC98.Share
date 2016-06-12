@@ -78,6 +78,7 @@ else
         <tr>
             <th>文件名</th>
             <th>操作</th>
+            <th>上传用户</th>
             <th>上传日期</th>
             <th>文件大小</th>
         </tr>
@@ -99,11 +100,11 @@ else
             <tr>
 
                 <td>
-                    <a asp-controller="Home" asp-action="Fileinfo">@item.Name</a>
+                    @*<a asp-controller="Home" asp-action="Fileinfo">*@@item.Name@*</a>*@
                 </td>
 
                 <td style="text-align: match-parent">
-                    <a class="btn btn-default btn-xs" asp-action="Download" asp-controller="File" asp-route-id="@item.Id" >下载</a>
+                    <a class="btn btn-default btn-xs" asp-action="Download" asp-controller="File" asp-route-id="@item.Id">下载</a>
                     @*<a class="btn btn-default" data-toggle="modal" data-target="#deletefile" onclick="DeleteFile('@item.Id')">
                         <a id="delete-file-name" data-item="@item.Name">删除</a>
                     </a>
@@ -112,6 +113,7 @@ else
                         <a id="share-file-name" data-item="@item.Name">分享</a>
                     </a>*@
                 </td>
+                <td>@item.UserName</td>
                 <td>@item.UploadTime</td>
                 @*<td>@item.Size</td>*@
                 <td id="SizeOfItem" class="change-size">@item.Size</td>

@@ -75,7 +75,7 @@
 
 					<div class="form-group">
 
-						<p class="help-block">下表列出了该勋章的所有购买选项。你可以为不同的有效时间分别设定价格。</p>
+						<p class="help-block">下表列出了该勋章的所有购买选项。你可以为不同的有效时间分别设定价格。如果列表中没有任何项目，则用户将不能通过支付论坛货币的形式获得勋章。</p>
 
 						@{
 							// 价格数量
@@ -132,19 +132,25 @@
 
 	function deletePriceItem(btn) {
 
+		$(btn).parents('tr').first().remove();
+
+		// 重排所有内容
+		reapplyPriceItems();
+
 	}
 
 	function reapplyPriceItems() {
+
 		$('#price-table').find('tr').each(function (index, ele) {
 			$(ele).find('input').eq(0).prop('name', 'PriceSettings[' + index + '].ExpiryDate');
-			$(ele).find('input').eq(0).prop('name', 'PriceSettings[' + index + '].Price');
-			$(ele).find('input').eq(0).prop('name', 'PriceSettings[' + index + '].Price');
+			$(ele).find('input').eq(1).prop('name', 'PriceSettings[' + index + '].Price');
 		});
 	}
 
 	function addPriceItem(btn) {
 
-		var row = $(btn).parents('tr');
+		// 当前行
+		var row = $(btn).parents('tr').first();
 
 		var clone = $(row).clone();
 		// 清除所有内容
@@ -153,8 +159,10 @@
 		// 修改上一行样式
 		$(row).find('button').text('删除');
 		$(row).find('button').removeClass('btn-success').addClass('btn-danger');
-		$(row).find('button').prop('onclick', 'deletePriceItem(this);');
+		$(row).find('button').attr('onclick', 'deletePriceItem(this);');
 
+		// 重排所有内容
+		reapplyPriceItems();
 
 		$('#price-table').append(clone);
 	}

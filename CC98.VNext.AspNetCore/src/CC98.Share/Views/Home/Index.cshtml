@@ -8,22 +8,25 @@
 }
 
 <style type="text/css">
-    .person-li {
-        float: left;
-        padding: 15px;
-        text-align: center;
-    }
+	.person-li {
+		float: left;
+		padding: 15px;
+		text-align: center;
+		border-top: 1px solid #efefef;
+		border-bottom:1px solid #efefef;
+	}
 
-    .search-form {
-        background-color: #ccc;
-        border-radius: 3px;
-        height: 20px;
-    }
+	.search-form {
+		background-color: #ccc;
+		border-radius: 3px;
+		height: 20px;
+	}
+
 	.btn-sm1 {
 		padding: 5px 10px;
-		  line-height: 1.5;
-		  border-radius: 3px;
-		  font-size:14px;
+		line-height: 1.5;
+		border-radius: 3px;
+		font-size: 14px;
 	}
 </style>
 
@@ -38,143 +41,84 @@
 else
 {
     var dataShow = (IPagedList<ShareItem>) ViewData["datashow"];
-    var filesize = (long) ViewData["filesize"];
-    var filecount = (int) ViewData["filecount"];
-    var sharecount = (int) ViewData["sharecount"];
+    var filesize = (long) ViewData["filesize"];@*用户文件总大小*@
+	var filecount = (int)ViewData["filecount"];
+	var sharecount = (int)ViewData["sharecount"];
 
-    var pagersource = (IPagedList) ViewData["pagersource"];
+	var pagersource = (IPagedList)ViewData["pagersource"];
+	<div class="container">
+	<hr style="border: none; border-top: 1px solid #eee; height: 1px;" />
+	<div id="person-info" style="display: inline-block; ">
+		<img class="img-thumbnail" width="120" height="120" src="@User.GetPortraitUri()" style="float:left" />
+		<div style="float:left">
+			<h4 style="padding-left:70px">@User.Identity.Name</h4>
+			
+			<ul style="list-style: none;float:left; ">
+				<li class="person-li">
 
+					<p>@sharecount</p>
+					分享数
+				</li>
+				<li class="person-li">
 
-    <div id="person-info" style="display: inline-block;">
-        <ul style="list-style: none;">
-            <li class="person-li">
-                @*需要后端调用一下用户头像*@
-                <img class="img-thumbnail" width="120" height="120"  src="@User.GetPortraitUri()"/>
-				
-            </li>
-            <li class="person-li">
-                <h4>
-                    @User.Identity.Name<br/>
-                </h4>
+					<p>@filecount</p>
+					文件数
+				</li>
+				<li class="person-li">
 
-            </li>
-            <li class="person-li">
-                <br/>
-                <p>@sharecount</p>
-                分享数
-            </li>
-            <li class="person-li">
-                <br/>
-                <p>@filecount</p>
-                文件数
-            </li>
-            <li class="person-li">
-                <br/>
-                <p>2TB</p>
-                网盘容量
-            </li>
-            <li class="person-li">
-                <br/>@{
-					var filesize1 = (double)filesize;
-					filesize1 = 2199023255552 - filesize1;
-					var unit1 = "B";
-					if (filesize1 > 1099511627776)
-					{
-						filesize1 = filesize1 / 1099511627776;
-						unit1 = "TB";
-					}
-					if (filesize1 > 1073741824)
-					{
-						filesize1 = filesize1 / 1073741824;
-						unit1 = "GB";
-					}
-					if (filesize1 > 1048576)
-					{
-						filesize1 = filesize1 / 1048576;
-						unit1 = "MB";
-					}
-					if (filesize1 > 1024)
-					{
-						filesize1 = filesize1 / 1024;
-						unit1 = "KB";
-					}
-					var totalsize = filesize1.ToString(".##") + unit1;
-				}
-                <p>@totalsize</p>
-                可用容量
-				
-            </li>
+					<p>2TB</p>
+					网盘容量
+				</li>
+				<li class="person-li">
+					<p class="change-size">@filesize</p>
+					可用容量
 
-        </ul>
+				</li>
 
-    </div>
-    <hr style="border: none; border-top: 1px solid #eee; height: 1px;"/>
-    <div style="height: 10px"></div>
-
-    <div class="container">
-
-
-        <div style="display: inline; margin-top: 10px; text-align: right;">
-
-            @*<form class="form-inline" style="float: left; text-align: left;" asp-action="Upload" asp-controller="File" asp-antiforgery="true" enctype="multipart/form-data">
-                <input id="lefile" type="file" name="file" style="display: none; float: left; text-align: left;" onchange="JudgeFile()" multiple="multiple">
-                <div class="input-append">
-
-                    <a onclick="$('input[id=lefile]').click();">
-                        <input id="photoCover" class="btn btn-default" type="text" value="点此选择文件" style="text-align: left">
-
-                    </a><button id="uploadFile" type="submit" class="btn btn-default" disabled="disabled"> 上传文件 </button>
-                </div>
-            </form>*@
-            @await Html.PartialAsync("_UploadPartial")
-            <script type="text/javascript">
-                $('input[id=lefile]')
-                    .change(function() {
-                        $('#photoCover').val($(this).val());
-                    });
-            </script>
-
-            <form class="form-inline" style="float: right; margin-left: 10px; text-align: left;">
-                <div class="form-group">
-                    <input type="text" class="form-control" id="exampleInputEmail2" placeholder="输入要搜索的文件">
-                </div>
-                <button type="submit" class="btn btn-default">搜索</button>
-            </form>
-        </div>
-        <table class="table table-striped" style="margin-top: 20px">
-            <thead style="border: 2px solid #eee">
-            <tr>
-
-                <th>文件名称</th>
-                <th style="text-align: center">操作</th>
-                <th>上传日期</th>
-                <th>文件大小</th>
-            </tr>
-            </thead>
-            <tbody>
+			</ul>
+		</div>
+	</div>
 
 
 
-            @foreach (var item in dataShow)
+
+
+
+	<div style="display: inline; margin-top: 10px; text-align: right;">
+		@await Html.PartialAsync("_UploadPartial")
+		<script type="text/javascript">
+			$('input[id=lefile]')
+				.change(function () {
+					$('#photoCover').val($(this).val());
+				});
+		</script>
+
+		<form class="form-inline" style="float: right; margin-left: 10px; text-align: left;">
+			<div class="form-group">
+				<input type="text" class="form-control" id="exampleInputEmail2" placeholder="输入要搜索的文件">
+			</div>
+			<button type="submit" class="btn btn-default">搜索</button>
+		</form>
+	</div>
+	<div style="display:block; clear:both; border-top: 1px solid #eee;"></div>
+	<table class="table table-striped" style="margin-top: 20px">
+
+		<thead style="border:2px solid #eee">
+			<tr>
+
+				<th>文件名称</th>
+				<th style="text-align: center">操作</th>
+				<th>上传日期</th>
+				<th>文件大小</th>
+			</tr>
+		</thead>
+		<tbody>
+
+
+
+			@foreach (var item in dataShow)
 			{
-				var size = (double)@item.Size;
-				var unit = "B";
-				if (size > 1073741824)
-				{
-					size = size * 1.00 / 1073741824;
-					unit = "G";
-				}
-				if (size > 1048576)
-				{
-					size = size / 1048576;
-					unit = "MB";
-				}
-				if (size > 1024)
-				{
-					size = size / 1024;
-					unit = "KB";
-				}
-				var FinalSize = size.ToString(".##") + unit;
+
 
 				<tr>
 
@@ -189,27 +133,27 @@ else
 					<td style="text-align: center;">
 
 						<a class="btn-sm1" asp-action="Download" asp-controller="File" asp-route-id="@item.Id">下载</a>
-                        <a class="btn-sm1" data-toggle="modal" data-target="#deletefile" data-id="@item.Id" data-name="@item.Name" onclick="DeleteFile(this)">删除</a>
-                        @*需要判断文件状态选择显示哪个功能*@
-                        <a class="btn-sm1" data-toggle="modal" href="#sharefile" data-id="@item.Id" data-name="@item.Name" onclick="ShareFile(this)">分享</a>
-                        <a class="btn-sm1" data-toggle="modal" href="#cancelshare" data-id="@item.Id" data-name="@item.Name" onclick="CancelShare(this)">取消分享</a>
-                    </td>
-                    <td>@item.UploadTime</td>
-					
-                    <td id="SizeOfItem" >@FinalSize</td>
-                </tr>
+						<a class="btn-sm1" data-toggle="modal" data-target="#deletefile" data-id="@item.Id" data-name="@item.Name" onclick="DeleteFile(this)">删除</a>
+						@*需要判断文件状态选择显示哪个功能*@
+						<a class="btn-sm1" data-toggle="modal" href="#sharefile" data-id="@item.Id" data-name="@item.Name" onclick="ShareFile(this)">分享</a>
+						<a class="btn-sm1" data-toggle="modal" href="#cancelshare" data-id="@item.Id" data-name="@item.Name" onclick="CancelShare(this)">取消分享</a>
+					</td>
+					<td>@item.UploadTime</td>
+
+					<td id="SizeOfItem" class="change-size">@item.Size</td>
+				</tr>
 			}
 
 
-            </tbody>
-        </table>
-        <div class="pagination-index" style="float: right">
-            <ul class="pagination">
-                <pager source="@pagersource"/>
-                
-            </ul>
-        </div>
-    </div>
+		</tbody>
+	</table>
+	<div class="pagination-index" style="float: right">
+		<ul class="pagination">
+			<pager source="@pagersource" />
+
+		</ul>
+	</div>
+</div>
 }
 
 
@@ -297,7 +241,61 @@ else
         </div>
     </div>
 </form>
+@section scripts{
+	<script>
+		$(document).ready(function(){
+		@*将文件大小替换成友好的显示*@
+			var filesize = getElementsClass("change-size");
+			var unit = "B";
+
+			for (var i = 0; i < filesize.length; i++) {
+				var size = parseFloat(filesize[i].innerHTML);
+
+				if (size > 1099511627776) {
+					unit = "TB";
+					size = size * 1.00 / 1099511627776;
+				}
+				if (size > 1073741824)
+				{
+					size = size * 1.00 / 1073741824;
+					unit = "G";
+				}
+				if (size > 1048576)
+				{
+					size = size / 1048576;
+					unit = "MB";
+				}
+				if (size > 1024)
+				{
+					size = size / 1024;
+					unit = "KB";
+				}
+				size = size.toFixed(2);
+				var FinalSize = String(size) + unit;
+				filesize[i].innerHTML = FinalSize;
+
+			}
+		});
+		function getElementsClass(classnames) {
+			var classobj = new Array();
+			var classint = 0;
+			var tags = document.getElementsByTagName("*");
+			for (var i in tags) {
+				if (tags[i].nodeType == 1) {@*判断节点类型 *@
+					if (tags[i].getAttribute("class") == classnames)@*判断和需要CLASS名字相同的，并组成一个数组*@
+					{
+						classobj[classint] = tags[i];
+						classint++;
+					}
+				}
+			}
+			return classobj;
+		}
+	</script>
+}
 <script type="text/javascript">
+	
+	
     function DeleteFile(obj) {
         $('#delete-file-id-input').val($(obj).data('id'));
         $('#delete-file-name-in').text($(obj).data('name'));
@@ -314,14 +312,16 @@ else
     }
 
     function JudgeFile() {@*用于上传文件时判断是否已选择文件，若没有选择，则无法上传*@
-        if ($('#lefile').val() == "") {
-            $('#uploadFile').attr('disabled', 'disabled');
+		if ($('#lefile').val() == "") {
+			$('#uploadFile').attr('disabled', 'disabled');
 
-        } else {
-            $('#uploadFile').removeAttr('disabled');
-            $('#photoCover').val($('#lefile').val());
-        }
+		} else {
+			$('#uploadFile').removeAttr('disabled');
+			$('#photoCover').val($('#lefile').val());
+		}
 
-    }
-	
+	}
+
+
+
 </script>

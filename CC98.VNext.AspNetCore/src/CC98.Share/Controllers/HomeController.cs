@@ -64,7 +64,9 @@ namespace CC98.Share.Controllers
 
             ViewData["datashow"] = pageData;
             ViewData["filecount"] = fileCount;
-            ViewData["filesize"] = fileSize;
+			fileSize = 2199023255552 - fileSize;
+
+			ViewData["filesize"] = fileSize;
             ViewData["sharecount"] = shareCount;
             ViewData["pagersource"] = pagerSource;
 

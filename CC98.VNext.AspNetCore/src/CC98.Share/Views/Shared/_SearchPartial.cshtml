@@ -17,9 +17,8 @@
     var data = (ShareItem[])ViewData["List"];
     var list1 = new List<SelectListItem>();
     var dataSource = (IPagedList<ShareItem>)ViewData["datasource"];
-    list1.Add(new SelectListItem { Text = "精确匹配", Value = nameof(Accuracy.Accurate), Selected = false });
     list1.Add(new SelectListItem { Text = "部分匹配", Value = nameof(Accuracy.Vague), Selected = false });
-
+    list1.Add(new SelectListItem { Text = "精确匹配", Value = nameof(Accuracy.Accurate), Selected = false });
     var transdata = ViewBag.onePageOfProducts;
     var transsearch = (SearchModeViewModel)ViewData["SEARCH"];
 }

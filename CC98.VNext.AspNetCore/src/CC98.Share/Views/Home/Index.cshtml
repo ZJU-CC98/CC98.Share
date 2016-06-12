@@ -34,7 +34,7 @@
 {
     <div style="text-align: center">
         <h3 style="color: #004b83">
-            <b>请登录</b>
+            <b><a asp-controller="Account" asp-action="LogOn" asp-route-returnUrl="@Url.Action()">请登录</a></b>
         </h3><img src="~/images/index_src.png" style="text-align: center"/>
     </div>
 }
@@ -133,7 +133,7 @@ var pagersource = (IPagedList)ViewData["pagersource"];
                             $('#photoCover').val($(this).val());
                         });
                 </script>
-
+				<span id="sizeAlert" style="display:none;color:red">文件大小超过限制，单次上传总大小限制为50M</span>
                 @*<form class="form-inline" style="float: right; margin-left: 10px; text-align: left;">
                         <div class="form-group">
                             <input type="text" class="form-control" id="exampleInputEmail2" placeholder="输入要搜索的文件">
@@ -357,8 +357,14 @@ var pagersource = (IPagedList)ViewData["pagersource"];
 			$('#uploadFile').attr('disabled', 'disabled');
 			$('#sizeAlert').hide();
 		} else {
-			
-			if (theFile.files[0].size > 52428800) {
+			var totalSize = 0;
+			for (i = 0; i < theFile.files.length ; i++)
+			{
+				totalSize += theFile.files[i].size;
+
+			}
+		
+			if (totalSize > 52428800) {
 				$('#uploadFile').attr('disabled', 'disabled');
 				$('#photoCover').val($('#lefile').val());
 				$('#sizeAlert').show();

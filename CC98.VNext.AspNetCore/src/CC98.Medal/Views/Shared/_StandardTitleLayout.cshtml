@@ -1,0 +1,23 @@
+﻿@{
+    // 如果没有定义窗口标题，则使用页面标题作为窗口标题
+    if (ViewBag.Title == null)
+    {
+        ViewBag.Title = ViewBag.PageTitle;
+    }
+
+    Layout = "_Layout";
+}
+
+<h1 class="page-header lead text-center">@ViewBag.PageTitle</h1>
+
+@* 如果没有禁止显示消息，则默认显示消息 *@
+@if (ViewBag.ShowOperationMessages != false)
+{
+    <div asp-message-list="AlertDialogClosable"></div>
+}
+
+@RenderBody()
+
+@section scripts{
+    @await RenderSectionAsync("scripts", false);
+}

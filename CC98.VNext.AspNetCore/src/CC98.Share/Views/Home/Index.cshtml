@@ -23,9 +23,9 @@
 	}
 
 	.btn-sm1 {
-		padding: 5px 10px;
+		
 		line-height: 1.5;
-		border-radius: 3px;
+		
 		font-size: 14px;
 	}
 </style>
@@ -66,7 +66,7 @@ else
 				</li>
 				<li class="person-li">
 
-					<p>2TB</p>
+					<p>50GB</p>
 					网盘容量
 				</li>
 				<li class="person-li">
@@ -78,12 +78,6 @@ else
 			</ul>
 		</div>
 	</div>
-
-
-
-
-
-
 	<div style="display: inline; margin-top: 10px; text-align: right;">
 		@await Html.PartialAsync("_UploadPartial")
 		<script type="text/javascript">
@@ -92,7 +86,7 @@ else
 					$('#photoCover').val($(this).val());
 				});
 		</script>
-
+		<span id="sizeAlert" style="color:red; display:none;">上传文件超过允许值！单次上传总大小限制为50M</span>
 		<form class="form-inline" style="float: right; margin-left: 10px; text-align: left;">
 			<div class="form-group">
 				<input type="text" class="form-control" id="exampleInputEmail2" placeholder="输入要搜索的文件">
@@ -117,21 +111,11 @@ else
 
 
 			@foreach (var item in dataShow)
-			{
-
-
-				<tr>
-
-
+			{	<tr>
 					<td>
-
 						<a asp-controller="File" asp-action="Download" asp-route-id="@item.Id">@item.Name</a>
-
 					</td>
-
-
 					<td style="text-align: center;">
-
 						<button class="btn-sm1 btn-link" asp-action="Download" asp-controller="File" asp-route-id="@item.Id">下载</button>
 						<button class="btn-sm1 btn-link" data-toggle="modal" data-target="#deletefile" data-id="@item.Id" data-name="@item.Name" onclick="DeleteFile(this)">删除</button>
 						@*需要判断文件状态选择显示哪个功能*@
@@ -235,7 +219,7 @@ else
 	<script>
 		$(document).ready(function(){
 		@*将文件大小替换成友好的显示*@
-			var filesize = getElementsClass("change-size");
+			var filesize =  $(".change-size");
 			var unit = "B";
 
 			for (var i = 0; i < filesize.length; i++) {
@@ -266,21 +250,8 @@ else
 
 			}
 		});
-		function getElementsClass(classnames) {
-			var classobj = new Array();
-			var classint = 0;
-			var tags = document.getElementsByTagName("*");
-			for (var i in tags) {
-				if (tags[i].nodeType == 1) {@*判断节点类型 *@
-					if (tags[i].getAttribute("class") == classnames)@*判断和需要CLASS名字相同的，并组成一个数组*@
-					{
-						classobj[classint] = tags[i];
-						classint++;
-					}
-				}
-			}
-			return classobj;
-		}
+		
+		
 	</script>
 }
 <script type="text/javascript">
@@ -301,13 +272,23 @@ else
         $('#cancel-share-file-name-in').text($(obj).data('name'));
     }
 
-    function JudgeFile() {@*用于上传文件时判断是否已选择文件，若没有选择，则无法上传*@
+    function JudgeFile(theFile) {@*用于上传文件时判断是否已选择文件，若没有选择，则无法上传*@
 		if ($('#lefile').val() == "") {
 			$('#uploadFile').attr('disabled', 'disabled');
-
+			$('#sizeAlert').hide();
 		} else {
-			$('#uploadFile').removeAttr('disabled');
-			$('#photoCover').val($('#lefile').val());
+			
+			if (theFile.files[0].size > 52428800) {
+				$('#uploadFile').attr('disabled', 'disabled');
+				$('#photoCover').val($('#lefile').val());
+				$('#sizeAlert').show();
+			}
+			else {
+				$('#sizeAlert').hide();
+				$('#uploadFile').removeAttr('disabled');
+				$('#photoCover').val($('#lefile').val());
+			}
+			
 		}
 
 	}

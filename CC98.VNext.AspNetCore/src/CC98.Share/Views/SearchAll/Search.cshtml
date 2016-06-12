@@ -77,8 +77,9 @@ else
         <thead>
         <tr>
             <th>文件名</th>
-            <th>文件路径</th>
-            <th>文件描述</th>
+            <th>操作</th>
+            <th>上传日期</th>
+            <th>文件大小</th>
         </tr>
         </thead>
         <tbody>
@@ -92,6 +93,7 @@ else
                 <td>@item.Description</td>
             </tr>
             }*@
+
         @foreach (var item in dataSource)
         {
             <tr>
@@ -100,18 +102,19 @@ else
                     <a asp-controller="Home" asp-action="Fileinfo">@item.Name</a>
                 </td>
 
-                <td style="text-align: center">
-                    <a class="btn btn-default" asp-action="Download" asp-controller="File" asp-route-id="@item.Id">下载</a>
-                    <a class="btn btn-default" data-toggle="modal" data-target="#deletefile" onclick="DeleteFile('@item.Id')">
+                <td style="text-align: match-parent">
+                    <a class="btn btn-default btn-xs" asp-action="Download" asp-controller="File" asp-route-id="@item.Id" >下载</a>
+                    @*<a class="btn btn-default" data-toggle="modal" data-target="#deletefile" onclick="DeleteFile('@item.Id')">
                         <a id="delete-file-name" data-item="@item.Name">删除</a>
                     </a>
 
                     <a class="btn btn-default" data-toggle="modal" href="#sharefile" onclick="ShareFile('@item.Id')">
                         <a id="share-file-name" data-item="@item.Name">分享</a>
-                    </a>
+                    </a>*@
                 </td>
                 <td>@item.UploadTime</td>
-                <td>@item.Size</td>
+                @*<td>@item.Size</td>*@
+                <td id="SizeOfItem" class="change-size">@item.Size</td>
             </tr>
         }
 
@@ -145,3 +148,87 @@ else
 
     <button type="submit" class="btn btn-default btn-primary">搜索</button>
 </form>
+@section scripts{
+    <script>
+		$(document).ready(function(){
+		@*将文件大小替换成友好的显示*@
+			var filesize = getElementsClass("change-size");
+			var unit = "B";
+
+			for (var i = 0; i < filesize.length; i++) {
+				var size = parseFloat(filesize[i].innerHTML);
+
+				if (size > 1099511627776) {
+					unit = "TB";
+					size = size * 1.00 / 1099511627776;
+				}
+				if (size > 1073741824)
+				{
+					size = size * 1.00 / 1073741824;
+					unit = "G";
+				}
+				if (size > 1048576)
+				{
+					size = size / 1048576;
+					unit = "MB";
+				}
+				if (size > 1024)
+				{
+					size = size / 1024;
+					unit = "KB";
+				}
+				size = size.toFixed(2);
+				var FinalSize = String(size) + unit;
+				filesize[i].innerHTML = FinalSize;
+
+			}
+		});
+		function getElementsClass(classnames) {
+			var classobj = new Array();
+			var classint = 0;
+			var tags = document.getElementsByTagName("*");
+			for (var i in tags) {
+				if (tags[i].nodeType == 1) {@*判断节点类型 *@
+					if (tags[i].getAttribute("class") == classnames)@*判断和需要CLASS名字相同的，并组成一个数组*@
+					{
+						classobj[classint] = tags[i];
+						classint++;
+					}
+				}
+			}
+			return classobj;
+		}
+    </script>
+}
+<script type="text/javascript">
+
+
+    function DeleteFile(obj) {
+        $('#delete-file-id-input').val($(obj).data('id'));
+        $('#delete-file-name-in').text($(obj).data('name'));
+    }
+
+    function ShareFile(obj) {
+        $('#share-file-id-input').val($(obj).data('id'));
+        $('#share-file-name-in').text($(obj).data('name'));
+    }
+
+    function CancelShare(obj) {
+        $('#cancel-share-file-id-input').val($(obj).data('id'));
+        $('#cancel-share-file-name-in').text($(obj).data('name'));
+    }
+
+    function JudgeFile() {@*用于上传文件时判断是否已选择文件，若没有选择，则无法上传*@
+		if ($('#lefile').val() == "") {
+			$('#uploadFile').attr('disabled', 'disabled');
+
+		} else {
+			$('#uploadFile').removeAttr('disabled');
+			$('#photoCover').val($('#lefile').val());
+		}
+
+	}
+
+
+
+</script>

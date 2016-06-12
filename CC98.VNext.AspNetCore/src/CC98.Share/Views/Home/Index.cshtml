@@ -51,7 +51,7 @@ var pagersource = (IPagedList)ViewData["pagersource"];
     <div class="container">
         <hr style="border: none; border-top: 1px solid #eee; height: 1px;" />
         <div id="person-info" style="display: inline-block;">
-            <img class="img-thumbnail" width="120" height="120" src="@User.GetPortraitUri()" style="float: left" />
+            <img class="img-thumbnail" width="120" height="120" src="@User.GetPortraitUri()" style="float: left"/>
             <div style="float: left">
                 <h4 style="padding-left: 70px">@User.Identity.Name</h4>
 
@@ -68,18 +68,37 @@ var pagersource = (IPagedList)ViewData["pagersource"];
                     </li>
                     <li class="person-li">
 
-					<p>50GB</p>
-					网盘容量
-				</li>
-				<li class="person-li">
-					<p class="change-size">@filesize</p>
-					可用容量
+                        <p>50GB</p>
+                        网盘容量
+                    </li>
+                    <li class="person-li">
+                        <p class="change-size">@filesize</p>
+                        可用容量
 
                     </li>
 
                 </ul>
             </div>
         </div>
+
+        <div style="display: inline; margin-top: 10px; text-align: right;">
+            @await Html.PartialAsync("_UploadPartial")
+            <script type="text/javascript">
+                    $('input[id=lefile]')
+                        .change(function () {
+                            $('#photoCover').val($(this).val());
+                        });
+            </script>
+            <span id="sizeAlert" style="display:none;color:red" class="text-capitalize">文件大小超过限制，单次上传总大小限制为50M</span>
+
+            @*<form class="form-inline" style="float: right; margin-left: 10px; text-align: left;">
+                <div class="form-group">
+                    <input type="text" class="form-control" id="exampleInputEmail2" placeholder="输入要搜索的文件">
+                </div>
+                <button type="submit" class="btn btn-default">搜索</button>
+            </form>*@
+        </div>
+        <div style="display: block; clear: both; height: 5px"></div>
         <h2 class="text-center text-muted">
             前辈你还没有上传文件~
         </h2>
@@ -133,14 +152,15 @@ var pagersource = (IPagedList)ViewData["pagersource"];
                             $('#photoCover').val($(this).val());
                         });
                 </script>
-				<span id="sizeAlert" style="display:none;color:red">文件大小超过限制，单次上传总大小限制为50M</span>
-                @*<form class="form-inline" style="float: right; margin-left: 10px; text-align: left;">
-                        <div class="form-group">
-                            <input type="text" class="form-control" id="exampleInputEmail2" placeholder="输入要搜索的文件">
-                        </div>
-                        <button type="submit" class="btn btn-default">搜索</button>
-                    </form>*@
-            </div>
+                <span id="sizeAlert" style="display:none;color:red" class="text-capitalize">文件大小超过限制，单次上传总大小限制为50M</span>
+                
+                    @*<form class="form-inline" style="float: right; margin-left: 10px; text-align: left;">
+                <div class="form-group">
+                    <input type="text" class="form-control" id="exampleInputEmail2" placeholder="输入要搜索的文件">
+                </div>
+                <button type="submit" class="btn btn-default">搜索</button>
+            </form>*@
+                </div>
             <div style="display: block; clear: both; height: 5px"></div>
            
 

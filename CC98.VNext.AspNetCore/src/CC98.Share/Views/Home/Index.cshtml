@@ -135,8 +135,8 @@ else
 						<a class="btn-sm1" asp-action="Download" asp-controller="File" asp-route-id="@item.Id">下载</a>
 						<a class="btn-sm1" data-toggle="modal" data-target="#deletefile" data-id="@item.Id" data-name="@item.Name" onclick="DeleteFile(this)">删除</a>
 						@*需要判断文件状态选择显示哪个功能*@
-						<a class="btn-sm1" data-toggle="modal" href="#sharefile" data-id="@item.Id" data-name="@item.Name" onclick="ShareFile(this)">分享</a>
-						<a class="btn-sm1" data-toggle="modal" href="#cancelshare" data-id="@item.Id" data-name="@item.Name" onclick="CancelShare(this)">取消分享</a>
+						<a class="btn-sm1" data-toggle="modal" data-target="#sharefile" data-id="@item.Id" data-name="@item.Name" onclick="ShareFile(this)">分享</a>
+						<a class="btn-sm1" data-toggle="modal" data-target="#cancelshare" data-id="@item.Id" data-name="@item.Name" onclick="CancelShare(this)">取消分享</a>
 					</td>
 					<td>@item.UploadTime</td>
 
@@ -188,12 +188,39 @@ else
 		<div class="modal-body" style="margin-left: 20px">
 			<p id="share-file-name-in"></p>
 		</div>
+	<div id="sharefile" class="modal fade in" style="background-color: #fff; display: none; margin-top: 10%; margin-left: 25%; position: fixed; width: 450px; height: 250px">
+		<div class="modal-header">
+
+			<a class="close" data-dismiss="modal">x</a>
+			<h4>您选择分享以下文件</h4>
+			<br />
+			<p id="share-file-name-in"></p>
+		</div>
+		<div class="modal-body" style="margin-left: 20px">
+		</div>
+		<div class="modal-footer">
+			
+			<button type="submit">确认</button>
+			<a href="#" class="btn" data-dismiss="modal">取消</a>
+		</div>
+		@*<div class="modal-header">
+            <a class="close" data-dismiss="modal">x</a>
+            <h4>分享文件</h4>
+			<br />
+            <p id="share-file-name-in"></p>
+        </div>
+        @*<div class="modal-body" style="margin-left:20px">
+		<h5>您选择分享以下文件</h5>
+	@*</div>
         <div class="modal-footer">
             <span id="copysuccess" style="display: none">复制成功！</span>
             <a href="#" class="btn btn-success"type="submit">确认</a><!--How????-->
             <a href="#" class="btn btn-default" data-dismiss="modal">取消</a>
         </div>
     </div>
+            <a href="#" class="btn" data-dismiss="modal">取消</a>
+        </div>*@
+	</div>
 </form>
 @*删除界面，需要获取文件名以及对按钮操作进行绑定函数*@
 <form asp-action="DeleteFile" asp-controller="File">

@@ -40,7 +40,8 @@ namespace CC98.Share.Controllers
         ///     显示网站主页。
         /// </summary>
         /// <returns>操作结果。</returns>
-        public IActionResult Index(int page = 1)
+        public IActionResult Index([FromServices]IOptions<Setting> setting,
+int page = 1)
         {
             if (User.Identity.IsAuthenticated == false)
             {
@@ -68,7 +69,7 @@ namespace CC98.Share.Controllers
 
             ViewData["datashow"] = pageData;
             ViewData["filecount"] = fileCount;
-			fileSize = 53687091200 - fileSize;
+			fileSize = setting.Value.UserTotalSize - fileSize;
 
 			ViewData["filesize"] = fileSize;
 			ViewData["sharecount"] = shareCount;

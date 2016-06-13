@@ -3,6 +3,7 @@ using CC98.Share.Data;
 using CC98.Share.ViewModels.SearchAll;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc;
+using Sakura.AspNetCore;
 
 // For more information on enabling MVC for empty projects, visit http://go.microsoft.com/fwlink/?LinkID=397860
 

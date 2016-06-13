@@ -1,39 +1,36 @@
-﻿@using CC98.Share
+﻿@using System.Collections.Generic
+@using CC98.Share
 @using CC98.Share.Data
 @using CC98.Share.ViewModels.SearchAll
+@using Microsoft.AspNetCore.Mvc.Rendering
 @using Sakura.AspNetCore
 @model CC98.Share.ViewModels.SearchAll.SearchModeViewModel
 
 @{
 
 
-	var list = new List<SelectListItem>();
+    var list = new List<SelectListItem>();
 
-	list.Add(new SelectListItem {Text = "发布者", Value = nameof(Valuation.UserName), Selected = false});
-	list.Add(new SelectListItem {Text = "文件名", Value = nameof(Valuation.FileName), Selected = false});
-	list.Add(new SelectListItem {Text = "描述", Value = nameof(Valuation.Discription), Selected = false});
-	list.Add(new SelectListItem {Text = "文件名及描述", Value = nameof(Valuation.FileNameAndDis), Selected = false});
-	var data = (ShareItem[]) ViewData["List"];
-	var list1 = new List<SelectListItem>();
-	var dataSource = (IPagedList<ShareItem>) ViewData["datasource"];
-	list1.Add(new SelectListItem {Text = "精确匹配", Value = nameof(Accuracy.Accurate), Selected = false});
-	list1.Add(new SelectListItem {Text = "部分匹配", Value = nameof(Accuracy.Vague), Selected = false});
+    list.Add(new SelectListItem {Text = "发布者", Value = nameof(Valuation.UserName), Selected = false});
+    list.Add(new SelectListItem {Text = "文件名", Value = nameof(Valuation.FileName), Selected = false});
+    list.Add(new SelectListItem {Text = "描述", Value = nameof(Valuation.Discription), Selected = false});
+    list.Add(new SelectListItem {Text = "文件名及描述", Value = nameof(Valuation.FileNameAndDis), Selected = false});
+    var data = (ShareItem[]) ViewData["List"];
+    var list1 = new List<SelectListItem>();
+    var dataSource = (IPagedList<ShareItem>) ViewData["datasource"];
+    list1.Add(new SelectListItem {Text = "精确匹配", Value = nameof(Accuracy.Accurate), Selected = false});
+    list1.Add(new SelectListItem {Text = "部分匹配", Value = nameof(Accuracy.Vague), Selected = false});
 
-	var transdata = ViewBag.onePageOfProducts;
-	var transsearch = (SearchModeViewModel) ViewData["SEARCH"];
+    var transdata = ViewBag.onePageOfProducts;
+    var transsearch = (SearchModeViewModel) ViewData["SEARCH"];
+    Layout = "_Layout";
+    ViewBag.PageTitle = "搜索结果";
 }
 <br/>
 
 @if (ViewData["CHECK"] == null)
 {
-	<html>
-	<head>
-		<title>Bootstrap 实例 - 基本的表格</title>
-		<link href="http://libs.baidu.com/bootstrap/3.0.3/css/bootstrap.min.css" rel="stylesheet">
-		<script src="http://libs.baidu.com/jquery/2.0.0/jquery.min.js"></script>
-		<script src="http://libs.baidu.com/bootstrap/3.0.3/js/bootstrap.min.js"></script>
-	</head>
-	<body>
+	
 	<table class="table">
 
 		<thead>
@@ -41,10 +38,8 @@
 			<span>请在下方的搜索框内输入关键词并选择搜索的类型</span>
 		</tr>
 		</thead>
-		<tbody></tbody>
 	</table>
-	</body>
-	</html>
+	
 }
 else if (data.Length == 0)
 {
@@ -62,13 +57,8 @@ else if (data.Length == 0)
 
 else
 {
-	<html>
-	<head>
-		<title>Bootstrap 实例 - 基本的表格</title>
-		<link href="http://libs.baidu.com/bootstrap/3.0.3/css/bootstrap.min.css" rel="stylesheet">
-		<script src="http://libs.baidu.com/jquery/2.0.0/jquery.min.js"></script>
-		<script src="http://libs.baidu.com/bootstrap/3.0.3/js/bootstrap.min.js"></script>
-	</head>
+	
+
 	<body>
 	<table class="table table-striped">
 		<caption>搜索结果</caption>
@@ -125,7 +115,7 @@ else
 
 
 	</body>
-	</html>
+	
 
 
 	<html>

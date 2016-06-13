@@ -24,7 +24,8 @@
 
 	.btn-sm1 {
 		font-size: 14px;
-		line-height: 1.5;
+		margin:0px 10px;
+		cursor:pointer;
 	}
 </style>
 
@@ -81,16 +82,11 @@ if (filecount == 0)
 					</ul>
 				</div>
 			</div>
-
+		<h4>&nbsp;&nbsp;<small><span id="sizeAlert" style="display:none;color:red">文件大小超过限制!</span>上传限制为50M/次</small></h4>
         <div style="display: inline; margin-top: 10px; text-align: right;">
             @await Html.PartialAsync("_UploadPartial")
-            <script type="text/javascript">
-                    $('input[id=lefile]')
-                        .change(function () {
-                            $('#photoCover').val($(this).val());
-                        });
-            </script>
-            <span id="sizeAlert" style="display:none;color:red" class="text-capitalize">文件大小超过限制，单次上传总大小限制为50M</span>
+           
+			
 
 				@*<form class="form-inline" style="float: right; margin-left: 10px; text-align: left;">
 						<div class="form-group">
@@ -144,11 +140,11 @@ if (filecount == 0)
 
 
 
-
+			<h4>&nbsp;&nbsp;<small><span id="sizeAlert" style="display:none;color:red">文件大小超过限制!</span>上传限制为50M/次</small></h4>
             <div style="display: inline; margin-top: 10px; text-align: right;">
                 @await Html.PartialAsync("_UploadPartial")
-                
-                
+				
+				
                 
                     @*<form class="form-inline" style="float: right; margin-left: 10px; text-align: left;">
                 <div class="form-group">
@@ -157,7 +153,7 @@ if (filecount == 0)
                 <button type="submit" class="btn btn-default">搜索</button>
             </form>*@
                 </div>
-			<h4><small><span id="sizeAlert" style="display:none;color:red">文件大小超过限制!</span>上传限制为50M/次</small></h4>
+			
             <div style="display: block; clear: both; height: 5px"></div>
            
 
@@ -184,16 +180,16 @@ if (filecount == 0)
 							<a asp-controller="File" asp-action="Download" asp-route-id="@item.Id">@item.Name</a>
 						</td>
 						<td style="text-align: center;">
-							<button class="btn-sm1 btn-link" asp-action="Download" asp-controller="File" asp-route-id="@item.Id">下载</button>
-							<button class="btn-sm1 btn-link" data-toggle="modal" data-target="#deletefile" data-id="@item.Id" data-name="@item.Name" onclick="DeleteFile(this)">删除</button>
+							<a class="btn-sm1 btn-link" asp-action="Download" asp-controller="File" asp-route-id="@item.Id">下载</a>
+							<a class="btn-sm1 btn-link" data-toggle="modal" data-target="#deletefile" data-id="@item.Id" data-name="@item.Name" onclick="DeleteFile(this)">删除</a>
 							@*需要判断文件状态选择显示哪个功能*@
 							@if (!item.IsShared)
 							{
-								<button class="btn-sm1 btn-link" data-toggle="modal" data-target="#sharefile" data-id="@item.Id" data-name="@item.Name" onclick="ShareFile(this)">选择分享</button>
+								<a class="btn-sm1 btn-link" data-toggle="modal" data-target="#sharefile" data-id="@item.Id" data-name="@item.Name" onclick="ShareFile(this)">选择分享</a>
 							}
 							else
 							{
-								<button class="btn-sm1 btn-link" data-toggle="modal" data-target="#cancelshare" data-id="@item.Id" data-name="@item.Name" onclick="CancelShare(this)">取消分享</button>
+								<a class="btn-sm1 btn-link" data-toggle="modal" data-target="#cancelshare" data-id="@item.Id" data-name="@item.Name" onclick="CancelShare(this)">取消分享</a>
 							}
 						</td>
 						<td>@item.UploadTime</td>
@@ -355,6 +351,10 @@ if (filecount == 0)
 	</script>
 }
 <script type="text/javascript">
+	 
+      $('input[id=lefile]').change(function () {
+          $('#photoCover').val($(this).val());
+      });
 
 
 	function DeleteFile(obj) {

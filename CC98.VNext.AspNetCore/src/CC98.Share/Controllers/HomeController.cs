@@ -66,11 +66,11 @@ int page = 1)
 					shareCount = shareCount + 1;
 				}
 			}
-
-            ViewData["datashow"] = pageData;
+			var userTotalSize = setting.Value.UserTotalSize;
+			ViewData["datashow"] = pageData;
             ViewData["filecount"] = fileCount;
-			fileSize = setting.Value.UserTotalSize - fileSize;
-
+			fileSize = userTotalSize - fileSize;
+			ViewData["userTotalSize"] = userTotalSize;
 			ViewData["filesize"] = fileSize;
 			ViewData["sharecount"] = shareCount;
 			ViewData["pagersource"] = pagerSource;

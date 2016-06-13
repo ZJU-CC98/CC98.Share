@@ -42,13 +42,13 @@ else
 {
 	var dataShow = (IPagedList<ShareItem>) ViewData["datashow"];
 	var filesize = (long) ViewData["filesize"]; @*用户文件总大小*@
-	var filecount = (int) ViewData["filecount"];
-	var sharecount = (int) ViewData["sharecount"];
+var filecount = (int) ViewData["filecount"];
+var sharecount = (int) ViewData["sharecount"];
+var totalSize = ViewData["userTotalSize"];
+var pagersource = (IPagedList) ViewData["pagersource"];
 
-	var pagersource = (IPagedList) ViewData["pagersource"];
-
-	if (filecount == 0)
-	{
+if (filecount == 0)
+{
 		<div class="container">
 			<hr style="border: none; border-top: 1px solid #eee; height: 1px;"/>
 			<div id="person-info" style="display: inline-block;">
@@ -69,7 +69,7 @@ else
 						</li>
 						<li class="person-li">
 
-							<p>50GB</p>
+							<p class="change-size">@totalSize</p>
 							网盘容量
 						</li>
 						<li class="person-li">
@@ -127,7 +127,7 @@ else
 						</li>
 						<li class="person-li">
 
-                            <p>50GB</p>
+                            <p class="change-size">@totalSize</p>
                             网盘容量
                         </li>
                         <li class="person-li">
@@ -334,7 +334,7 @@ else
 				}
 				if (size > 1073741824) {
 					size = size * 1.00 / 1073741824;
-					unit = "G";
+					unit = "GB";
 				}
 				if (size > 1048576) {
 					size = size / 1048576;

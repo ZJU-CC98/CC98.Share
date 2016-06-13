@@ -6,18 +6,18 @@
 @* 如果没有禁止显示消息，则默认显示消息 *@
 @if (ViewBag.ShowOperationMessages != false)
 {
-    <div asp-message-list="AlertDialogClosable"></div>
+	<div asp-message-list="AlertDialogClosable"></div>
 }
 
 @section scripts{
-    @await RenderSectionAsync("scripts", false);
+	@await RenderSectionAsync("scripts", false);
 }
 <form class="form-inline" style="float: left; text-align: left;" asp-action="Upload" asp-controller="File" asp-antiforgery="true" enctype="multipart/form-data">
-    <input asp-for="Files" id="lefile" type="file" style="display: none; float: left; text-align: left;"  onchange="JudgeFile(this)" multiple="multiple">
-    <div class="input-append">
+	<input asp-for="Files" id="lefile" type="file" style="display: none; float: left; text-align: left;" onchange="JudgeFile(this)" multiple="multiple">
+	<div class="input-append">
 
-        <a onclick="$('input[id=lefile]').click();">
-            <input id="photoCover" class="btn btn-default" type="text" value="点此选择文件" style="text-align: left">
+		<a onclick="$('input[id=lefile]').click();">
+			<input id="photoCover" class="btn btn-default" type="text" value="点此选择文件" style="text-align: left">
 
 
         </a><button id="uploadFile" type="submit" class="btn btn-default" disabled="disabled"> 上传文件 </button>

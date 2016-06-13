@@ -82,7 +82,7 @@ if (filecount == 0)
 					</ul>
 				</div>
 			</div>
-		<h4>&nbsp;&nbsp;<small><span id="sizeAlert" style="display:none;color:red">文件大小超过限制!</span>上传限制为50M/次</small></h4>
+		<h4>&nbsp;&nbsp;<small><span id="sizeAlert" style="display:none;color:red">文件大小超过限制!</span>上传限制为50M/个</small></h4>
         <div style="display: inline; margin-top: 10px; text-align: right;">
             @await Html.PartialAsync("_UploadPartial")
            
@@ -140,7 +140,7 @@ if (filecount == 0)
 
 
 
-			<h4>&nbsp;&nbsp;<small><span id="sizeAlert" style="display:none;color:red">文件大小超过限制!</span>上传限制为50M/次</small></h4>
+			<h4>&nbsp;&nbsp;<small><span id="sizeAlert" style="display:none;color:red">文件大小超过限制!</span>上传限制为50M/个</small></h4>
             <div style="display: inline; margin-top: 10px; text-align: right;">
                 @await Html.PartialAsync("_UploadPartial")
 				
@@ -237,7 +237,7 @@ if (filecount == 0)
 @*分享界面，需要产生独特的链接*@
 <form asp-action="ShareFile" asp-controller="File">
 	<input type="hidden" id="share-file-id-input" name="id"/>
-	<div id="sharefile" class="modal fade in" style="background-color: #fefefe; display: none; height: 250px; margin-left: 25%; margin-top: 10%; position: fixed; width: 450px;">
+	<div id="sharefile" class="modal fade in" style="background-color: #fefefe; display: none; height: 230px; margin-left: 25%; margin-top: 10%; position: fixed; width: 450px;">
 		<div class="modal-header">
 			<a class="close" data-dismiss="modal">x</a>
 			<h4>分享文件</h4>
@@ -274,7 +274,7 @@ if (filecount == 0)
 @*删除界面，需要获取文件名以及对按钮操作进行绑定函数*@
 <form asp-action="DeleteFile" asp-controller="File">
 	<input type="hidden" id="delete-file-id-input" name="id"/>
-	<div id="deletefile" class="modal fade in" style="background-color: #fefefe; display: none; height: 250px; margin-left: 25%; margin-top: 10%; position: fixed; width: 450px;">
+	<div id="deletefile" class="modal fade in" style="background-color: #fefefe; display: none; height: 230px; margin-left: 25%; margin-top: 10%; position: fixed; width: 450px;">
 		<div class="modal-header">
 			<a class="close" data-dismiss="modal">x</a>
 			<h4>永久删除以下文件</h4>
@@ -292,7 +292,7 @@ if (filecount == 0)
 @*取消分享，需要获取文件名以及对按钮操作进行绑定函数*@
 <form asp-action="CancelShare" asp-controller="File">
 	<input type="hidden" id="cancel-share-file-id-input" name="id"/>
-	<div id="cancelshare" class="modal fade in" style="background-color: #fefefe; display: none; height: 250px; margin-left: 25%; margin-top: 10%; position: fixed; width: 450px;">
+	<div id="cancelshare" class="modal fade in" style="background-color: #fefefe; display: none; height: 230px; margin-left: 25%; margin-top: 10%; position: fixed; width: 450px;">
 		<div class="modal-header">
 
 			<a class="close" data-dismiss="modal">x</a>
@@ -379,18 +379,16 @@ if (filecount == 0)
 		} else {
 			var totalSize = 0;
 			for (i = 0; i < theFile.files.length; i++) {
-				totalSize += theFile.files[i].size;
-
-			}
-
-			if (totalSize > 52428800) {
-				$('#uploadFile').attr('disabled', 'disabled');
-				$('#photoCover').val($('#lefile').val());
-				$('#sizeAlert').show();
-			} else {
-				$('#sizeAlert').hide();
-				$('#uploadFile').removeAttr('disabled');
-				$('#photoCover').val($('#lefile').val());
+				totalSize = theFile.files[i].size;
+				if (totalSize > 52428800) {
+					$('#uploadFile').attr('disabled', 'disabled');
+					$('#photoCover').val($('#lefile').val());
+					$('#sizeAlert').show();
+				} else {
+					$('#sizeAlert').hide();
+					$('#uploadFile').removeAttr('disabled');
+					$('#photoCover').val($('#lefile').val());
+				}
 			}
 
 		}

@@ -3,15 +3,19 @@ using CC98.Share.Data;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc;
 using Sakura.AspNetCore;
+using Microsoft.Extensions.Options;
 
 namespace CC98.Share.Controllers
 {
     /// <summary>
     ///     提供网站最常用功能的访问。
     /// </summary>
+	
     public class HomeController : Controller
     {
-        public HomeController(IHostingEnvironment environment, CC98ShareModel userDb)
+		
+		
+		public HomeController(IHostingEnvironment environment, CC98ShareModel userDb)
         {
             Environment = environment;
             UserDb = userDb;
@@ -22,8 +26,9 @@ namespace CC98.Share.Controllers
 
 
         private CC98ShareModel UserDb { get; }
+		public int FromServices { get; private set; }
 
-        private IQueryable<ShareItem> GetUserFile(string username)
+		private IQueryable<ShareItem> GetUserFile(string username)
         {
             var result = from i in UserDb.Items
                          orderby i.Id
@@ -32,12 +37,14 @@ namespace CC98.Share.Controllers
             return result;
         }
 
-        /// <summary>
-        ///     显示网站主页。
-        /// </summary>
-        /// <returns>操作结果。</returns>
-        public IActionResult Index(int page = 1)
-        {
+		/// <summary>
+		///     显示网站主页。
+		/// </summary>
+		/// <returns>操作结果。</returns>
+		/// 
+		public IActionResult Index( [FromServices]IOptions<Setting> setting, int page = 1
+)
+		{
             if (User.Identity.IsAuthenticated == false)
             {
                 return View();
@@ -64,7 +71,9 @@ namespace CC98.Share.Controllers
 
             ViewData["datashow"] = pageData;
             ViewData["filecount"] = fileCount;
-			fileSize = 53687091200 - fileSize;
+			
+			long settingSize = setting.Value.UserTotalSize;
+			fileSize = settingSize - fileSize;
 
 			ViewData["filesize"] = fileSize;
             ViewData["sharecount"] = shareCount;

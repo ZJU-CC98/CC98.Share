@@ -89,7 +89,7 @@ var pagersource = (IPagedList)ViewData["pagersource"];
                             $('#photoCover').val($(this).val());
                         });
             </script>
-            <span id="sizeAlert" style="display:none;color:red" class="text-capitalize">文件大小超过限制，单次上传总大小限制为50M</span>
+			<h4><small><span id="sizeAlert" style="display:none;color:red">文件大小超过限制!</span>上传限制为50M/次</small></h4>
 
             @*<form class="form-inline" style="float: right; margin-left: 10px; text-align: left;">
                 <div class="form-group">
@@ -126,7 +126,7 @@ var pagersource = (IPagedList)ViewData["pagersource"];
                         </li>
                         <li class="person-li">
 
-                            <p>2TB</p>
+                            <p>50GB</p>
                             网盘容量
                         </li>
                         <li class="person-li">
@@ -146,13 +146,8 @@ var pagersource = (IPagedList)ViewData["pagersource"];
 
             <div style="display: inline; margin-top: 10px; text-align: right;">
                 @await Html.PartialAsync("_UploadPartial")
-                <script type="text/javascript">
-                    $('input[id=lefile]')
-                        .change(function () {
-                            $('#photoCover').val($(this).val());
-                        });
-                </script>
-                <span id="sizeAlert" style="display:none;color:red" class="text-capitalize">文件大小超过限制，单次上传总大小限制为50M</span>
+                
+                
                 
                     @*<form class="form-inline" style="float: right; margin-left: 10px; text-align: left;">
                 <div class="form-group">
@@ -161,6 +156,7 @@ var pagersource = (IPagedList)ViewData["pagersource"];
                 <button type="submit" class="btn btn-default">搜索</button>
             </form>*@
                 </div>
+			<h4><small><span id="sizeAlert" style="display:none;color:red">文件大小超过限制!</span>上传限制为50M/次</small></h4>
             <div style="display: block; clear: both; height: 5px"></div>
            
 
@@ -312,35 +308,41 @@ var pagersource = (IPagedList)ViewData["pagersource"];
 </form>
 @section scripts{
 	<script>
-		$(document).ready(function(){
-		@*将文件大小替换成友好的显示*@
-			var filesize =  $(".change-size");
+		@*上传框样式替换*@
+                    $('input[id=lefile]')
+                        .change(function () {
+                            $('#photoCover').val($(this).val());
+                        });
+
+		$(document).ready(function () {
+			@*将文件大小替换成友好的显示*@
+			var filesize1 = $(".change-size");
 			var unit = "B";
 
-                    for (var i = 0; i < filesize.length; i++) {
-                        var size = parseFloat(filesize[i].innerHTML);
+			filesize1.each(function (index, element) {
+				var size = parseInt($(element).html());
 
-                        if (size > 1099511627776) {
-                            unit = "TB";
-                            size = size * 1.00 / 1099511627776;
-                        }
-                        if (size > 1073741824) {
-                            size = size * 1.00 / 1073741824;
-                            unit = "G";
-                        }
-                        if (size > 1048576) {
-                            size = size / 1048576;
-                            unit = "MB";
-                        }
-                        if (size > 1024) {
-                            size = size / 1024;
-                            unit = "KB";
-                        }
-                        size = size.toFixed(2);
-                        var FinalSize = String(size) + unit;
-                        filesize[i].innerHTML = FinalSize;
+				if (size > 1099511627776) {
+					unit = "TB";
+					size = size * 1.00 / 1099511627776;
+				}
+				if (size > 1073741824) {
+					size = size * 1.00 / 1073741824;
+					unit = "G";
+				}
+				if (size > 1048576) {
+					size = size / 1048576;
+					unit = "MB";
+				}
+				if (size > 1024) {
+					size = size / 1024;
+					unit = "KB";
+				}
+				size = size.toFixed(2);
+				var FinalSize = String(size) + unit;
+				$(element).text(FinalSize);
 
-			}
+			})
 		});
 		
 		

@@ -55,10 +55,6 @@ namespace CC98.Share.Data
 		/// </summary>
 		public long Size { get; set; }
 
-		/// <summary>
-		///     用户文件总大小
-		/// </summary>
-		public long TotalSize { get; set; }
 
 		/// <summary>
 		///     上传时间

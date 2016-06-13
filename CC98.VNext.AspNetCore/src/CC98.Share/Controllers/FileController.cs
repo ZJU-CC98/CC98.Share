@@ -194,16 +194,7 @@ namespace CC98.Share.Controllers
 				return StatusCode(400);
 			}
 			//随机生成一个文件名字，并将此文件插入数据库。
-			bool share;
 			var value = inputModel.Value;
-			if (value == 1)
-			{
-				share = true;
-			}
-			else
-			{
-				share = false;
-			}
 			try
 			{
 				foreach (var file in inputModel.Files)
@@ -219,14 +210,17 @@ namespace CC98.Share.Controllers
 						await file.CopyToAsync(stream);
 					}
 					tm.Size = file.Length;
-					tm.TotalSize += tm.Size;
-					if (tm.Size > Setting.Value.UserOnceSize)
+                    var output = from i in Model.Items where i.UserName == ExternalSignInManager.GetUserName(User) select i;
+                    var items = from i in output select i.Size;
+                    var TotalSize = items.Sum();
+                    TotalSize += tm.Size;
+                    if (tm.Size > Setting.Value.UserOnceSize)
 					{
 						var level = OperationMessageLevel.Error;
 						accessor.Messages.Add(level, "错误", "上传文件大小超过单次上传上限");
 						return RedirectToAction("Index", "Home");
 					}
-					if (tm.TotalSize > Setting.Value.UserTotalSize)
+					if (TotalSize > Setting.Value.UserTotalSize)
 					{
 						var level = OperationMessageLevel.Error;
 						accessor.Messages.Add(level, "错误", "上传文件总大小超过网盘容量");
@@ -234,7 +228,7 @@ namespace CC98.Share.Controllers
 					}
 					tm.Name = Path.GetFileName(file.FileName);
 					tm.UserName = ExternalSignInManager.GetUserName(User);
-					tm.IsShared = share;
+					tm.IsShared = value;
 					tm.UploadTime = DateTime.Now;
 					Model.Items.Add(tm);
 					await Model.SaveChangesAsync();

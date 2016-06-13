@@ -8,9 +8,10 @@ using CC98.Share.Data;
 namespace cc98.share.Migrations
 {
     [DbContext(typeof(CC98ShareModel))]
-    partial class CC98ShareModelModelSnapshot : ModelSnapshot
+    [Migration("20160613123315_total")]
+    partial class total
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
             modelBuilder
                 .HasAnnotation("ProductVersion", "1.0.0-rc2-20901")

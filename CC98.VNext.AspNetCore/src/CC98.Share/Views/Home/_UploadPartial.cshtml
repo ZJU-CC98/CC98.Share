@@ -23,13 +23,9 @@
 
 			
         </a>
-		@*<select name="IsShare">
-		<option value="1">是</option>
-		<option value="0">否</option>
-	</select>*@
 		<!-- Split button -->
 		<!-- Split button -->
-		<input type="hidden" name="IsShare" id="Shared" value="false">
+		<input asp-for="Value" type="hidden" id="Shared" value="false">
 			
 		<div class="btn-group">
 			<button id="uploadFile" type="submit" class="btn btn-default dropdown-toggle" disabled="disabled">上传文件</button>

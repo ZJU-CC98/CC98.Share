@@ -1,0 +1,18 @@
+﻿@model IEnumerable<MedalCategory>
+@{
+	var activeCategoryId = (int?)ViewBag.ActiveCategoryId;
+}
+
+@if (Model.Any())
+{
+	<div class="list-group">
+		@foreach (var i in Model)
+		{
+			<a class="list-group-item" asp-controller="Medal" asp-action="Index" asp-route-category="@i.Id">@i.Name</a>
+		}
+	</div>
+}
+else
+{
+	<p class="text-center text-muted">目前没有勋章分类</p>
+}

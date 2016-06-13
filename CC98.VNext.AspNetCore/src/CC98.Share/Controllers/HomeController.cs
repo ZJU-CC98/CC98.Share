@@ -3,22 +3,26 @@ using CC98.Share.Data;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc;
 using Sakura.AspNetCore;
+using Microsoft.Extensions.Options;
 
 namespace CC98.Share.Controllers
 {
     /// <summary>
     ///     提供网站最常用功能的访问。
     /// </summary>
+	
     public class HomeController : Controller
     {
-        public HomeController(IHostingEnvironment environment, CC98ShareModel userDb)
+		
+		
+		public HomeController(IHostingEnvironment environment, CC98ShareModel userDb)
         {
             Environment = environment;
             UserDb = userDb;
         }
 
 
-        private IHostingEnvironment Environment { get; }
+		private IHostingEnvironment Environment { get; }
 
 
         private CC98ShareModel UserDb { get; }
@@ -36,7 +40,8 @@ namespace CC98.Share.Controllers
         ///     显示网站主页。
         /// </summary>
         /// <returns>操作结果。</returns>
-        public IActionResult Index(int page = 1)
+        public IActionResult Index([FromServices]IOptions<Setting> setting,
+int page = 1)
         {
             if (User.Identity.IsAuthenticated == false)
             {
@@ -52,55 +57,55 @@ namespace CC98.Share.Controllers
             var pageData = products.OrderBy(p => p.Id).ToPagedList(pageSize, pageNumber);
             IPagedList pagerSource = result.ToPagedList(pageSize, page);
 
-            foreach (var i in products)
-            {
-                fileCount = fileCount + 1;
-                fileSize = fileSize + i.Size;
-                if (i.IsShared)
-                {
-                    shareCount = shareCount + 1;
-                }
-            }
+			foreach (var i in products)
+			{
+				fileCount = fileCount + 1;
+				fileSize = fileSize + i.Size;
+				if (i.IsShared)
+				{
+					shareCount = shareCount + 1;
+				}
+			}
 
             ViewData["datashow"] = pageData;
             ViewData["filecount"] = fileCount;
-			fileSize = 2199023255552 - fileSize;
+			fileSize = setting.Value.UserTotalSize - fileSize;
 
 			ViewData["filesize"] = fileSize;
-            ViewData["sharecount"] = shareCount;
-            ViewData["pagersource"] = pagerSource;
+			ViewData["sharecount"] = shareCount;
+			ViewData["pagersource"] = pagerSource;
 
-            return View();
-        }
+			return View();
+		}
 
-        public IActionResult About()
-        {
-            ViewData["Message"] = "Your application description page.";
+		public IActionResult About()
+		{
+			ViewData["Message"] = "Your application description page.";
 
-            return View();
-        }
+			return View();
+		}
 
-        public IActionResult Contact()
-        {
-            ViewData["Message"] = "Your contact page.";
+		public IActionResult Contact()
+		{
+			ViewData["Message"] = "Your contact page.";
 
-            return View();
-        }
+			return View();
+		}
 
-        public IActionResult Fileinfo()
-        {
-            ViewData["Message"] = "开发中";
+		public IActionResult Fileinfo()
+		{
+			ViewData["Message"] = "开发中";
 
-            return View();
-        }
+			return View();
+		}
 
-        /// <summary>
-        ///     当网站发生错误时显示的页面。
-        /// </summary>
-        /// <returns>操作结果。</returns>
-        public IActionResult Error()
-        {
-            return View();
-        }
-    }
+		/// <summary>
+		///     当网站发生错误时显示的页面。
+		/// </summary>
+		/// <returns>操作结果。</returns>
+		public IActionResult Error()
+		{
+			return View();
+		}
+	}
 }

@@ -1,32 +1,29 @@
-﻿@using System.Collections.Generic
-@using CC98.Share
+﻿@using CC98.Share
 @using CC98.Share.Data
 @using CC98.Share.ViewModels.SearchAll
-@using Microsoft.AspNetCore.Mvc.Rendering
 @using Sakura.AspNetCore
 @model CC98.Share.ViewModels.SearchAll.SearchModeViewModel
 @{
 
 
-    var list = new List<SelectListItem>();
+	var list = new List<SelectListItem>();
 
-    list.Add(new SelectListItem { Text = "发布者", Value = nameof(Valuation.UserName), Selected = false });
-    list.Add(new SelectListItem { Text = "文件名", Value = nameof(Valuation.FileName), Selected = false });
-    list.Add(new SelectListItem { Text = "描述", Value = nameof(Valuation.Discription), Selected = false });
-    list.Add(new SelectListItem { Text = "文件名及描述", Value = nameof(Valuation.FileNameAndDis), Selected = false });
-    var data = (ShareItem[])ViewData["List"];
-    var list1 = new List<SelectListItem>();
-    var dataSource = (IPagedList<ShareItem>)ViewData["datasource"];
-    list1.Add(new SelectListItem { Text = "精确匹配", Value = nameof(Accuracy.Accurate), Selected = false });
-    list1.Add(new SelectListItem { Text = "部分匹配", Value = nameof(Accuracy.Vague), Selected = false });
-
-    var transdata = ViewBag.onePageOfProducts;
-    var transsearch = (SearchModeViewModel)ViewData["SEARCH"];
+	list.Add(new SelectListItem {Text = "发布者", Value = nameof(Valuation.UserName), Selected = false});
+	list.Add(new SelectListItem {Text = "文件名", Value = nameof(Valuation.FileName), Selected = false});
+	list.Add(new SelectListItem {Text = "描述", Value = nameof(Valuation.Discription), Selected = false});
+	list.Add(new SelectListItem {Text = "文件名及描述", Value = nameof(Valuation.FileNameAndDis), Selected = false});
+	var data = (ShareItem[]) ViewData["List"];
+	var list1 = new List<SelectListItem>();
+	var dataSource = (IPagedList<ShareItem>) ViewData["datasource"];
+	list1.Add(new SelectListItem {Text = "部分匹配", Value = nameof(Accuracy.Vague), Selected = false});
+	list1.Add(new SelectListItem {Text = "精确匹配", Value = nameof(Accuracy.Accurate), Selected = false});
+	var transdata = ViewBag.onePageOfProducts;
+	var transsearch = (SearchModeViewModel) ViewData["SEARCH"];
 }
-<form asp-action="Search" asp-controller="SearchAll" method="get" style="padding-top: 10px; margin-left:10px;">
-    <input type="text" asp-for="Words" class="search-form" placeholder="请输入内容" style="height: 28px; padding-left:5px" />
-    <select asp-for="Mode" asp-items="list" class="search-form" style="height: 28px;margin-left:5px"></select>
-    <select asp-for="Acc" asp-items="list1" class="search-form" style="height: 28px;margin-left:5px"></select>
+<form asp-action="Search" asp-controller="SearchAll" method="get" style="margin-left: 10px; padding-top: 10px;">
+	<input type="text" asp-for="Words" class="search-form" placeholder="请输入内容" style="height: 28px; padding-left: 5px"/>
+	<select asp-for="Mode" asp-items="list" class="search-form" style="height: 28px; margin-left: 5px"></select>
+	<select asp-for="Acc" asp-items="list1" class="search-form" style="height: 28px; margin-left: 5px"></select>
 
-    <button type="submit" class="btn btn-xs btn-primary " style="font-size:14px;margin-left:5px;padding:3px 5px">搜索</button>
+	<button type="submit" class="btn btn-xs btn-primary " style="font-size: 14px; margin-left: 5px; padding: 3px 5px">搜索</button>
 </form>

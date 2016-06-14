@@ -23,7 +23,7 @@
 
     var transdata = ViewBag.onePageOfProducts;
     var transsearch = (SearchModeViewModel) ViewData["SEARCH"];
-    Layout = "_Layout";
+    Layout = "_StandardTitleLayout";
     ViewBag.PageTitle = "搜索结果";
 }
 <br/>
@@ -61,7 +61,7 @@ else
 
 	<body>
 	<table class="table table-striped">
-		<caption>搜索结果</caption>
+		@*<caption>搜索结果</caption>*@
 		<thead>
 		<tr>
 			<th>文件名</th>

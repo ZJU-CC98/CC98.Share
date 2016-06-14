@@ -195,7 +195,7 @@ namespace CC98.Share.Controllers
 			}
 			//随机生成一个文件名字，并将此文件插入数据库。
 			var value = inputModel.Value;
-			try
+			
 			{
 				foreach (var file in inputModel.Files)
 				{
@@ -235,10 +235,7 @@ namespace CC98.Share.Controllers
 				}
 				return RedirectToAction("Index", "Home");
 			}
-			catch
-			{
-				return StatusCode(404);
-			}
+			
 		}
 	}
 }

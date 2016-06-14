@@ -14,7 +14,7 @@
 }
 
 
-<form class="form-inline" style="float: left; text-align: left;" asp-action="Upload" asp-controller="File" asp-antiforgery="true" enctype="multipart/form-data">
+<form class="form-inline" style="float: left; text-align: left;" asp-action="Upload" asp-controller="File" asp-antiforgery="true" enctype="multipart/form-data" method="post">
 	<input asp-for="Files" id="lefile" type="file" style="display: none; float: left; text-align: left;" onchange="JudgeFile(this)" multiple="multiple" />
 	<div class="input-append" >
 		
@@ -25,6 +25,7 @@
         </a>
 		<!-- Split button -->
 		<!-- Split button -->
+		
 		<input asp-for="Value" type="hidden" id="Shared" value="false">
 			
 		<div class="btn-group">
@@ -35,8 +36,8 @@
 				
 			</button>
 			<ul class="dropdown-menu">
-				<li><a onclick="$('Shared').val('true')">分享</a></li>
-				<li><a onclick="$('Shared').val('false')">不分享</a></li>
+				<li><a onclick="$('#Shared').val('true')">分享</a></li>
+				<li><a onclick="$('#Shared').val('false')">不分享</a></li>
 			</ul>
 		</div>
 		

@@ -348,7 +348,25 @@ if (filecount == 0)
 
 			})
 		});
-		
+		function Share() {
+			$('#Shared').val('true')
+			$('#ShareThem').text('分享 √');
+			$('#NotShareThem').text('不分享');
+			$('.btn-group button').addClass("btn-success");
+			$('.btn-group button').removeClass("btn-default");
+			$('.btn-group button').removeClass("btn-warning");
+
+			$('#uploadFile').text('上传并分享');
+		}
+		function NotShare() {
+			$('#Shared').val('false')
+			$('#NotShareThem').text('不分享 √');
+			$('#ShareThem').text('分享');
+			$('.btn-group button').addClass("btn-warning");
+			$('.btn-group button').removeClass("btn-default");
+			$('.btn-group button').removeClass("btn-success");
+			$('#uploadFile').text('上传文件');
+		}
 		
 	</script>
 }

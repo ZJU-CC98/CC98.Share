@@ -47,7 +47,7 @@ else
 	var sharecount = (int)ViewData["sharecount"];
 	var totalSize = ViewData["userTotalSize"];
 	var pagersource = (IPagedList)ViewData["pagersource"];
-
+	var onceSize = ViewData["onceSize"];
 	if (filecount == 0)
 	{
 		<div class="container">
@@ -82,7 +82,7 @@ else
 					</ul>
 				</div>
 			</div>
-			<h4>&nbsp;&nbsp;<small><span id="sizeAlert" style="display:none;color:red">文件大小超过限制!</span>上传限制为50M/个</small></h4>
+			<h4>&nbsp;&nbsp;<small>上传限制为<span class="change-size">@onceSize</span>/个</small></h4>
 			<div style="display: inline; margin-top: 10px; text-align: right;">
 
 

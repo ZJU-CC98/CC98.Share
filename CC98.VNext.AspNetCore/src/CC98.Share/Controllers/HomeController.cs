@@ -74,7 +74,7 @@ int page = 1)
 			ViewData["filesize"] = fileSize;
 			ViewData["sharecount"] = shareCount;
 			ViewData["pagersource"] = pagerSource;
-
+			ViewData["onceSize"] = setting.Value.UserOnceSize;
 			return View();
 		}
 

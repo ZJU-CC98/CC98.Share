@@ -24,8 +24,8 @@
 
 	.btn-sm1 {
 		font-size: 14px;
-		margin:0px 10px;
-		cursor:pointer;
+		margin: 0px 10px;
+		cursor: pointer;
 	}
 </style>
 
@@ -36,24 +36,24 @@
 			<b>
 				<a asp-controller="Account" asp-action="LogOn" asp-route-returnUrl="@Url.Action()">请登录</a>
 			</b>
-		</h3><img src="~/images/index_src.png" style="text-align: center"/>
+		</h3><img src="~/images/index_src.png" style="text-align: center" />
 	</div>
 }
 else
 {
-	var dataShow = (IPagedList<ShareItem>) ViewData["datashow"];
-	var filesize = (long) ViewData["filesize"]; @*用户文件总大小*@
-var filecount = (int) ViewData["filecount"];
-var sharecount = (int) ViewData["sharecount"];
-var totalSize = ViewData["userTotalSize"];
-var pagersource = (IPagedList) ViewData["pagersource"];
+	var dataShow = (IPagedList<ShareItem>)ViewData["datashow"];
+	var filesize = (long)ViewData["filesize"];
+	var filecount = (int)ViewData["filecount"];
+	var sharecount = (int)ViewData["sharecount"];
+	var totalSize = ViewData["userTotalSize"];
+	var pagersource = (IPagedList)ViewData["pagersource"];
 
-if (filecount == 0)
-{
+	if (filecount == 0)
+	{
 		<div class="container">
-			<hr style="border: none; border-top: 1px solid #eee; height: 1px;"/>
+			<hr style="border: none; border-top: 1px solid #eee; height: 1px;" />
 			<div id="person-info" style="display: inline-block;">
-				<img class="img-thumbnail" width="120" height="120" src="@User.GetPortraitUri()" style="float: left"/>
+				<img class="img-thumbnail" width="120" height="120" src="@User.GetPortraitUri()" style="float: left" />
 				<div style="float: left">
 					<h4 style="padding-left: 70px">@User.Identity.Name</h4>
 
@@ -82,13 +82,13 @@ if (filecount == 0)
 					</ul>
 				</div>
 			</div>
-		<h4>&nbsp;&nbsp;<small><span id="sizeAlert" style="display:none;color:red">文件大小超过限制!</span>上传限制为50M/个</small></h4>
-        <div style="display: inline; margin-top: 10px; text-align: right;">
-            
-			
-			@await Html.PartialAsync("_UploadPartial")
-           
-			
+			<h4>&nbsp;&nbsp;<small><span id="sizeAlert" style="display:none;color:red">文件大小超过限制!</span>上传限制为50M/个</small></h4>
+			<div style="display: inline; margin-top: 10px; text-align: right;">
+
+
+				@await Html.PartialAsync("_UploadPartial")
+
+
 
 				@*<form class="form-inline" style="float: right; margin-left: 10px; text-align: left;">
 						<div class="form-group">
@@ -106,9 +106,9 @@ if (filecount == 0)
 	else
 	{
 		<div class="container">
-			<hr style="border: none; border-top: 1px solid #eee; height: 1px;"/>
+			<hr style="border: none; border-top: 1px solid #eee; height: 1px;" />
 			<div id="person-info" style="display: inline-block;">
-				<img class="img-thumbnail" width="120" height="120" src="@User.GetPortraitUri()" style="float: left"/>
+				<img class="img-thumbnail" width="120" height="120" src="@User.GetPortraitUri()" style="float: left" />
 				<div style="float: left">
 					<h4 style="padding-left: 70px">@User.Identity.Name</h4>
 
@@ -125,12 +125,12 @@ if (filecount == 0)
 						</li>
 						<li class="person-li">
 
-                            <p class="change-size">@totalSize</p>
-                            网盘容量
-                        </li>
-                        <li class="person-li">
-                            <p class="change-size">@filesize</p>
-                            可用容量
+							<p class="change-size">@totalSize</p>
+							网盘容量
+						</li>
+						<li class="person-li">
+							<p class="change-size">@filesize</p>
+							可用容量
 
 						</li>
 
@@ -143,69 +143,69 @@ if (filecount == 0)
 
 
 			<h4>&nbsp;&nbsp;<small><span id="sizeAlert" style="display:none;color:red">文件大小超过限制!</span>上传限制为50M/个</small></h4>
-            <div style="display: inline; margin-top: 10px; text-align: right;">
-                @await Html.PartialAsync("_UploadPartial")
-				
-				
-                
-                    @*<form class="form-inline" style="float: right; margin-left: 10px; text-align: left;">
-                <div class="form-group">
-                    <input type="text" class="form-control" id="exampleInputEmail2" placeholder="输入要搜索的文件">
-                </div>
-                <button type="submit" class="btn btn-default">搜索</button>
-            </form>*@
-                </div>
-			
-            <div style="display: block; clear: both; height: 5px"></div>
-           
+			<div style="display: inline; margin-top: 10px; text-align: right;">
+				@await Html.PartialAsync("_UploadPartial")
+
+
+
+				@*<form class="form-inline" style="float: right; margin-left: 10px; text-align: left;">
+						<div class="form-group">
+							<input type="text" class="form-control" id="exampleInputEmail2" placeholder="输入要搜索的文件">
+						</div>
+						<button type="submit" class="btn btn-default">搜索</button>
+					</form>*@
+			</div>
+
+			<div style="display: block; clear: both; height: 5px"></div>
+
 
 
 			<table class="table table-striped" style="border-bottom: 3px solid #ddd">
 
 				<thead style="border: 2px solid #eee">
-				<tr>
+					<tr>
 
-					<th>文件名称</th>
-					<th style="text-align: center">操作</th>
-					<th>上传日期</th>
-					<th>文件大小</th>
-				</tr>
+						<th>文件名称</th>
+						<th style="text-align: center">操作</th>
+						<th>上传日期</th>
+						<th>文件大小</th>
+					</tr>
 				</thead>
 				<tbody>
 
 
 
-				@foreach (var item in dataShow)
-				{
-					<tr>
-						<td>
-							<a asp-controller="File" asp-action="Download" asp-route-id="@item.Id">@item.Name</a>
-						</td>
-						<td style="text-align: center;">
-							<a class="btn-sm1 btn-link" asp-action="Download" asp-controller="File" asp-route-id="@item.Id">下载</a>
-							<a class="btn-sm1 btn-link" data-toggle="modal" data-target="#deletefile" data-id="@item.Id" data-name="@item.Name" onclick="DeleteFile(this)">删除</a>
-							@*需要判断文件状态选择显示哪个功能*@
-							@if (!item.IsShared)
-							{
-								<a class="btn-sm1 btn-link" data-toggle="modal" data-target="#sharefile" data-id="@item.Id" data-name="@item.Name" onclick="ShareFile(this)">选择分享</a>
-							}
-							else
-							{
-								<a class="btn-sm1 btn-link" data-toggle="modal" data-target="#cancelshare" data-id="@item.Id" data-name="@item.Name" onclick="CancelShare(this)">取消分享</a>
-							}
-						</td>
-						<td>@item.UploadTime</td>
+					@foreach (var item in dataShow)
+					{
+						<tr>
+							<td>
+								<a asp-controller="File" asp-action="Download" asp-route-id="@item.Id">@item.Name</a>
+							</td>
+							<td style="text-align: center;">
+								<a class="btn-sm1 btn-link" asp-action="Download" asp-controller="File" asp-route-id="@item.Id">下载</a>
+								<a class="btn-sm1 btn-link" data-toggle="modal" data-target="#deletefile" data-id="@item.Id" data-name="@item.Name" onclick="DeleteFile(this)">删除</a>
+								@*需要判断文件状态选择显示哪个功能*@
+								@if (!item.IsShared)
+								{
+									<a class="btn-sm1 btn-link" data-toggle="modal" data-target="#sharefile" data-id="@item.Id" data-name="@item.Name" onclick="ShareFile(this)">选择分享</a>
+								}
+								else
+								{
+									<a class="btn-sm1 btn-link" data-toggle="modal" data-target="#cancelshare" data-id="@item.Id" data-name="@item.Name" onclick="CancelShare(this)">取消分享</a>
+								}
+							</td>
+							<td>@item.UploadTime</td>
 
-						<td id="SizeOfItem" class="change-size">@item.Size</td>
-					</tr>
-				}
+							<td id="SizeOfItem" class="change-size">@item.Size</td>
+						</tr>
+					}
 
 
 				</tbody>
 			</table>
 			<div class="pagination-index" style="float: right">
 				<ul class="pagination">
-					<pager source="@pagersource"/>
+					<pager source="@pagersource" />
 
 				</ul>
 			</div>
@@ -238,7 +238,7 @@ if (filecount == 0)
 </div>
 @*分享界面，需要产生独特的链接*@
 <form asp-action="ShareFile" asp-controller="File">
-	<input type="hidden" id="share-file-id-input" name="id"/>
+	<input type="hidden" id="share-file-id-input" name="id" />
 	<div id="sharefile" class="modal fade in" style="background-color: #fefefe; display: none; height: 230px; margin-left: 25%; margin-top: 10%; position: fixed; width: 450px;">
 		<div class="modal-header">
 			<a class="close" data-dismiss="modal">x</a>
@@ -275,7 +275,7 @@ if (filecount == 0)
 </form>
 @*删除界面，需要获取文件名以及对按钮操作进行绑定函数*@
 <form asp-action="DeleteFile" asp-controller="File">
-	<input type="hidden" id="delete-file-id-input" name="id"/>
+	<input type="hidden" id="delete-file-id-input" name="id" />
 	<div id="deletefile" class="modal fade in" style="background-color: #fefefe; display: none; height: 230px; margin-left: 25%; margin-top: 10%; position: fixed; width: 450px;">
 		<div class="modal-header">
 			<a class="close" data-dismiss="modal">x</a>
@@ -293,7 +293,7 @@ if (filecount == 0)
 </form>
 @*取消分享，需要获取文件名以及对按钮操作进行绑定函数*@
 <form asp-action="CancelShare" asp-controller="File">
-	<input type="hidden" id="cancel-share-file-id-input" name="id"/>
+	<input type="hidden" id="cancel-share-file-id-input" name="id" />
 	<div id="cancelshare" class="modal fade in" style="background-color: #fefefe; display: none; height: 230px; margin-left: 25%; margin-top: 10%; position: fixed; width: 450px;">
 		<div class="modal-header">
 
@@ -311,12 +311,12 @@ if (filecount == 0)
 	</div>
 </form>
 @section scripts{
-	<script>
+	<script type="text/javascript" language="javascript">
+
 		@*上传框样式替换*@
-                    $('input[id=lefile]')
-                        .change(function () {
-                            $('#photoCover').val($(this).val());
-                        });
+		$('#lefile').change(function () {
+			$('#photoCover').val($(this).val());
+		});
 
 		$(document).ready(function () {
 			@*将文件大小替换成友好的显示*@
@@ -343,13 +343,13 @@ if (filecount == 0)
 					unit = "KB";
 				}
 				size = size.toFixed(2);
-				var FinalSize = String(size) + unit;
-				$(element).text(FinalSize);
+				var finalSize = String(size) + unit;
+				$(element).text(finalSize);
 
-			})
+			});
 		});
 		function Share() {
-			$('#Shared').val('true')
+			$('#Shared').val('true');
 			$('#ShareThem').text('分享 √');
 			$('#NotShareThem').text('不分享');
 			$('.btn-group button').addClass("btn-success");
@@ -359,7 +359,7 @@ if (filecount == 0)
 			$('#uploadFile').text('上传并分享');
 		}
 		function NotShare() {
-			$('#Shared').val('false')
+			$('#Shared').val('false');
 			$('#NotShareThem').text('不分享 √');
 			$('#ShareThem').text('分享');
 			$('.btn-group button').addClass("btn-warning");
@@ -367,53 +367,45 @@ if (filecount == 0)
 			$('.btn-group button').removeClass("btn-success");
 			$('#uploadFile').text('上传文件');
 		}
-		
-	</script>
-}
-<script type="text/javascript">
-	 
-      $('input[id=lefile]').change(function () {
-          $('#photoCover').val($(this).val());
-      });
 
+		function DeleteFile(obj) {
+			$('#delete-file-id-input').val($(obj).data('id'));
+			$('#delete-file-name-in').text($(obj).data('name'));
+		}
 
-	function DeleteFile(obj) {
-		$('#delete-file-id-input').val($(obj).data('id'));
-		$('#delete-file-name-in').text($(obj).data('name'));
-	}
+		function ShareFile(obj) {
+			$('#share-file-id-input').val($(obj).data('id'));
+			$('#share-file-name-in').text($(obj).data('name'));
+		}
 
-	function ShareFile(obj) {
-		$('#share-file-id-input').val($(obj).data('id'));
-		$('#share-file-name-in').text($(obj).data('name'));
-	}
+		function CancelShare(obj) {
+			$('#cancel-share-file-id-input').val($(obj).data('id'));
+			$('#cancel-share-file-name-in').text($(obj).data('name'));
+		}
 
-	function CancelShare(obj) {
-		$('#cancel-share-file-id-input').val($(obj).data('id'));
-		$('#cancel-share-file-name-in').text($(obj).data('name'));
-	}
-
-	function JudgeFile(theFile) {@*用于上传文件时判断是否已选择文件，若没有选择，则无法上传*@
-		if ($('#lefile').val() == "") {
-			$('#uploadFile').attr('disabled', 'disabled');
-			$('#sizeAlert').hide();
-		} else {
-			var totalSize = 0;
-			for (i = 0; i < theFile.files.length; i++) {
-				totalSize = theFile.files[i].size;
-				if (totalSize > 52428800) {
-					$('#uploadFile').attr('disabled', 'disabled');
-					$('#photoCover').val($('#lefile').val());
-					$('#sizeAlert').show();
-				} else {
-					$('#sizeAlert').hide();
-					$('#uploadFile').removeAttr('disabled');
-					$('#photoCover').val($('#lefile').val());
+		function JudgeFile(theFile) {
+			@*用于上传文件时判断是否已选择文件，若没有选择，则无法上传*@
+			if ($('#lefile').val() === "") {
+				$('#uploadFile').attr('disabled', 'disabled');
+				$('#sizeAlert').hide();
+			} else {
+				var totalSize = 0;
+				for (var i = 0; i < theFile.files.length; i++) {
+					totalSize = theFile.files[i].size;
+					if (totalSize > 52428800) {
+						$('#uploadFile').attr('disabled', 'disabled');
+						$('#photoCover').val($('#lefile').val());
+						$('#sizeAlert').show();
+					} else {
+						$('#sizeAlert').hide();
+						$('#uploadFile').removeAttr('disabled');
+						$('#photoCover').val($('#lefile').val());
+					}
 				}
+
 			}
 
 		}
 
-	}
-
-
-</script>
+	</script>
+}

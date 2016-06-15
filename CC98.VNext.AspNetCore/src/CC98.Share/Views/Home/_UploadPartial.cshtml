@@ -18,7 +18,7 @@
 	<input asp-for="Files" id="lefile" type="file" style="display: none; float: left; text-align: left;" onchange="JudgeFile(this)" multiple="multiple" />
 	<div class="input-append">
 		
-		<a onclick="$('input[id=lefile]').click();">
+		<a onclick="$('#lefile').click();">
 			<input id="photoCover" class="btn btn-default" type="text" placeholder="选择一个或多个文件" style="text-align: left;">			
         </a>		
 		<input asp-for="Value" type="hidden" id="Shared" value="false">		

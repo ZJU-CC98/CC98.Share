@@ -142,7 +142,7 @@ else
 
 
 
-			<h4>&nbsp;&nbsp;<small><span id="sizeAlert" style="display:none;color:red">文件大小超过限制!</span>上传限制为50M/个</small></h4>
+			<h4>&nbsp;&nbsp;<small>上传限制为50M/个</small></h4>
 			<div style="display: inline; margin-top: 10px; text-align: right;">
 				@await Html.PartialAsync("_UploadPartial")
 
@@ -168,7 +168,7 @@ else
 						<th>文件名称</th>
 						<th style="text-align: center">操作</th>
 						<th>上传日期</th>
-						<th>文件大小</th>
+						<th style="text-align:right; ">文件大小</th>
 					</tr>
 				</thead>
 				<tbody>
@@ -196,7 +196,7 @@ else
 							</td>
 							<td>@item.UploadTime</td>
 
-							<td id="SizeOfItem" class="change-size">@item.Size</td>
+							<td id="SizeOfItem" class="change-size" style="text-align:right;">@item.Size</td>
 						</tr>
 					}
 
@@ -389,7 +389,7 @@ else
 				$('#uploadFile').attr('disabled', 'disabled');
 				$('#sizeAlert').hide();
 			} else {
-				var totalSize = 0;
+				@*var totalSize = 0;
 				for (var i = 0; i < theFile.files.length; i++) {
 					totalSize = theFile.files[i].size;
 					if (totalSize > 52428800) {
@@ -397,11 +397,11 @@ else
 						$('#photoCover').val($('#lefile').val());
 						$('#sizeAlert').show();
 					} else {
-						$('#sizeAlert').hide();
+						$('#sizeAlert').hide*@
 						$('#uploadFile').removeAttr('disabled');
 						$('#photoCover').val($('#lefile').val());
-					}
-				}
+					
+				
 
 			}
 

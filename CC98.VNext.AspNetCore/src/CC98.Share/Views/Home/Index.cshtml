@@ -47,119 +47,49 @@ else
 	var sharecount = (int)ViewData["sharecount"];
 	var totalSize = ViewData["userTotalSize"];
 	var pagersource = (IPagedList)ViewData["pagersource"];
-	var onceSize = ViewData["onceSize"];
-	if (filecount == 0)
-	{
-		<div class="container">
-			<hr style="border: none; border-top: 1px solid #eee; height: 1px;" />
-			<div id="person-info" style="display: inline-block;">
-				<img class="img-thumbnail" width="120" height="120" src="@User.GetPortraitUri()" style="float: left" />
-				<div style="float: left">
-					<h4 style="padding-left: 70px">@User.Identity.Name</h4>
+	
+	<div class="container">
+		<hr style="border: none; border-top: 1px solid #eee; height: 1px;" />
+		<div id="person-info" style="display: inline-block;">
+			<img class="img-thumbnail" width="120" height="120" src="@User.GetPortraitUri()" style="float: left" />
+			<div style="float: left">
+				<h4 style="padding-left: 70px">@User.Identity.Name</h4>
 
-					<ul style="float: left; list-style: none;">
-						<li class="person-li">
+				<ul style="float: left; list-style: none;">
+					<li class="person-li">
 
-							<p>@sharecount</p>
-							分享数
-						</li>
-						<li class="person-li">
+						<p>@sharecount</p>
+						分享数
+					</li>
+					<li class="person-li">
 
-							<p>@filecount</p>
-							文件数
-						</li>
-						<li class="person-li">
+						<p>@filecount</p>
+						文件数
+					</li>
+					<li class="person-li">
 
-							<p class="change-size">@totalSize</p>
-							网盘容量
-						</li>
-						<li class="person-li">
-							<p class="change-size">@filesize</p>
-							可用容量
+						<p class="change-size">@totalSize</p>
+						网盘容量
+					</li>
+					<li class="person-li">
+						<p class="change-size">@filesize</p>
+						可用容量
 
-						</li>
+					</li>
 
-					</ul>
-				</div>
+				</ul>
 			</div>
-			<h4>&nbsp;&nbsp;<small>上传限制为<span class="change-size">@onceSize</span>/个</small></h4>
-			<div style="display: inline; margin-top: 10px; text-align: right;">
-
-
-				@await Html.PartialAsync("_UploadPartial")
-
-
-
-				@*<form class="form-inline" style="float: right; margin-left: 10px; text-align: left;">
-						<div class="form-group">
-							<input type="text" class="form-control" id="exampleInputEmail2" placeholder="输入要搜索的文件">
-						</div>
-						<button type="submit" class="btn btn-default">搜索</button>
-					</form>*@
-			</div>
-			<div style="clear: both; display: block; height: 5px"></div>
-			<h2 class="text-center text-muted">
-				前辈你还没有上传文件~
-			</h2>
 		</div>
-	}
-	else
-	{
-		<div class="container">
-			<hr style="border: none; border-top: 1px solid #eee; height: 1px;" />
-			<div id="person-info" style="display: inline-block;">
-				<img class="img-thumbnail" width="120" height="120" src="@User.GetPortraitUri()" style="float: left" />
-				<div style="float: left">
-					<h4 style="padding-left: 70px">@User.Identity.Name</h4>
+		
+			@await Html.PartialAsync("_UploadPartial")
+		
+		<div style="clear: both; display: block; height: 5px"></div>
 
-					<ul style="float: left; list-style: none;">
-						<li class="person-li">
-
-							<p>@sharecount</p>
-							分享数
-						</li>
-						<li class="person-li">
-
-							<p>@filecount</p>
-							文件数
-						</li>
-						<li class="person-li">
-
-							<p class="change-size">@totalSize</p>
-							网盘容量
-						</li>
-						<li class="person-li">
-							<p class="change-size">@filesize</p>
-							可用容量
-
-						</li>
-
-					</ul>
-				</div>
-			</div>
-
-
-
-
-
-			<h4>&nbsp;&nbsp;<small>上传限制为50M/个</small></h4>
-			<div style="display: inline; margin-top: 10px; text-align: right;">
-				@await Html.PartialAsync("_UploadPartial")
-
-
-
-				@*<form class="form-inline" style="float: right; margin-left: 10px; text-align: left;">
-						<div class="form-group">
-							<input type="text" class="form-control" id="exampleInputEmail2" placeholder="输入要搜索的文件">
-						</div>
-						<button type="submit" class="btn btn-default">搜索</button>
-					</form>*@
-			</div>
-
-			<div style="display: block; clear: both; height: 5px"></div>
-
-
-
+			@if (filecount == 0){		
+		<h2 class="text-center text-muted">	前辈你还没有上传文件~	</h2>
+		}
+	
+	else{
 			<table class="table table-striped" style="border-bottom: 3px solid #ddd">
 
 				<thead style="border: 2px solid #eee">
@@ -210,9 +140,11 @@ else
 				</ul>
 			</div>
 
-		</div>
+		
 	}
+	</div>
 }
+
 
 
 

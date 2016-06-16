@@ -32,11 +32,12 @@
 @if (User.Identity.IsAuthenticated == false)
 {
 	<div style="text-align: center">
+		<h2><br /><br /><strong>欢迎使用CC98Share</strong><br /><br /></h2>
 		<h3 style="color: #004b83">
 			<b>
 				<a asp-controller="Account" asp-action="LogOn" asp-route-returnUrl="@Url.Action()">请登录</a>
 			</b>
-		</h3><img src="~/images/index_src.png" style="text-align: center" />
+		</h3>@*<img src="~/images/index_src.png" style="text-align: center" />*@
 	</div>
 }
 else

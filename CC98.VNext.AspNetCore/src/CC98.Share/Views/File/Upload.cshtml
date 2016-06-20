@@ -1,0 +1,21 @@
+﻿@{
+	ViewBag.Title = "Upload";
+}
+
+<h2>Upload</h2>
+<br/>
+<body>
+<form asp-action="Upload" asp-controller="File" asp-antiforgery="true" eenen nctype="multipart/form-data">
+	<br/>
+	<span>上传文件</span>
+	<input type="file" name="file"/>
+	<br/>
+	<br/>
+	<p>是否分享：</p>
+	<select name="IsShare">
+		<option value="1">是</option>
+		<option value="0">否</option>
+	</select>
+	<button type="submit">Upload</button>
+</form>
+</body>

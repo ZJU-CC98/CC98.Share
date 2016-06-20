@@ -1,0 +1,12 @@
+﻿@{
+	ViewBag.Title = "Download";
+}
+
+<h2>Index</h2>
+<form asp-action="Download" asp-controller="File" asp-antiforgery="true">
+	<br/>
+	<p>Download</p>
+	<input type="text" name="id"/>
+	<br/>
+	<button type="submit">Download</button>
+</form>

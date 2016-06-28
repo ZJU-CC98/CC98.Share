@@ -1,31 +1,31 @@
 {
-  "language": "zh-CN",
-  "version": "1.0.0-rc2",
-  "title": "CC98 AppSetting Package",
-  "description": "This package provide a generic meaner to access application specific settings for CC98 Applications.",
-  "authors": [ "CC98" ],
-  "copyright": "Copyright (c) CC98 2016. All rights are reserved.",
+	"language": "zh-CN",
+	"version": "1.0.0",
+	"title": "CC98 AppSetting Package",
+	"description": "This package provide a generic meaner to access application specific settings for CC98 Applications.",
+	"authors": [ "CC98" ],
+	"copyright": "Copyright (c) CC98 2016. All rights are reserved.",
 
-  "packOptions": {
-    "projectUrl": "https://github.com/sgjsakura/CC98",
-    "licenseUrl": "http://www.apache.org/licenses/LICENSE-2.0",
-    "tags": [ "CC98" ],
-    "owners": [ "CC98" ],
-    "releaseNotes": "Update to ASP.NET Core RC2"
-  },
+	"packOptions": {
+		"projectUrl": "https://github.com/sgjsakura/CC98",
+		"licenseUrl": "http://www.apache.org/licenses/LICENSE-2.0",
+		"tags": [ "CC98" ],
+		"owners": [ "CC98" ],
+		"releaseNotes": "Update to ASP.NET Core RTM"
+	},
 
-  "dependencies": {
-    "JetBrains.Annotations": "10.1.4",
-    "Newtonsoft.Json": "8.0.3",
-    "Microsoft.EntityFrameworkCore": "1.0.0-rc2-final",
-    "Microsoft.Extensions.Options": "1.0.0-rc2-final",
-    "NETStandard.Library": "1.5.0-rc2-24027",
-    "System.ComponentModel.Annotations": "4.1.0-rc2-24027"
-  },
+	"dependencies": {
+		"Newtonsoft.Json": "9.0.1",
+		"Microsoft.EntityFrameworkCore": "1.0.0",
+		"Microsoft.Extensions.Options": "1.0.0",
+		"NETStandard.Library": "1.6.0",
+		"JetBrains.Annotations": "10.1.4"
+	},
 
-  "frameworks": {
-    "netstandard1.5": {
-      "imports": [ "dnxcore50", "portable-net45+win8" ]
-    }
-  }
+	"frameworks": {
+			"netstandard1.3": {
+				"imports": [ "dnxcore50" ]
+			},
+		"net451": { }
+	}
 }

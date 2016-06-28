@@ -97,7 +97,7 @@ namespace CC98.Share
 			{
 				// 应用程序的主 Cookie 设置
 				identityOptions.Cookies.ApplicationCookie.CookieHttpOnly = true;
-				identityOptions.Cookies.ApplicationCookie.CookieSecure = CookieSecureOption.Never;
+				identityOptions.Cookies.ApplicationCookie.CookieSecure = CookieSecurePolicy.None;
 				identityOptions.Cookies.ApplicationCookie.LoginPath = new PathString("/Account/LogOn");
 				identityOptions.Cookies.ApplicationCookie.LogoutPath = new PathString("/Account/LogOff");
 				identityOptions.Cookies.ApplicationCookie.AutomaticAuthenticate = true;
@@ -105,7 +105,7 @@ namespace CC98.Share
 
 				// 外部 Cookie（和其他身份验证交互使用的临时票证）设置
 				identityOptions.Cookies.ExternalCookie.CookieHttpOnly = true;
-				identityOptions.Cookies.ExternalCookie.CookieSecure = CookieSecureOption.Never;
+				identityOptions.Cookies.ExternalCookie.CookieSecure = CookieSecurePolicy.None;
 				identityOptions.Cookies.ExternalCookie.AutomaticAuthenticate = false;
 				identityOptions.Cookies.ExternalCookie.AutomaticChallenge = false;
 			});

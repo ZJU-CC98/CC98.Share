@@ -1,27 +1,27 @@
-﻿{
-  "version": "1.0.0-rc2",
-  "language": "zh-CN",
-  "title": "CC98 Identity Scopes Package",
-  "description": "This package provides definition of all supported scopes in CC98 authentication service.",
-  "authors": ["CC98"],
-  "copyright": "Copyright (c) CC98 2016. All rights are reserved.",
+{
+	"version": "1.0.0",
+  "language": "",
+	"title": "CC98 Identity Scopes Package",
+	"description": "This package provides definition of all supported scopes in CC98 authentication service.",
+	"authors": [ "CC98" ],
+	"copyright": "Copyright (c) CC98 2016. All rights are reserved.",
 
-  "packOptions": {
-    "projectUrl": "https://github.com/sgjsakura/CC98",
-    "licenseUrl": "http://www.apache.org/licenses/LICENSE-2.0",
-    "tags": ["CC98"],
-    "owners": ["CC98"],
-    "releaseNotes": "Update to ASP.NET Core RC2"
-  },
+	"packOptions": {
+		"projectUrl": "https://github.com/sgjsakura/CC98",
+		"licenseUrl": "http://www.apache.org/licenses/LICENSE-2.0",
+		"tags": [ "CC98" ],
+		"owners": [ "CC98" ],
+		"releaseNotes": "Update to ASP.NET Core RTM"
+	},
 
-  "dependencies": {
-    "JetBrains.Annotations": "10.1.4",
-    "NETStandard.Library": "1.5.0-rc2-24027"
-  },
+	"dependencies": {
+		"JetBrains.Annotations": "10.1.4",
+		"System.Runtime": "4.1.0"
+	},
 
-  "frameworks": {
-    "netstandard1.5": {
-      "imports": "dnxcore50"
-    }
-  }
+	"frameworks": {
+		"netstandard1.0": {
+			"imports": "dnxcore50"
+		}
+	}
 }

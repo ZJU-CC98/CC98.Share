@@ -165,17 +165,24 @@ namespace CC98.Share.Controllers
 		///     获取ContentDisposition中的文件名称。
 		/// </summary>
 		/// <returns>操作结果。</returns>
-		public string GetFileName(string contentDisposition)
+		public string GetFileName(string fileName)
 		{
-			//获取文件名称的起始位置。
-			var startIndex = contentDisposition.IndexOf("filename=\"", StringComparison.OrdinalIgnoreCase) + 10;
-			//获取文件名称的结尾位置。
-			var endIndex = contentDisposition.LastIndexOf("\"", StringComparison.OrdinalIgnoreCase);
-			var length = endIndex - startIndex;
-			//通过起始位置和结尾位置获得名称。
-			if (length > 50) length = 50;
-			var fileName = contentDisposition.Substring(startIndex, length);
-			return fileName;
+            var extension = Path.GetExtension(fileName);
+            var file = Path.GetFileNameWithoutExtension(fileName);
+            int extLength;
+            int fileLength;
+            if(extension.Length >= Setting.Value.FileNameLengh)
+            {
+                extLength = Setting.Value.FileNameLengh-1;
+            }
+            else
+            {
+                extLength = extension.Length;
+            }
+            fileLength = Setting.Value.FileNameLengh - extLength;
+            if (fileLength > file.Length) fileLength = file.Length;
+			var answer = file.Substring(0, fileLength)+extension.Substring(0,extLength);
+			return answer;
 		}
 
 		/// <summary>

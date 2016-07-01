@@ -167,22 +167,27 @@ namespace CC98.Share.Controllers
 		/// <returns>操作结果。</returns>
 		public string GetFileName(string fileName)
 		{
-            var extension = Path.GetExtension(fileName);
-            var file = Path.GetFileNameWithoutExtension(fileName);
-            int extLength;
-            int fileLength;
-            if(extension.Length >= Setting.Value.FileNameLengh)
-            {
-                extLength = Setting.Value.FileNameLengh-1;
-            }
-            else
-            {
-                extLength = extension.Length;
-            }
-            fileLength = Setting.Value.FileNameLengh - extLength;
-            if (fileLength > file.Length) fileLength = file.Length;
-			var answer = file.Substring(0, fileLength)+extension.Substring(0,extLength);
-			return answer;
+			var extension = Path.GetExtension(fileName);
+			var file = Path.GetFileNameWithoutExtension(fileName);
+
+			int extLength;
+			if (extension.Length >= Setting.Value.FileNameLengh)
+			{
+				extLength = Setting.Value.FileNameLengh - 1;
+			}
+			else
+			{
+				extLength = extension.Length;
+			}
+
+			var fileLength = Setting.Value.FileNameLengh - extLength;
+
+			if (fileLength > file.Length)
+			{
+				fileLength = file.Length;
+			}
+
+			return Path.ChangeExtension(file.Substring(0, fileLength), extension.Substring(0, extLength));
 		}
 
 		/// <summary>
@@ -192,57 +197,67 @@ namespace CC98.Share.Controllers
 		[Authorize]
 		[ValidateAntiForgeryToken]
 		[HttpPost]
-		public async Task<IActionResult> Upload(UploadViewModel inputModel, [FromServices] IOperationMessageAccessor accessor,
-			int page = 1)
+		public async Task<IActionResult> Upload(UploadViewModel inputModel, [FromServices] IOperationMessageAccessor accessor)
 		{
 			// 首先检测是否有文件传入函数。
-			if (inputModel.Files == null)
+			if (inputModel.Files == null || inputModel.Files.Length == 0)
 			{
 				return StatusCode(400);
 			}
 			//随机生成一个文件名字，并将此文件插入数据库。
 			var value = inputModel.Value;
-			
+
 			{
 				foreach (var file in inputModel.Files)
 				{
 					var fileNameRandom = Path.GetRandomFileName();
-					var tm = new ShareItem();
-					tm.Path = "\\" + fileNameRandom;
 
-					var saveFileName = Setting.Value.StoreFolder + "\\" + fileNameRandom;
+					var tm = new ShareItem
+					{
+						Path = "\\" + fileNameRandom
+					};
+
+					var saveFileName = Path.Combine(Setting.Value.StoreFolder, fileNameRandom);
 
 					using (var stream = System.IO.File.OpenWrite(saveFileName))
 					{
 						await file.CopyToAsync(stream);
 					}
 					tm.Size = file.Length;
-                    var output = from i in Model.Items where i.UserName == ExternalSignInManager.GetUserName(User) select i;
-                    var items = from i in output select i.Size;
-                    var TotalSize = items.Sum();
-                    TotalSize += tm.Size;
-                    if (tm.Size > Setting.Value.UserOnceSize)
+
+					var currentUserName = ExternalSignInManager.GetUserName(User);
+
+					var currentUserItems = from i in Model.Items
+										   where i.UserName == currentUserName
+										   select i.Size;
+
+					var totalSize = currentUserItems.Sum();
+
+					totalSize += tm.Size;
+
+					if (tm.Size > Setting.Value.UserOnceSize)
 					{
-						var level = OperationMessageLevel.Error;
-						accessor.Messages.Add(level, "错误", "上传文件大小超过单次上传上限");
+						accessor.Messages.Add(OperationMessageLevel.Error, "错误", "上传文件大小超过单次上传上限");
 						return RedirectToAction("Index", "Home");
 					}
-					if (TotalSize > Setting.Value.UserTotalSize)
+
+					if (totalSize > Setting.Value.UserTotalSize)
 					{
-						var level = OperationMessageLevel.Error;
-						accessor.Messages.Add(level, "错误", "上传文件总大小超过网盘容量");
+						accessor.Messages.Add(OperationMessageLevel.Error, "错误", "上传文件总大小超过网盘容量");
 						return RedirectToAction("Index", "Home");
 					}
-					tm.Name = Path.GetFileName(file.FileName);
+
+					tm.Name = GetFileName(file.FileName);
 					tm.UserName = ExternalSignInManager.GetUserName(User);
 					tm.IsShared = value;
 					tm.UploadTime = DateTime.Now;
 					Model.Items.Add(tm);
+
 					await Model.SaveChangesAsync();
 				}
 				return RedirectToAction("Index", "Home");
 			}
-			
+
 		}
 	}
 }

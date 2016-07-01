@@ -171,16 +171,16 @@ namespace CC98.Share.Controllers
 			var file = Path.GetFileNameWithoutExtension(fileName);
 
 			int extLength;
-			if (extension.Length >= Setting.Value.FileNameLengh)
+			if (extension.Length >= Setting.Value.FileNameLength)
 			{
-				extLength = Setting.Value.FileNameLengh - 1;
+				extLength = Setting.Value.FileNameLength - 1;
 			}
 			else
 			{
 				extLength = extension.Length;
 			}
 
-			var fileLength = Setting.Value.FileNameLengh - extLength;
+			var fileLength = Setting.Value.FileNameLength - extLength;
 
 			if (fileLength > file.Length)
 			{

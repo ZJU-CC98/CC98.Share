@@ -5,6 +5,6 @@
 		public string StoreFolder { get; set; }
 		public long UserTotalSize { get; set; }
 		public long UserOnceSize { get; set; }
-        public int FileNameLengh { get; set; }
+        public int FileNameLength { get; set; }
     }
 }

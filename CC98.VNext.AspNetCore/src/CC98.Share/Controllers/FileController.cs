@@ -187,7 +187,7 @@ namespace CC98.Share.Controllers
 				fileLength = file.Length;
 			}
 
-			return Path.ChangeExtension(file.Substring(0, fileLength), extension.Substring(0, extLength));
+			return file.Substring(0, fileLength) + extension.Substring(0, extLength);
 		}
 
 		/// <summary>

@@ -117,7 +117,11 @@ else
 					{
 						<tr>
 							<td>
-								<a asp-controller="File" asp-action="Download" asp-route-id="@item.Id">@item.Name</a>
+								<a asp-controller="File" asp-action="Download" asp-route-id="@item.Id">@item.Name</a>&nbsp;&nbsp;
+                                @if (!item.IsShared)
+                                {<span  class="label label-primary">私密</span>}
+                                else
+                                {<span class="label label-success" >公开</span>}
 							</td>
 							<td style="text-align: center;">
 								<a class="btn-sm1 btn-link" asp-action="Download" asp-controller="File" asp-route-id="@item.Id">下载</a>
@@ -126,15 +130,16 @@ else
 								@if (!item.IsShared)
 								{
 									<a class="btn-sm1 btn-link" data-toggle="modal" data-target="#sharefile" data-id="@item.Id" data-name="@item.Name" onclick="ShareFile(this)">选择分享</a>
-								}
-								else
-								{
+                                    
+                                }
+                                else
+                                {
 									<a class="btn-sm1 btn-link" data-toggle="modal" data-target="#cancelshare" data-id="@item.Id" data-name="@item.Name" onclick="CancelShare(this)">取消分享</a>
 								}
 							</td>
 							<td>@item.UploadTime</td>
 
-							<td id="SizeOfItem" class="change-size" style="text-align:right;">@item.Size</td>
+							<td class="change-size" style="text-align:right;">@item.Size</td>
 						</tr>
 					}
 

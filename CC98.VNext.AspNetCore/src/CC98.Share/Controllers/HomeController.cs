@@ -85,16 +85,31 @@ int page = 1)
 			return View();
 		}
 
-		public IActionResult Contact()
-		{
-			ViewData["Message"] = "Your contact page.";
 
-			return View();
-		}
-
-		public IActionResult Fileinfo()
+		public IActionResult Fileinfo([FromServices]IOptions<Setting> setting)
 		{
-			ViewData["Message"] = "开发中";
+            var result = GetUserFile(User.Identity.Name);
+            var products = result.ToArray();
+            long fileSize = 0;
+            var fileCount = 0;
+            var shareCount = 0;
+            foreach (var i in products)
+            {
+                fileCount = fileCount + 1;
+                fileSize = fileSize + i.Size;
+                if (i.IsShared)
+                {
+                    shareCount = shareCount + 1;
+                }
+            }
+            var userTotalSize = setting.Value.UserTotalSize;
+            ViewData["filecount"] = fileCount;
+            fileSize = userTotalSize - fileSize;
+            ViewData["userTotalSize"] = userTotalSize;
+            ViewData["filesize"] = fileSize;
+            ViewData["sharecount"] = shareCount;
+            ViewData["onceSize"] = setting.Value.UserOnceSize;
+            ViewData["Message"] = "开发中";
 
 			return View();
 		}

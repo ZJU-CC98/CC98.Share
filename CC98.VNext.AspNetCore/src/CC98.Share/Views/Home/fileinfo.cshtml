@@ -1,16 +1,108 @@
-﻿@{
+﻿@using CC98.Identity
+@using CC98.Share.Data
+@using Sakura.AspNetCore
+@{
     Layout = "_Layout";
     ViewBag.PageTitle = "待开发";
 }
 
 
-	<style type="text/css">
-		
-	</style>
+<style type="text/css">
+    .border {
+        border: 1px solid #eee;
+        padding: 25px;
+        float: left;
+    }
+</style>
 
 
+@{
+    var totalSize = (long)ViewData["userTotalSize"];
+    var filesize = (long)ViewData["filesize"];
+    var filecount = (int)ViewData["filecount"];
+    var sharecount = (int)ViewData["sharecount"];
+    var fileSizeNow = (totalSize - filesize) / (totalSize / 200);
+}
+<hr />
+<div class="container">
+
+    <div class="border" style="width:300px;">
+        <h4><img class="img-circle" width="80" height="80" src="@User.GetPortraitUri()" align="middle" />&nbsp;&nbsp;@User.Identity.Name</h4>
 
 
-<div class="container" style="margin:50px;background-color:#efefef; clear:both;">
-	
-	</div>
+        <hr />
+        <div>
+            <h5>我的分享数:&nbsp;&nbsp;@sharecount</h5>
+            <h5>我的文件数:&nbsp;&nbsp;@filecount</h5>
+            <hr />
+            <div class="progress" style="width:200px">
+                <div class="progress-bar" role="progressbar" aria-valuenow="60"
+                     aria-valuemin="0" aria-valuemax="100" style="width: 0%;">
+                    <span class="sr-only">40% 完成</span>
+                </div>
+            </div>
+            <h6>已用容量 <span class="change-size">@fileSizeNow</span>/可用容量<span class="change-size"> @filesize</span></h6>
+        </div>
+
+
+    </div>
+    <div class="file-info border" style="width:800px">
+
+        <div>
+            <h4><strong>文件名</strong></h4>
+
+            <div>
+                <button class="btn-default btn">下载文件 <span class="glyphicon glyphicon-download-alt"></span></button>
+                @*如果是本人*@
+                <button class="btn-default btn">复制链接<span class="glyphicon glyphicon-list-alt"></span></button>
+                <button class="btn-default btn">取消分享 <span class="glyphicon glyphicon-remove"></span></button>
+                <button class="btn-default btn">选择分享 <span class="glyphicon glyphicon-share"></span></button>
+                <button class="btn-default btn">删除文件 <span class="glyphicon glyphicon-trash"></span></button>
+                <button class="btn-default btn">移动路径 <span class="glyphicon glyphicon-copy"></span></button>
+                @*如果不是本人*@
+                <button class="btn-default btn">转存 <span class="glyphicon glyphicon-share-alt"></span></button>
+                @*<button class="btn-default btn">复制链接 <span class="glyphicon glyphicon-list-alt"></span></button>*@
+            </div>
+        </div>
+        <hr />
+        <h4>文件描述 <small><span class="glyphicon glyphicon-pencil"></span>编辑</small></h4>
+        <p>这是个可以用来XX，也可以用来OO的文件</p>
+    </div>
+</div>
+@section scripts{
+    <script type="text/javascript" language="javascript">
+        $(document).ready(function () {
+            var barSize = '@fileSizeNow';
+            barSize = barSize.concat('px');
+            $('.progress-bar').css('width', barSize);
+            @*将文件大小替换成友好的显示*@
+            var filesize1 = $(".change-size");
+            var unit = "B";
+
+            filesize1.each(function (index, element) {
+                var size = parseInt($(element).html());
+
+                if (size > 1099511627776) {
+                    unit = "TB";
+                    size = size * 1.00 / 1099511627776;
+                }
+                if (size > 1073741824) {
+                    size = size * 1.00 / 1073741824;
+                    unit = "GB";
+                }
+                if (size > 1048576) {
+                    size = size / 1048576;
+                    unit = "MB";
+                }
+                if (size > 1024) {
+                    size = size / 1024;
+                    unit = "KB";
+                }
+                size = size.toFixed(2);
+                var finalSize = String(size) + unit;
+                $(element).text(finalSize);
+
+            });
+        });
+    </script>
+}

@@ -1,0 +1,39 @@
+﻿@*
+    For more information on enabling MVC for empty projects, visit http://go.microsoft.com/fwlink/?LinkID=397860
+*@
+@model CC98.Share.ViewModels.FileController.UploadViewModel
+
+@* 如果没有禁止显示消息，则默认显示消息 *@
+@if (ViewBag.ShowOperationMessages != false)
+{
+	<div asp-message-list="AlertDialogClosable"></div>
+}
+
+@section scripts{
+	@await RenderSectionAsync("scripts", false);
+}
+@{var onceSize = ViewData["onceSize"]; }
+<h4 >&nbsp;&nbsp;<small>上传限制为<span class="change-size">@onceSize</span>/个</small></h4>
+<div style="display: inline; margin-top: 10px; text-align: right;">
+	<form class="form-inline" style="float: left; text-align: left;" asp-action="Upload" asp-controller="File" asp-antiforgery="true" enctype="multipart/form-data" method="post">
+		<input asp-for="Files" id="lefile" type="file" style="display: none; float: left; text-align: left;" onchange="JudgeFile(this)" multiple="multiple" />
+		<div class="input-append" style="display:inline; float:left">			
+		<input onclick="$('#lefile').click();" id="photoCover" class="btn-sm input-change" type="text" placeholder="选择一个或多个文件" >			
+		</div>
+		<input asp-for="Value" type="hidden" id="Shared" value="false">
+		<div class="btn-group">
+			<button id="uploadFile" type="submit" class="btn btn-default dropdown-toggle" disabled="disabled" title="请选择一个或多个文件">上传文件</button>
+			<button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+				<span class="caret"></span>&nbsp;
+			</button>
+			<ul class="dropdown-menu">
+				<li><a onclick="Share()" id="ShareThem">分享</a></li>
+				<li><a onclick="NotShare()" id="NotShareThem">不分享</a></li>
+			</ul>
+		</div>
+
+
+
+
+	</form>
+</div>

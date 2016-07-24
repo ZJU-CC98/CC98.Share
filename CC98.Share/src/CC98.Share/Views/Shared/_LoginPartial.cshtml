@@ -1,6 +1,5 @@
-﻿@inject ExternalSignInManager ExternalSignInManager
-
-
+﻿@using Sakura.AspNetCore.Authentication
+@inject ExternalSignInManager ExternalSignInManager
 @if (ExternalSignInManager.IsSignedIn(User))
 {
 	<form asp-controller="Account" asp-action="LogOff" method="post" id="logoutForm" class="navbar-right">

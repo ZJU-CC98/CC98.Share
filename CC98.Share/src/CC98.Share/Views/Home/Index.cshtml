@@ -116,7 +116,14 @@ else
 					@foreach (var item in dataShow)
 					{
 						<tr>
-							<td>
+							<td>@if (!item.IsShared)
+                            {
+                                <span class="label label-primary">私密</span>
+                            }
+                            else
+                            {
+                                <span class="label label-success">公开</span>
+                            }
 								<a asp-controller="File" asp-action="Download" asp-route-id="@item.Id">@item.Name</a>
 							</td>
 							<td style="text-align: center;">

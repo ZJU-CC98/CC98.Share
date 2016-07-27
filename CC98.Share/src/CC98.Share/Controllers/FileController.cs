@@ -247,10 +247,10 @@ namespace CC98.Share.Controllers
 						return RedirectToAction("Index", "Home");
 					}
 
-					tm.Name = GetFileName(file.FileName);
+					tm.Name = Path.GetFileName(file.FileName);
 					tm.UserName = ExternalSignInManager.GetUserName(User);
 					tm.IsShared = value;
-					tm.UploadTime = DateTime.Now;
+					tm.UploadTime = DateTimeOffset.UtcNow;
 					Model.Items.Add(tm);
 
 					await Model.SaveChangesAsync();

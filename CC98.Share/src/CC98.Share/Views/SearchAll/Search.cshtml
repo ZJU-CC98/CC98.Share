@@ -100,7 +100,7 @@ else
                     </a>*@
 				</td>
 				<td>@item.UserName</td>
-				<td>@item.UploadTime</td>
+				<td>@item.UploadTime.ToLocalTime().ToString("G")</td>
 				@*<td>@item.Size</td>*@
 				<td id="SizeOfItem" class="change-size">@item.Size</td>
 			</tr>

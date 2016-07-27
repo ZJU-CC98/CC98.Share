@@ -1,4 +1,6 @@
-﻿@inject ExternalSignInManager ExternalSignInManager
+﻿@using System.Threading.Tasks
+@using Sakura.AspNetCore.Authentication
+@inject ExternalSignInManager ExternalSignInManager
 
 
 @if (ExternalSignInManager.IsSignedIn(User))

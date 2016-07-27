@@ -132,7 +132,7 @@ else
 									<a class="btn-sm1 btn-link" data-toggle="modal" data-target="#cancelshare" data-id="@item.Id" data-name="@item.Name" onclick="CancelShare(this)">取消分享</a>
 								}
 							</td>
-							<td>@item.UploadTime</td>
+							<td>@item.UploadTime.ToLocalTime().ToString("G")</td>
 
 							<td id="SizeOfItem" class="change-size" style="text-align:right;">@item.Size</td>
 						</tr>
@@ -261,24 +261,25 @@ else
 		$(document).ready(function () {
 			@*将文件大小替换成友好的显示*@
 			var filesize1 = $(".change-size");
-			var unit = "B";
+			
 
 			filesize1.each(function (index, element) {
 				var size = parseInt($(element).html());
+				var unit = "B";
 
 				if (size > 1099511627776) {
 					unit = "TB";
 					size = size * 1.00 / 1099511627776;
 				}
-				if (size > 1073741824) {
+				else if (size > 1073741824) {
 					size = size * 1.00 / 1073741824;
 					unit = "GB";
 				}
-				if (size > 1048576) {
+				else if (size > 1048576) {
 					size = size / 1048576;
 					unit = "MB";
 				}
-				if (size > 1024) {
+				else if (size > 1024) {
 					size = size / 1024;
 					unit = "KB";
 				}

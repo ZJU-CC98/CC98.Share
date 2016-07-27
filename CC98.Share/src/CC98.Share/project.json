@@ -53,9 +53,9 @@
 		"JetBrains.Annotations": "10.1.4",
 		"Sakura.AspNetCore.Mvc.TempDataExtensions": "1.0.1",
 		"Sakura.AspNetCore.Mvc.Messages": "1.0.2",
-		"Sakura.AspNetCore.PagedList": "1.0.2",
+		"Sakura.AspNetCore.PagedList": "2.0.0", 
 		"Sakura.AspNetCore.Authentication.ExternalCookie": "2.0.0",
-			"Sakura.AspNetCore.Mvc.PagedList": "2.0.5",
+		"Sakura.AspNetCore.Mvc.PagedList": "2.0.6",
 
 		"Microsoft.AspNetCore.Session": "1.0.0",
 		"Microsoft.AspNetCore.Identity": "1.0.0",

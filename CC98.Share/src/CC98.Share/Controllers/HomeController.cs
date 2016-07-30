@@ -4,7 +4,7 @@ using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc;
 using Sakura.AspNetCore;
 using Microsoft.Extensions.Options;
-
+using Sakura.AspNetCore.Authentication;
 namespace CC98.Share.Controllers
 {
     /// <summary>

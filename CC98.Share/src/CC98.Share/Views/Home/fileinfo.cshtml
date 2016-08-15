@@ -1,4 +1,4 @@
-﻿@using CC98.Identity
+@using CC98.Identity
 @using CC98.Share.Data
 @using Sakura.AspNetCore
 @{
@@ -12,6 +12,17 @@
         border: 1px solid #eee;
         margin: 20px;
     }
+    .label {
+    display: inline-block;
+    padding: 3px 4px;
+    margin:3px 4px;
+    font-size: 12px;
+    font-weight: 600;
+    line-height: 1;
+    color: #fff;
+    border-radius: 3px;
+    box-shadow: inset 0 -1px 0 rgba(0,0,0,0.12);
+}
 </style>
 
 
@@ -99,6 +110,7 @@ else
                 <div>
                     <br />
                     <h4><strong>文件名</strong>&nbsp;&nbsp;<small><span style="right:15px">上传于：xxxxxxx</span><span style="position:absolute;right:30px">下载次数：30</span></small></h4>
+                    <span><a href="#" class="label" style="background-color:#fbca04; color:#332900">#标签1</a><a href="#" class="label" style="background-color:#207de5; color:#fff">#标签2</a></span>
                     <hr />
                     <div style="line-height:60px">
                         <button class="btn-default btn">下载文件 <span class="glyphicon glyphicon-download-alt"></span></button>

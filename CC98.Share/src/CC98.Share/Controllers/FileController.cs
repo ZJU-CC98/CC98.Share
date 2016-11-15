@@ -252,8 +252,15 @@ namespace CC98.Share.Controllers
 					tm.IsShared = value;
 					tm.UploadTime = DateTimeOffset.UtcNow;
 					Model.Items.Add(tm);
-
-					await Model.SaveChangesAsync();
+                    try
+                    {
+                        await Model.SaveChangesAsync();
+                    }
+                    catch
+                    {
+                        accessor.Messages.Add(OperationMessageLevel.Error, "错误", "文件名字过长");
+                        return RedirectToAction("Index", "Home");
+                    }
 				}
 				return RedirectToAction("Index", "Home");
 			}

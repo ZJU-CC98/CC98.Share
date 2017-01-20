@@ -59,6 +59,6 @@ namespace CC98.Share.Data
 		/// <summary>
 		///     上传时间
 		/// </summary>
-		public DateTime UploadTime { get; set; }
+		public DateTimeOffset UploadTime { get; set; }
 	}
 }

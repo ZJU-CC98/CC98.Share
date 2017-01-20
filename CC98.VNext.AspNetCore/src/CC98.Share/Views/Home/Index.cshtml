@@ -44,7 +44,7 @@
 			<b>
 				<a asp-controller="Account" asp-action="LogOn" asp-route-returnUrl="@Url.Action()">请登录</a>
 			</b>
-		</h3>@*<img src="~/images/index_src.png" style="text-align: center" />*@
+		</h3>
 	</div>
 }
 else
@@ -117,16 +117,11 @@ else
 					{
 						<tr>
 							<td>
-                                @*需要判断文件状态选择显示哪个功能*@
+								<a asp-controller="File" asp-action="Download" asp-route-id="@item.Id">@item.Name</a>&nbsp;&nbsp;
                                 @if (!item.IsShared)
-                                {
-                                    <span class="label label-success">私密</span>
-                                }
+                                {<span  class="label label-primary">私密</span>}
                                 else
-                                {
-                                    <span class="label label-info">公开</span>
-                                }
-								<a asp-controller="File" asp-action="Download" asp-route-id="@item.Id">@item.Name</a>
+                                {<span class="label label-success" >公开</span>}
 							</td>
 							<td style="text-align: center;">
 								<a class="btn-sm1 btn-link" asp-action="Download" asp-controller="File" asp-route-id="@item.Id">下载</a>
@@ -135,15 +130,16 @@ else
 								@if (!item.IsShared)
 								{
 									<a class="btn-sm1 btn-link" data-toggle="modal" data-target="#sharefile" data-id="@item.Id" data-name="@item.Name" onclick="ShareFile(this)">选择分享</a>
-								}
-								else
-								{
+                                    
+                                }
+                                else
+                                {
 									<a class="btn-sm1 btn-link" data-toggle="modal" data-target="#cancelshare" data-id="@item.Id" data-name="@item.Name" onclick="CancelShare(this)">取消分享</a>
 								}
 							</td>
-							<td>@item.UploadTime.ToLocalTime().ToString("G")</td>
+							<td>@item.UploadTime</td>
 
-							<td id="SizeOfItem" class="change-size" style="text-align:right;">@item.Size</td>
+							<td class="change-size" style="text-align:right;">@item.Size</td>
 						</tr>
 					}
 
@@ -270,25 +266,24 @@ else
 		$(document).ready(function () {
 			@*将文件大小替换成友好的显示*@
 			var filesize1 = $(".change-size");
-			
+			var unit = "B";
 
 			filesize1.each(function (index, element) {
 				var size = parseInt($(element).html());
-				var unit = "B";
 
 				if (size > 1099511627776) {
 					unit = "TB";
 					size = size * 1.00 / 1099511627776;
 				}
-				else if (size > 1073741824) {
+				if (size > 1073741824) {
 					size = size * 1.00 / 1073741824;
 					unit = "GB";
 				}
-				else if (size > 1048576) {
+				if (size > 1048576) {
 					size = size / 1048576;
 					unit = "MB";
 				}
-				else if (size > 1024) {
+				if (size > 1024) {
 					size = size / 1024;
 					unit = "KB";
 				}
@@ -297,6 +292,8 @@ else
 				$(element).text(finalSize);
 
 			});
+			
+
 		});
 		function Share() {
 			$('#Shared').val('true');

@@ -35,7 +35,35 @@
 		text-align: left;
 	}
 </style>
+<script type="text/javascript">
+    (function () {
+        'use strict';
+        // click events
+        document.body.addEventListener('click', copy, true);
+        // event handler
+        function copy(e) {
+            // find target element
+            var
+              t = e.target,
+              c = t.dataset.copytarget,
+              inp = (c ? document.querySelector(c) : null);
+            // is element selectable?
+            if (inp && inp.select) {
+                // select text
+                inp.select();
 
+                try {
+                    // copy text
+                    document.execCommand('copy');
+                    inp.blur();
+                }
+                catch (err) {
+                    alert('please press Ctrl/Cmd+C to copy');
+                }
+            }
+        }
+    })();
+</script>
 @if (User.Identity.IsAuthenticated == false)
 {
 	<div style="text-align: center">
@@ -55,7 +83,7 @@ else
 	var sharecount = (int)ViewData["sharecount"];
 	var totalSize = ViewData["userTotalSize"];
 	var pagersource = (IPagedList)ViewData["pagersource"];
-	
+
 	<div class="container">
 		<hr style="border: none; border-top: 1px solid #eee; height: 1px;" />
 		<div id="person-info" style="display: inline-block;">
@@ -88,15 +116,15 @@ else
 				</ul>
 			</div>
 		</div>
-		
+
 			@await Html.PartialAsync("_UploadPartial")
-		
+
 		<div style="clear: both; display: block; height: 5px"></div>
 
-			@if (filecount == 0){		
+			@if (filecount == 0){
 		<h2 class="text-center text-muted">	前辈你还没有上传文件~	</h2>
 		}
-	
+
 	else{
 			<table class="table table-striped" style="border-bottom: 3px solid #ddd">
 
@@ -129,6 +157,12 @@ else
 								<a asp-controller="File" asp-action="Download" asp-route-id="@item.Id">@item.Name</a>
 							</td>
 							<td style="text-align: center;">
+                                <label for="website">分享下载链接</label>
+                                <input type="text" id="website" value="@item.Id">
+                                <script type="text/javascript">
+                                    document.getElementById("website").value = window.location.host + "\\Download\\" + document.getElementById("website").value;
+                                </script>
+                                <button data-copytarget="#website">copy</button>
 								<a class="btn-sm1 btn-link" asp-action="Download" asp-controller="File" asp-route-id="@item.Id">下载</a>
 								<a class="btn-sm1 btn-link" data-toggle="modal" data-target="#deletefile" data-id="@item.Id" data-name="@item.Name" onclick="DeleteFile(this)">删除</a>
 								@*需要判断文件状态选择显示哪个功能*@
@@ -157,7 +191,7 @@ else
 				</ul>
 			</div>
 
-		
+
 	}
 	</div>
 }
@@ -270,7 +304,7 @@ else
 		$(document).ready(function () {
 			@*将文件大小替换成友好的显示*@
 			var filesize1 = $(".change-size");
-			
+
 
 			filesize1.each(function (index, element) {
 				var size = parseInt($(element).html());
@@ -350,12 +384,12 @@ else
 						$('#sizeAlert').hide*@
 						$('#uploadFile').removeAttr('disabled');
 						$('#photoCover').val($('#lefile').val());
-					
-				
+
+
 
 			}
 
 		}
 
-	</script>
+                                </script>
 }

@@ -158,10 +158,7 @@ else
 							</td>
 							<td style="text-align: center;">
                                 <label for="website">分享下载链接</label>
-                                <input type="text" id="website" value="@item.Id">
-                                <script type="text/javascript">
-                                    document.getElementById("website").value = window.location.host + "\\Download\\" + document.getElementById("website").value;
-                                </script>
+                                <input type="text" id="website" name="website" value="@item.Id">
                                 <button data-copytarget="#website">copy</button>
 								<a class="btn-sm1 btn-link" asp-action="Download" asp-controller="File" asp-route-id="@item.Id">下载</a>
 								<a class="btn-sm1 btn-link" data-toggle="modal" data-target="#deletefile" data-id="@item.Id" data-name="@item.Name" onclick="DeleteFile(this)">删除</a>
@@ -175,15 +172,22 @@ else
 									<a class="btn-sm1 btn-link" data-toggle="modal" data-target="#cancelshare" data-id="@item.Id" data-name="@item.Name" onclick="CancelShare(this)">取消分享</a>
 								}
 							</td>
+                            
 							<td>@item.UploadTime.ToLocalTime().ToString("G")</td>
 
 							<td id="SizeOfItem" class="change-size" style="text-align:right;">@item.Size</td>
 						</tr>
-					}
+                    }
 
 
 				</tbody>
 			</table>
+            <script type="text/javascript">
+                var els = document.getElementsByName("website");
+                for (var i = 0, j = els.length; i < j; i++) {
+                    els[i].value = window.location.host + "\\Download\\" + els[i].value;
+                }
+            </script>
 			<div class="pagination-index" style="float: right">
 				<ul class="pagination">
 					<pager source="@pagersource" />

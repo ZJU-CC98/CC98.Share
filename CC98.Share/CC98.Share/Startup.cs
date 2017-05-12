@@ -39,7 +39,7 @@ namespace CC98.Share
 			if (env.IsDevelopment())
 			{
 				// 如果处于开发模式，则添加用户个人机密数据（如服务器密码）
-				builder.AddUserSecrets();
+				builder.AddUserSecrets<Startup>();
 
 				// 添加 ApplicationInsights 开发模式设置
 				builder.AddApplicationInsightsSettings(true);
@@ -82,6 +82,22 @@ namespace CC98.Share
 
 			// 为应用程序添加 MVC 功能
 			services.AddMvc();
+
+			// 添加授权验证
+			services.AddAuthorization(options =>
+			{
+				// 操作员权限
+				options.AddPolicy(Policies.Operate, builder =>
+				{
+					builder.RequireRole(Policies.Roles.Operators, Policies.Roles.Administrators, Policies.Roles.GeneralAdministrators);
+				});
+
+				// 管理员权限
+				options.AddPolicy(Policies.Administrate, builder =>
+				{
+					builder.RequireRole(Policies.Roles.Administrators, Policies.Roles.GeneralAdministrators);
+				});
+			});
 
 			// 配置第三方身份验证相关的设置
 			services.Configure<SharedAuthenticationOptions>(options =>
@@ -134,9 +150,6 @@ namespace CC98.Share
 			// 在开发环境的调试窗口输出所有日志信息
 			loggerFactory.AddDebug();
 
-			// 启用 ApplicationInsights 请求遥测服务
-			app.UseApplicationInsightsRequestTelemetry();
-
 
 			// 开发环境配置
 			if (env.IsDevelopment())
@@ -154,9 +167,6 @@ namespace CC98.Share
 				// 使用通用配置错误页面，当网站发生错误时跳转到 Home/Error 页
 				app.UseExceptionHandler("/Home/Error");
 			}
-
-			// 启用 ApplicationInsights 异常遥测服务
-			app.UseApplicationInsightsExceptionTelemetry();
 
 			// 启用会话数据服务支持（TempData 必须）
 			app.UseSession();

@@ -1,0 +1,114 @@
+﻿@model Sakura.AspNetCore.IPagedList<System.IO.FileInfo>
+@{
+	ViewBag.PageTitle = "清理冗余空间";
+
+	var totalSize = (long) ViewBag.TotalSize;
+}
+
+<div class="alert alert-info" role="alert">该页面列出了所有目前没有被引用（在 CC98 Share 中没有任何链接指向）的资源。这些资源可能是用户临时上传或者其他原因产生的。CC98 Share 无法自动清理文件，如有需要，可以手动删除这些文件。</div>
+
+@if (Model.Count == 0)
+{
+	<p class="text-center text-muted">目前没有任何冗余文件。请经常定期清理冗余文件。</p>
+}
+else
+{
+	<table class="table table-striped table-hover">
+		<thead>
+		<tr>
+			<th>文件名</th>
+			<th>大小</th>
+			<th>创建时间</th>
+			<th>最后访问时间</th>
+			<th>操作</th>
+		</tr>
+		</thead>
+		
+		<tbody>
+		@foreach (var i in Model)
+		{
+			<tr>
+				<th>@i.Name</th>
+				<td class="change-size">@i.Length</td>
+				<td>@i.CreationTime.ToString("G")</td>
+				<td>@i.LastAccessTime.ToString("G")</td>
+				<td>
+					<div class="btn-group btn-group-xs">
+						<a class="btn btn-default" asp-controller="Manage" asp-action="Download" asp-route-fileName="@i.Name">下载</a>
+						<button type="button" class="btn btn-danger" data-file-name="@i.Name" onclick="deleteFile(this);">删除</button>
+					</div>
+				</td>
+			</tr>
+		}
+		</tbody>
+
+	</table>
+
+	<pager />
+
+	<hr />
+
+	<p>目前一共有 <strong>@Model.TotalCount</strong> 个冗余文件，占据的总体积为 <strong class="change-size">@totalSize</strong>。单击下面的按钮可以删除所有冗余文件。</p>
+	<button type="button" class="btn btn-danger" data-toggle="modal" data-target="#clean-up-all-file-modal">删除所有文件</button>
+	
+}
+
+<form asp-controller="Manage" asp-action="Delete" asp-antiforgery="true" method="post">
+	<input type="hidden" name="fileName" id="delete-file-name-input" />
+	<div id="delete-file-modal" class="modal fade" tabindex="-1" role="dialog">
+		<div class="modal-dialog" role="document">
+			<div class="modal-content">
+				<div class="modal-header">
+					<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+					<h4 class="modal-title">删除文件警告</h4>
+				</div>
+				<div class="modal-body">
+					<p>你确定要删除文件 <strong id="delete-file-name-text"></strong> 吗？这个操作不可恢复。要继续，请单击<q>确认删除</q>按钮。否则，请单击<q>取消</q>按钮，或单击对话框外的任何区域。</p>
+				</div>
+				<div class="modal-footer">
+					<button type="submit" class="btn btn-danger">确认删除</button>
+					<button type="button" class="btn btn-default" data-dismiss="modal">取消</button>
+				</div>
+			</div><!-- /.modal-content -->
+		</div><!-- /.modal-dialog -->
+	</div><!-- /.modal -->
+</form>
+
+<form asp-controller="Manage" asp-action="CleanUpAll" asp-antiforgery="true" method="post">
+	<div id="clean-up-all-file-modal" class="modal fade" tabindex="-1" role="dialog">
+		<div class="modal-dialog" role="document">
+			<div class="modal-content">
+				<div class="modal-header">
+					<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+					<h4 class="modal-title">清理文件警告</h4>
+				</div>
+				<div class="modal-body">
+					<p>你确定要删清理所有冗余文件吗？这个操作不可恢复。<strong>注意：请在操作前尽量再次确认没有有效文件被意外包含到列表中，否则可能对用户造成较大的损失。</strong>要继续，请单击<q>确认清理</q>按钮。否则，请单击<q>取消</q>按钮，或单击对话框外的任何区域。</p>
+				</div>
+				<div class="modal-footer">
+					<button type="submit" class="btn btn-danger">确认清理</button>
+					<button type="button" class="btn btn-default" data-dismiss="modal">取消</button>
+				</div>
+			</div><!-- /.modal-content -->
+		</div><!-- /.modal-dialog -->
+	</div><!-- /.modal -->
+</form>
+
+
+@section scripts{
+	
+	<script type="text/javascript" language="javascript">
+
+		function deleteFile(btn) {
+
+			var fileName = $(btn).data('file-name');
+
+			$('#delete-file-name-input').val(fileName);
+			$('#delete-file-name-text').text(fileName);
+
+			$('#delete-file-modal').modal();
+		}
+
+	</script>
+
+}

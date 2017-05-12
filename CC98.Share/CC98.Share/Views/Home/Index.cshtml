@@ -1,4 +1,5 @@
 ﻿@using CC98.Identity
+@using CC98.Share
 @using CC98.Share.Data
 @using Sakura.AspNetCore
 @model CC98.Share.ViewModels.SearchAll.SearchModeViewModel
@@ -26,47 +27,17 @@
 		margin: 0px 10px;
 		cursor: pointer;
 	}
-	.input-change{
-		border:1px solid #ccc;
-		box-shadow:none;
-		font-size:14px;
-		height:34px;
+
+	.input-change {
+		border: 1px solid #ccc;
+		box-shadow: none;
+		font-size: 14px;
+		height: 34px;
 		text-align: left;
 	}
 </style>
-<script type="text/javascript">
-    (function () {
-        'use strict';
-        // click events
-        document.body.addEventListener('click', copy, true);
-        // event handler
-        function copy(e) {
-            // find target element
-            var
-              t = e.target,
-              c = t.dataset.copytarget;
-            var q = String(c);
-            q = "#" + q;
-            var
-              inp = (q ? document.querySelector(q) : null);
-            // is element selectable?
-            if (inp && inp.select) {
-                // select text
-                inp.select();
 
-                try {
-                    // copy text
-                    document.execCommand('copy');
-                    inp.blur();
-                }
-                catch (err) {
-                    alert('please press Ctrl/Cmd+C to copy');
-                }
-            }
-        }
-    })();
-</script>
-@if (User.Identity.IsAuthenticated == false)
+@if (!User.Identity.IsAuthenticated)
 {
 	<div style="text-align: center">
 		<h2><br /><br /><strong>欢迎使用CC98Share</strong><br /><br /></h2>
@@ -119,24 +90,26 @@ else
 			</div>
 		</div>
 
-			@await Html.PartialAsync("_UploadPartial")
+		@await Html.PartialAsync("_UploadPartial")
 
 		<div style="clear: both; display: block; height: 5px"></div>
 
-			@if (filecount == 0){
-		<h2 class="text-center text-muted">	前辈你还没有上传文件~	</h2>
+		@if (filecount == 0)
+		{
+			<h2 class="text-center text-muted">	前辈你还没有上传文件~	</h2>
 		}
 
-	else{
+		else
+		{
 			<table class="table table-striped" style="border-bottom: 3px solid #ddd">
 
 				<thead style="border: 2px solid #eee">
 					<tr>
 
 						<th>文件名称</th>
-						<th style="text-align: center">操</th>
+						<th>操作</th>
 						<th>上传日期</th>
-						<th style="text-align:right; ">文件大小</th>
+						<th>文件大小</th>
 					</tr>
 				</thead>
 				<tbody>
@@ -147,49 +120,47 @@ else
 					{
 						<tr>
 							<td>
-                                @*需要判断文件状态选择显示哪个功能*@
-                                @if (!item.IsShared)
-                                {
-                                    <span class="label label-success">私密</span>
-                                }
-                                else
-                                {
-                                    <span class="label label-info">公开</span>
-                                }
-								<a asp-controller="File" asp-action="Download" asp-route-id="@item.Id">@item.Name</a>
-							</td>
-							<td style="text-align: center;">
-                                <label for="website">分享下载链接</label>
-                                <input type="text" id='s-@item.Id.ToString()' name="website" value="@item.Id">
-                                <button data-copytarget='s-@item.Id.ToString()'>copy</button>
-								<a class="btn-sm1 btn-link" asp-action="Download" asp-controller="File" asp-route-id="@item.Id">下载</a>
-								<a class="btn-sm1 btn-link" data-toggle="modal" data-target="#deletefile" data-id="@item.Id" data-name="@item.Name" onclick="DeleteFile(this)">删除</a>
 								@*需要判断文件状态选择显示哪个功能*@
 								@if (!item.IsShared)
 								{
-									<a class="btn-sm1 btn-link" data-toggle="modal" data-target="#sharefile" data-id="@item.Id" data-name="@item.Name" onclick="ShareFile(this)">选择分享</a>
+									<span class="label label-success">私密</span>
 								}
 								else
 								{
-									<a class="btn-sm1 btn-link" data-toggle="modal" data-target="#cancelshare" data-id="@item.Id" data-name="@item.Name" onclick="CancelShare(this)">取消分享</a>
+									<span class="label label-info">公开</span>
 								}
+								<a asp-controller="File" asp-action="Download" asp-route-id="@item.Id">@item.Name</a>
 							</td>
-                            
+							<td style="text-align: center;">
+								<a class="btn-sm1" asp-action="Download" asp-controller="File" asp-route-id="@item.Id">下载</a>
+								<a class="btn-sm1" data-toggle="modal" data-target="#deletefile" data-id="@item.Id" data-name="@item.Name" onclick="DeleteFile(this)">删除</a>
+								@*需要判断文件状态选择显示哪个功能*@
+								@if (!item.IsShared)
+								{
+									<a class="btn-sm1" data-toggle="modal" data-target="#sharefile" data-id="@item.Id" data-name="@item.Name" onclick="ShareFile(this)">选择分享</a>
+								}
+								else
+								{
+									<a class="btn-sm1" data-toggle="modal" data-target="#cancelshare" data-id="@item.Id" data-name="@item.Name" onclick="CancelShare(this)">取消分享</a>
+								}
+								<a class="btn-sm1" data-url="@Url.AbsoluteAction("Download", "File", new{item.Id})" href="#" onclick="copyLink(this);">复制链接</a>
+							</td>
+
 							<td>@item.UploadTime.ToLocalTime().ToString("G")</td>
 
 							<td id="SizeOfItem" class="change-size" style="text-align:right;">@item.Size</td>
 						</tr>
-                    }
+					}
 
 
 				</tbody>
 			</table>
-            <script type="text/javascript">
-                var els = document.getElementsByName("website");
-                for (var i = 0, j = els.length; i < j; i++) {
-                    els[i].value = window.location.host + "\\Download\\" + els[i].value;
-                }
-            </script>
+			<script type="text/javascript">
+				var els = document.getElementsByName("website");
+				for (var i = 0, j = els.length; i < j; i++) {
+					els[i].value = window.location.host + "\\Download\\" + els[i].value;
+				}
+			</script>
 			<div class="pagination-index" style="float: right">
 				<ul class="pagination">
 					<pager source="@pagersource" />
@@ -198,11 +169,9 @@ else
 			</div>
 
 
-	}
+		}
 	</div>
 }
-
-
 
 
 
@@ -225,6 +194,7 @@ else
 		<a href="#" class="btn" data-dismiss="modal">取消</a>
 	</div>
 </div>
+
 @*分享界面，需要产生独特的链接*@
 <form asp-action="ShareFile" asp-controller="File">
 	<input type="hidden" id="share-file-id-input" name="id" />
@@ -243,23 +213,6 @@ else
 			<a href="#" class="btn btn-default" data-dismiss="modal">取消</a>
 		</div>
 	</div>
-	@*<div class="modal-header">
-				<a class="close" data-dismiss="modal">x</a>
-				<h4>分享文件</h4>
-				<br />
-				<p id="share-file-name-in"></p>
-			</div>
-			@*<div class="modal-body" style="margin-left:20px">
-			<h5>您选择分享以下文件</h5>
-		@*</div>
-			<div class="modal-footer">
-				<span id="copysuccess" style="display: none">复制成功！</span>
-				<a href="#" class="btn btn-success"type="submit">确认</a><!--How????-->
-				<a href="#" class="btn btn-default" data-dismiss="modal">取消</a>
-			</div>
-		</div>
-				<a href="#" class="btn" data-dismiss="modal">取消</a>
-			</div>*@
 
 </form>
 @*删除界面，需要获取文件名以及对按钮操作进行绑定函数*@
@@ -307,37 +260,6 @@ else
 			$('#photoCover').val($(this).val());
 		});
 
-		$(document).ready(function () {
-			@*将文件大小替换成友好的显示*@
-			var filesize1 = $(".change-size");
-
-
-			filesize1.each(function (index, element) {
-				var size = parseInt($(element).html());
-				var unit = "B";
-
-				if (size > 1099511627776) {
-					unit = "TB";
-					size = size * 1.00 / 1099511627776;
-				}
-				else if (size > 1073741824) {
-					size = size * 1.00 / 1073741824;
-					unit = "GB";
-				}
-				else if (size > 1048576) {
-					size = size / 1048576;
-					unit = "MB";
-				}
-				else if (size > 1024) {
-					size = size / 1024;
-					unit = "KB";
-				}
-				size = size.toFixed(2);
-				var finalSize = String(size) + unit;
-				$(element).text(finalSize);
-
-			});
-		});
 		function Share() {
 			$('#Shared').val('true');
 			$('#ShareThem').text('分享 √');
@@ -379,23 +301,22 @@ else
 				$('#uploadFile').attr('disabled', 'disabled');
 				$('#sizeAlert').hide();
 			} else {
-				@*var totalSize = 0;
-				for (var i = 0; i < theFile.files.length; i++) {
-					totalSize = theFile.files[i].size;
-					if (totalSize > 52428800) {
-						$('#uploadFile').attr('disabled', 'disabled');
-						$('#photoCover').val($('#lefile').val());
-						$('#sizeAlert').show();
-					} else {
-						$('#sizeAlert').hide*@
-						$('#uploadFile').removeAttr('disabled');
-						$('#photoCover').val($('#lefile').val());
-
-
-
+				$('#uploadFile').removeAttr('disabled');
+				$('#photoCover').val($('#lefile').val());
 			}
+		}
+
+		function copyLink(ele) {
+
+			if (window.clipboardData.setData('text', $(ele).data('url'))) {
+				alert('下载地址已经复制到剪贴板');
+			} else {
+				alert('无法将下载地址复制到剪贴板。可能是网站没有足够的权限或者其它插件影响了此功能。请稍后再试一次，或尝试手动查看下载链接对应的地址。');
+			}
+
+			return false;
 
 		}
 
-                                </script>
+	</script>
 }

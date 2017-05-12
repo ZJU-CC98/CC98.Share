@@ -1,194 +1,98 @@
-﻿@using CC98.Share
+﻿@using System.Collections.Generic
+@using CC98.Share
 @using CC98.Share.Data
 @using CC98.Share.ViewModels.SearchAll
+@using Microsoft.AspNetCore.Mvc.Rendering
 @using Sakura.AspNetCore
-@model CC98.Share.ViewModels.SearchAll.SearchModeViewModel
+@model SearchModeViewModel
 
 @{
 
 
-    var list = new List<SelectListItem>();
+	var searchTypeList = new List<SelectListItem>
+	{
+		new SelectListItem {Text = "发布者", Value = nameof(Valuation.UserName)},
+		new SelectListItem {Text = "文件名", Value = nameof(Valuation.FileName)},
+		new SelectListItem {Text = "描述", Value = nameof(Valuation.Discription)},
+		new SelectListItem {Text = "文件名及描述", Value = nameof(Valuation.FileNameAndDis)}
+	};
 
-    list.Add(new SelectListItem {Text = "发布者", Value = nameof(Valuation.UserName), Selected = false});
-    list.Add(new SelectListItem {Text = "文件名", Value = nameof(Valuation.FileName), Selected = false});
-    list.Add(new SelectListItem {Text = "描述", Value = nameof(Valuation.Discription), Selected = false});
-    list.Add(new SelectListItem {Text = "文件名及描述", Value = nameof(Valuation.FileNameAndDis), Selected = false});
-    var data = (ShareItem[]) ViewData["List"];
-    var list1 = new List<SelectListItem>();
-    var dataSource = (IPagedList<ShareItem>) ViewData["datasource"];
-    list1.Add(new SelectListItem {Text = "精确匹配", Value = nameof(Accuracy.Accurate), Selected = false});
-    list1.Add(new SelectListItem {Text = "部分匹配", Value = nameof(Accuracy.Vague), Selected = false});
+	var searchModeList = new List<SelectListItem>
+	{
+		new SelectListItem {Text = "精确匹配", Value = nameof(Accuracy.Accurate), Selected = false},
+		new SelectListItem {Text = "部分匹配", Value = nameof(Accuracy.Vague), Selected = false}
+	};
 
-    var transdata = ViewBag.onePageOfProducts;
-    var transsearch = (SearchModeViewModel) ViewData["SEARCH"];
-    Layout = "_StandardTitleLayout";
-    ViewBag.PageTitle = "搜索结果";
+	var data = (ShareItem[])ViewData["List"];
+	var dataSource = (IPagedList<ShareItem>)ViewData["datasource"];
+
+
+	ViewBag.PageTitle = "搜索结果";
 }
-<br/>
 
 @if (ViewData["CHECK"] == null)
 {
-	
-	<table class="table">
+	<div class="alert alert-danger">
+		<a href="#" class="close" data-dismiss="alert">&times;</a>
+		<span>你没有输入任何搜索条件，请输入条件后再试一次</span>
+	</div>
 
-		<thead>
-		<tr>
-			<span>请在下方的搜索框内输入关键词并选择搜索的类型</span>
-		</tr>
-		</thead>
-	</table>
-	
 }
 else if (data.Length == 0)
 {
-	<html>
-	<body>
-	<div class="alert alert-warning">
-		<a href="#" class="close" data-dismiss="alert">
-			&times;
-		</a>
-		<strong>未找到文件</strong>
-	</div>
-	</body>
-	</html>
-}
 
+	<div class="alert alert-warning">
+		<a href="#" class="close" data-dismiss="alert">&times;</a>
+		<span>本次搜索未找到任何文件，请更换条件再试一次</span>
+	</div>
+}
 else
 {
-	
 
-	<body>
-	<table class="table table-striped">
-		@*<caption>搜索结果</caption>*@
-		<thead>
-		<tr>
-			<th>文件名</th>
-			<th>操作</th>
-			<th>上传用户</th>
-			<th>上传日期</th>
-			<th>文件大小</th>
-		</tr>
-		</thead>
-		<tbody>
-
-		@*@foreach (var item in dataSource)
-            {
-            <tr>
-                <td>@item.Name</td>
-                <td>@item.Path</td>
-
-                <td>@item.Description</td>
-            </tr>
-            }*@
-
-		@foreach (var item in dataSource)
-		{
-			<tr>
-
-				<td>
-					@*<a asp-controller="Home" asp-action="Fileinfo">*@@item.Name@*</a>*@
-				</td>
-
-				<td style="text-align: match-parent">
-					<a class="btn btn-default btn-xs" asp-action="Download" asp-controller="File" asp-route-id="@item.Id">下载</a>
-					@*<a class="btn btn-default" data-toggle="modal" data-target="#deletefile" onclick="DeleteFile('@item.Id')">
-                        <a id="delete-file-name" data-item="@item.Name">删除</a>
-                    </a>
-
-                    <a class="btn btn-default" data-toggle="modal" href="#sharefile" onclick="ShareFile('@item.Id')">
-                        <a id="share-file-name" data-item="@item.Name">分享</a>
-                    </a>*@
-				</td>
-				<td>@item.UserName</td>
-				<td>@item.UploadTime.ToLocalTime().ToString("G")</td>
-				@*<td>@item.Size</td>*@
-				<td id="SizeOfItem" class="change-size">@item.Size</td>
-			</tr>
-		}
-
-
-		</tbody>
-	</table>
-	<pager source="dataSource"/>
-
-
-	</body>
-	
-
-
-	<html>
-
-	<body>
 	<div class="alert alert-info">
 		<a href="#" class="close" data-dismiss="alert">
 			&times;
 		</a>
-		<strong>共找到</strong> @data.Count() <strong>个文件</strong>
+		<span>本次搜索共找到 <strong>@data.Length</strong> 个文件</span>
 	</div>
-	</body>
-	</html>
-}
 
-<form asp-action="Search" asp-controller="SearchAll" class="form-inline" method="get">
-	<input type="text" asp-for="Words" class="form-control" placeholder="请输入内容"/>
-	<select asp-for="Mode" asp-items="list" class="form-control"></select>
-	<select asp-for="Acc" asp-items="list1" class="form-control"></select>
+	<table class="table table-striped">
+		<thead>
+			<tr>
+				<th>文件名</th>
+				<th>操作</th>
+				<th>上传用户</th>
+				<th>上传日期</th>
+				<th>文件大小</th>
+			</tr>
+		</thead>
+		<tbody>
 
-	<button type="submit" class="btn btn-default btn-primary">搜索</button>
-</form>
-@section scripts{
-	<script>
-		$(document)
-			.ready(function() {
-				@*将文件大小替换成友好的显示*@
-			    var filesize1 = $(".change-size");
-				var unit = "B";
 
-				filesize1.each(function (index, element) {
-				    var size = parseInt($(element).html());
-				    var unit = "B";
+			@foreach (var item in dataSource)
+				{
+				<tr>
 
-				    if (size > 1099511627776) {
-				        unit = "TB";
-				        size = size * 1.00 / 1099511627776;
-				    }
-				    else if (size > 1073741824) {
-				        size = size * 1.00 / 1073741824;
-				        unit = "GB";
-				    }
-				    else if (size > 1048576) {
-				        size = size / 1048576;
-				        unit = "MB";
-				    }
-				    else if (size > 1024) {
-				        size = size / 1024;
-				        unit = "KB";
-				    }
-				    size = size.toFixed(2);
-				    var finalSize = String(size) + unit;
-				    $(element).text(finalSize);
+					<td>
+						@*<a asp-controller="Home" asp-action="Fileinfo">*@@item.Name@*</a>*@
+					</td>
 
-				});
-				
-			});
-
-		function getElementsClass(classnames) {
-			var classobj = new Array();
-			var classint = 0;
-			var tags = document.getElementsByTagName("*");
-			for (var i in tags) {
-				if (tags[i].nodeType == 1) {@*判断节点类型 *@
-					if (tags[i].getAttribute("class") == classnames)@*判断和需要CLASS名字相同的，并组成一个数组*@
-					{
-						classobj[classint] = tags[i];
-						classint++;
-					}
+					<td style="text-align: match-parent">
+						<a class="btn btn-default btn-xs" asp-action="Download" asp-controller="File" asp-route-id="@item.Id">下载</a>
+					</td>
+					<td>@item.UserName</td>
+					<td>@item.UploadTime.ToLocalTime().ToString("G")</td>
+					@*<td>@item.Size</td>*@
+					<td id="SizeOfItem" class="change-size">@item.Size</td>
+				</tr>
 				}
-			}
-			return classobj;
-		}
-	</script>
+
+
+		</tbody>
+	</table>
+	<pager source="dataSource" />
 }
+
 <script type="text/javascript">
 
 
@@ -207,8 +111,11 @@ else
 		$('#cancel-share-file-name-in').text($(obj).data('name'));
 	}
 
-	function JudgeFile() {@*用于上传文件时判断是否已选择文件，若没有选择，则无法上传*@
-		if ($('#lefile').val() == "") {
+	function JudgeFile() {
+
+		@*用于上传文件时判断是否已选择文件，若没有选择，则无法上传*@
+
+		if ($('#lefile').val() === '') {
 			$('#uploadFile').attr('disabled', 'disabled');
 
 		} else {

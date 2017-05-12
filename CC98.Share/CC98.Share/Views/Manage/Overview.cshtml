@@ -1,0 +1,13 @@
+﻿@{
+	ViewBag.PageTitle = "系统概览";
+
+	var usedSpace = (long)ViewBag.UsedSpace;
+	var freeSpace = (long)ViewBag.FreeSpace;
+}
+
+
+<div class="alert alert-info" role="alert">
+	目前 CC98 Share 共计使用了 <strong class="change-size">@usedSpace</strong> 空间，磁盘剩余可用空间为 <strong class="change-size">@freeSpace</strong>。注意：CC98 Share 可能和其它应用共享磁盘空间，因此，其它应用的活动也可能会导致可用磁盘空间减少。要了解磁盘使用的具体规划情况，请联系服务器管理员。
+</div>
+<a class="btn btn-default btn-primary" asp-controller="Manage" asp-action="CleanUp">清理冗余文件</a>
+

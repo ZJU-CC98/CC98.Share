@@ -1,4 +1,9 @@
-﻿<!DOCTYPE html>
+﻿@using CC98.Share
+@using CC98.Share.ViewModels.SearchAll
+@{
+	var searchModel = Model as SearchModeViewModel ?? new SearchModeViewModel();
+}
+<!DOCTYPE html>
 <html>
 <head>
 	<meta charset="utf-8" />
@@ -62,28 +67,20 @@
 					<li>
 						<a asp-controller="Home" asp-action="About">关于Share</a>
 					</li>
-                    <li>
-                        <a asp-controller="Home" asp-action="fileInfo">文件详情页</a>
-                    </li>
 					<li>
-						@*<form asp-action="Search" asp-controller="SearchAll" method="get" style="padding-top: 10px">
-								<input type="text" asp-for="Words" class="search-form" placeholder="请输入内容" style="height: 28px" />
-								<select asp-for="Mode" asp-items="list" class="search-form" style="height: 28px"></select>
-								<select asp-for="Acc" asp-items="list1" class="search-form" style="height: 28px"></select>
-
-								<button type="submit" class="btn btn-sm btn-primary ">搜索</button>
-							</form>*@
-						@await Html.PartialAsync("_SearchPartial")
+						<a asp-controller="Home" asp-action="fileInfo">文件详情页</a>
 					</li>
-					@*<li>
-										<a asp-controller="Home" asp-action="Contact">Contact</a>
-									</li>
-									<li>
-							<a asp-controller="File" asp-action="Download">Download</a>
-						</li
-						<li>
-							<a asp-controller="File" asp-action="Upload">上传文件</a>
-						</li>*@
+					<li asp-authorize-policy="@Policies.Administrate" class="dropdown">
+						<a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">管理 <span class="caret"></span></a>
+						<ul class="dropdown-menu">
+							<li><a asp-controller="Manage" asp-action="Overview">使用情况概览</a></li>
+							<li><a asp-controller="Manage" asp-action="CleanUp">清理磁盘空间</a></li>
+						</ul>
+					</li>
+
+					<li>
+						@await Html.PartialAsync("_SearchPartial", searchModel)
+					</li>
 				</ul>
 				@await Html.PartialAsync("_LoginPartial")
 			</div>
@@ -103,7 +100,7 @@
 		<script src="~/js/site.js" asp-append-version="true"></script>
 	</environment>
 	<environment names="Staging,Production">
-		<script src="https://ajax.aspnetcdn.com/ajax/jquery/jquery-3.1.1.min.js"
+		<script src="https://ajax.aspnetcdn.com/ajax/jquery/jquery-3.2.1.min.js"
 				asp-fallback-src="~/lib/jquery/dist/jquery.min.js"
 				asp-fallback-test="window.jQuery">
 

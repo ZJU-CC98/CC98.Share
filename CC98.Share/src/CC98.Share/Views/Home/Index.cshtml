@@ -6,7 +6,6 @@
 	Layout = "_Layout";
 	ViewBag.PageTitle = "首页";
 }
-
 <style type="text/css">
 	.person-li {
 		border-bottom: 1px solid #efefef;
@@ -45,8 +44,11 @@
             // find target element
             var
               t = e.target,
-              c = t.dataset.copytarget,
-              inp = (c ? document.querySelector(c) : null);
+              c = t.dataset.copytarget;
+            var q = String(c);
+            q = "#" + q;
+            var
+              inp = (q ? document.querySelector(q) : null);
             // is element selectable?
             if (inp && inp.select) {
                 // select text
@@ -132,7 +134,7 @@ else
 					<tr>
 
 						<th>文件名称</th>
-						<th style="text-align: center">操作</th>
+						<th style="text-align: center">操</th>
 						<th>上传日期</th>
 						<th style="text-align:right; ">文件大小</th>
 					</tr>
@@ -158,8 +160,8 @@ else
 							</td>
 							<td style="text-align: center;">
                                 <label for="website">分享下载链接</label>
-                                <input type="text" id="website" name="website" value="@item.Id">
-                                <button data-copytarget="#website">copy</button>
+                                <input type="text" id='s-@item.Id.ToString()' name="website" value="@item.Id">
+                                <button data-copytarget='s-@item.Id.ToString()'>copy</button>
 								<a class="btn-sm1 btn-link" asp-action="Download" asp-controller="File" asp-route-id="@item.Id">下载</a>
 								<a class="btn-sm1 btn-link" data-toggle="modal" data-target="#deletefile" data-id="@item.Id" data-name="@item.Name" onclick="DeleteFile(this)">删除</a>
 								@*需要判断文件状态选择显示哪个功能*@
